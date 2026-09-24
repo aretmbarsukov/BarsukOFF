@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BarsukON - Reparacion de moviles</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] } } } };
+  </script>
+  <style>
+    :root { --bg:#090a0c; --panel:rgba(17,20,28,.8); --text:#f4f5f7; --muted:#a6adba; --brand:#7dd3fc; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; overflow-x:hidden; }
+    .grid-bg { background-image:radial-gradient(circle, rgba(255,255,255,.08) 1px, transparent 1px); background-size:24px 24px; }
+    .glass-panel { background:rgba(17,20,28,.75); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1px solid rgba(255,255,255,.08); }
+    .brand-btn.active { border-color:rgba(125,211,252,.7); background:rgba(125,211,252,.08); color:white; }
+    .layer-box { transition:transform .25s ease, border-color .25s ease; }
+    .layer-box:hover { transform:translateY(-6px); border-color:rgba(255,255,255,.20); }
+    .before-after-container { position:relative; overflow:hidden; user-select:none; }
+    .img-overlay { position:absolute; top:0; left:0; height:100%; width:50%; overflow:hidden; border-right:2px solid rgba(255,255,255,.9); }
+    ::-webkit-scrollbar { width:8px; }
+    ::-webkit-scrollbar-track { background:var(--bg); }
+    ::-webkit-scrollbar-thumb { background:#2d3748; border-radius:999px; }
+  </style>
+</head>
+<body class="antialiased grid-bg text-slate-100 selection:bg-white selection:text-black">
+  <header class="fixed top-0 left-0 w-full z-50 glass-panel border-b border-white/10 px-4 lg:px-8 py-3">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 bg-white text-black rounded-xl font-mono font-black text-xl flex items-center justify-center shadow-lg shadow-white/10">B</div>
+        <div class="flex flex-col">
+          <span class="font-mono font-black text-xl tracking-wider text-white flex items-center gap-1.5">BARSUK<span class="text-sky-400">ON</span><span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span></span>
+          <span class="text-[10px] text-slate-400 tracking-widest uppercase font-mono">Precision Repair Lab</span>
+        </div>
+      </a>
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+        <a href="#calculator" class="hover:text-white transition-colors">Calculadora</a>
+        <a href="#interactive" class="hover:text-white transition-colors">Anatomia</a>
+        <a href="#services" class="hover:text-white transition-colors">Servicios</a>
+        <a href="#tracker" class="hover:text-white transition-colors">Estado</a>
+        <button onclick="toggleEmpresaModal()" class="px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-xs font-mono text-slate-300 hover:bg-white/10 transition-all flex items-center gap-1.5"><i class="fa-solid fa-graduation-cap text-slate-400"></i> Proyecto Empresa</button>
+      </nav>
+      <div class="flex items-center gap-3">
+        <button onclick="toggleLanguage()" class="px-3 py-1.5 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 font-mono text-xs text-white transition-all flex items-center gap-2"><i class="fa-solid fa-globe text-slate-400"></i><span id="currentLangLabel" class="font-bold">ES</span></button>
+        <button onclick="openBookingModal()" class="px-5 py-2.5 bg-white text-black font-semibold text-sm rounded-xl hover:bg-slate-200 transition-all shadow-md shadow-white/5 active:scale-95 flex items-center gap-2"><i class="fa-solid fa-bolt-lightning text-xs"></i><span>Reservar Cita</span></button>
+        <button id="mobileMenuBtn" class="md:hidden text-2xl text-slate-300 p-2"><i class="fa-solid fa-bars"></i></button>
+      </div>
+    </div>
+    <div id="mobileMenu" class="hidden md:hidden pt-4 pb-2 border-t border-white/10 mt-3 flex flex-col gap-3 font-medium text-sm text-slate-300">
+      <a href="#calculator" class="py-2 hover:text-white">Calculadora</a>
+      <a href="#interactive" class="py-2 hover:text-white">Anatomia</a>
+      <a href="#services" class="py-2 hover:text-white">Servicios</a>
+      <a href="#tracker" class="py-2 hover:text-white">Estado</a>
+      <button onclick="toggleEmpresaModal()" class="text-left py-2 text-slate-400 flex items-center gap-2"><i class="fa-solid fa-graduation-cap"></i> Proyecto Empresa</button>
+    </div>
+  </header>
+
+  <section class="relative pt-32 pb-20 md:pt-44 md:pb-32 px-4 max-w-7xl mx-auto overflow-hidden">
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-sky-400/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="relative z-10 text-center max-w-4xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-panel border border-white/10 text-xs text-slate-300 font-mono mb-6"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span><span>Reparacion expres desde 20 min • Garantia 6 meses</span></div>
+      <h1 class="text-4xl md:text-7xl font-extrabold tracking-tight text-white mb-6 leading-tight"><span>Precision quirurgica para tu</span> <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-sky-400 underline decoration-sky-500 decoration-wavy decoration-1">Smartphone</span>.</h1>
+      <p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-10 font-light leading-relaxed">Servicio tecnico minimalista de alta gama <strong class="text-slate-200 font-semibold">BarsukON</strong>. Sustitucion de modulos, microsoldadura BGA y restauracion tras mojado.</p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#calculator" class="w-full sm:w-auto px-8 py-4 bg-white text-black font-bold text-base rounded-2xl hover:bg-slate-200 transition-all shadow-xl shadow-white/10 flex items-center justify-center gap-3 group"><span>Calcular precio</span><i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i></a>
+        <a href="#interactive" class="w-full sm:w-auto px-8 py-4 glass-panel text-slate-200 font-semibold text-base rounded-2xl hover:bg-white/10 transition-all border border-white/15 flex items-center justify-center gap-2"><i class="fa-solid fa-microscope text-slate-400"></i><span>Como trabajamos</span></a>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 pt-10 border-t border-white/10 text-left">
+        <div class="glass-panel p-4 rounded-2xl"><div class="font-mono text-3xl font-extrabold text-white mb-1">1,420+</div><div class="text-xs text-slate-400">Dispositivos reparados</div></div>
+        <div class="glass-panel p-4 rounded-2xl"><div class="font-mono text-3xl font-extrabold text-white mb-1">30 min</div><div class="text-xs text-slate-400">Tiempo promedio</div></div>
+        <div class="glass-panel p-4 rounded-2xl"><div class="font-mono text-3xl font-extrabold text-white mb-1">99.2%</div><div class="text-xs text-slate-400">Piezas originales OEM</div></div>
+        <div class="glass-panel p-4 rounded-2xl"><div class="font-mono text-3xl font-extrabold text-white mb-1">180 dias</div><div class="text-xs text-slate-400">Garantia escrita</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="calculator" class="py-16 px-4 max-w-7xl mx-auto">
+    <div class="text-center mb-12">
+      <h2 class="text-xs font-mono tracking-widest text-slate-400 uppercase mb-2">// TERMINAL INTERACTIVO</h2>
+      <h3 class="text-3xl md:text-5xl font-extrabold text-white">Calculadora de presupuesto</h3>
+      <p class="text-slate-400 mt-2">Selecciona la marca, busca el modelo y obtén un presupuesto instantáneo.</p>
+    </div>
+
+    <div class="glass-panel rounded-3xl p-6 md:p-10 border border-white/10 shadow-2xl grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div class="lg:col-span-7 space-y-6">
+        <div>
+          <label class="block text-xs font-mono text-slate-400 uppercase tracking-wider mb-3">1. Selecciona la marca</label>
+          <div class="grid grid-cols-3 sm:grid-cols-5 gap-3" id="brandSelector">
+            <button onclick="selectBrand('apple', this)" class="brand-btn active p-3 rounded-2xl border border-white/30 text-center hover:bg-white/15 transition-all text-white flex flex-col items-center justify-center gap-2"><i class="fa-brands fa-apple text-2xl"></i><span class="text-xs font-medium">Apple</span></button>
+            <button onclick="selectBrand('samsung', this)" class="brand-btn p-3 rounded-2xl bg-white/5 border border-white/10 text-center hover:bg-white/15 transition-all text-slate-400 flex flex-col items-center justify-center gap-2"><i class="fa-solid fa-mobile-screen-button text-2xl"></i><span class="text-xs font-medium">Samsung</span></button>
+            <button onclick="selectBrand('xiaomi', this)" class="brand-btn p-3 rounded-2xl bg-white/5 border border-white/10 text-center hover:bg-white/15 transition-all text-slate-400 flex flex-col items-center justify-center gap-2"><i class="fa-solid fa-microchip text-2xl"></i><span class="text-xs font-medium">Xiaomi</span></button>
+            <button onclick="selectBrand('pixel', this)" class="brand-btn p-3 rounded-2xl bg-white/5 border border-white/10 text-center hover:bg-white/15 transition-all text-slate-400 flex flex-col items-center justify-center gap-2"><i class="fa-brands fa-google text-2xl"></i><span class="text-xs font-medium">Google</span></button>
+            <button onclick="selectBrand('other', this)" class="brand-btn p-3 rounded-2xl bg-white/5 border border-white/10 text-center hover:bg-white/15 transition-all text-slate-400 flex flex-col items-center justify-center gap-2"><i class="fa-solid fa-wrench text-2xl"></i><span class="text-xs font-medium">Otro</span></button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-mono text-slate-400 uppercase tracking-wider mb-2">2. Modelo del dispositivo</label>
+          <div class="space-y-2">
+            <input id="modelSearch" list="modelOptions" placeholder="Busca un modelo o escribe uno nuevo" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 font-mono text-sm focus:outline-none focus:border-sky-400" />
+            <datalist id="modelOptions"></datalist>
+            <div id="modelStatus" class="text-[11px] text-emerald-300 font-mono leading-relaxed">Disponible para diagnostico</div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-mono text-slate-400 uppercase tracking-wider mb-3">3. Tipo de averia</label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="issuesContainer"></div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-mono text-slate-400 uppercase tracking-wider mb-2">4. Calidad del repuesto</label>
+          <div class="grid grid-cols-2 gap-3">
+            <label class="cursor-pointer flex items-center justify-between p-3 rounded-xl border border-white/20 bg-white/5 hover:bg-white/10 transition-all"><div class="flex items-center gap-2"><input type="radio" name="partQuality" value="oem" checked onchange="updateCalculation()" class="accent-white"><span class="text-sm font-semibold text-white">Original OEM</span></div><span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">100% fabrica</span></label>
+            <label class="cursor-pointer flex items-center justify-between p-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all"><div class="flex items-center gap-2"><input type="radio" name="partQuality" value="copy" onchange="updateCalculation()" class="accent-white"><span class="text-sm font-semibold text-slate-300">Compatible AAA</span></div><span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">-25% precio</span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-5 flex flex-col justify-between bg-black/80 rounded-2xl p-6 border border-white/10 relative overflow-hidden">
+        <div>
+          <div class="flex items-center justify-between pb-4 border-b border-white/10 mb-6"><span class="text-xs font-mono text-slate-400 uppercase tracking-wider">Resumen de reparacion</span><span class="text-xs font-mono text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-shield-halved"></i> Garantia incluida</span></div>
+          <div id="summaryList" class="space-y-3 mb-6 font-mono text-sm"></div>
+        </div>
+        <div class="pt-6 border-t border-white/10">
+          <div class="flex items-center justify-between mb-2"><span class="text-slate-400 text-sm">Tiempo estimado:</span><span id="estimatedTime" class="font-mono text-white font-bold">35-45 min</span></div>
+          <div class="flex items-baseline justify-between mb-6"><span class="text-slate-400 text-sm">Total estimado:</span><div class="text-right"><span id="totalPrice" class="text-4xl font-extrabold font-mono text-white">0</span><span class="text-lg font-mono text-slate-400">€</span></div></div>
+          <div class="space-y-3">
+            <button onclick="bookCalculatedRepair()" class="w-full py-4 bg-white text-black font-extrabold text-base rounded-xl hover:bg-slate-200 transition-all shadow-lg flex items-center justify-center gap-2"><span>Reservar este precio</span><i class="fa-solid fa-chevron-right text-xs"></i></button>
+            <button onclick="openPaymentModal()" class="w-full py-3 bg-sky-400 text-black font-bold text-sm rounded-xl hover:bg-sky-300 transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-credit-card"></i><span>Pagar con simulación</span></button>
+            <button onclick="openOtherDeviceModal()" class="w-full py-3 border border-white/15 bg-white/5 text-slate-200 font-medium text-sm rounded-xl hover:bg-white/10 transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-laptop"></i><span>Otro dispositivo</span></button>
+          </div>
+          <p class="text-[11px] text-slate-500 text-center mt-3">*Diagnostico gratuito al reparar en BarsukON</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 px-4 max-w-7xl mx-auto">
+    <div class="text-center mb-12"><h2 class="text-xs font-mono tracking-widest text-slate-400 uppercase mb-2">// RESULTADOS VISUALES</h2><h3 class="text-3xl md:text-5xl font-extrabold text-white">Comparador antes y despues</h3><p class="text-slate-400 mt-2">Arrastra el deslizador para ver la calidad del cambio de pantalla.</p></div>
+    <div class="max-w-4xl mx-auto glass-panel rounded-3xl p-4 border border-white/10 shadow-2xl">
+      <div class="before-after-container rounded-2xl h-[320px] md:h-[450px] w-full relative bg-black/80 overflow-hidden cursor-ew-resize" id="sliderContainer">
+        <div class="absolute inset-0 w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-900 to-black select-none"><div class="text-center px-4"><div class="w-48 h-96 md:w-56 md:h-[380px] bg-slate-950 border-4 border-slate-700 rounded-[40px] shadow-2xl relative mx-auto overflow-hidden flex flex-col justify-between p-3"><div class="w-20 h-4 bg-slate-800 rounded-full mx-auto mb-2"></div><div class="flex-1 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 flex flex-col items-center justify-center p-4"><i class="fa-solid fa-check-circle text-emerald-400 text-4xl mb-2"></i><span class="font-mono text-xs text-slate-200 font-bold">Pantalla original restaurada</span><span class="text-[10px] text-slate-400">OLED Touch • 120Hz</span></div><div class="w-12 h-1 bg-slate-700 rounded-full mx-auto mt-2"></div></div><span class="inline-block mt-4 text-xs font-mono px-3 py-1 bg-emerald-500/20 text-emerald-300 rounded-full">DESPUES (BarsukON)</span></div></div>
+        <div class="img-overlay bg-gradient-to-br from-red-950/40 via-slate-900 to-black select-none" id="sliderOverlay"><div class="absolute inset-0 w-full h-full flex items-center justify-center"><div class="text-center px-4 min-w-[320px] md:min-w-[450px]"><div class="w-48 h-96 md:w-56 md:h-[380px] bg-slate-950 border-4 border-red-900/50 rounded-[40px] shadow-2xl relative mx-auto overflow-hidden flex flex-col justify-between p-3"><div class="w-20 h-4 bg-slate-800 rounded-full mx-auto mb-2"></div><div class="flex-1 rounded-2xl bg-slate-900 relative flex flex-col items-center justify-center p-4 overflow-hidden"><i class="fa-solid fa-triangle-exclamation text-amber-500 text-4xl mb-2"></i><span class="font-mono text-xs text-red-300 font-bold">Pantalla rota / cristal agrietado</span><span class="text-[10px] text-red-400">Manchas + tactil inoperativo</span><div class="absolute inset-0 pointer-events-none opacity-60"><svg class="w-full h-full" stroke="white" stroke-width="1.5"><line x1="10" y1="20" x2="180" y2="150" /><line x1="180" y1="150" x2="90" y2="280" /><line x1="180" y1="150" x2="220" y2="80" /></svg></div></div><div class="w-12 h-1 bg-slate-700 rounded-full mx-auto mt-2"></div></div><span class="inline-block mt-4 text-xs font-mono px-3 py-1 bg-red-500/20 text-red-300 rounded-full">ANTES (averia)</span></div></div></div>
+        <div class="absolute top-0 bottom-0 w-8 -ml-4 flex items-center justify-center pointer-events-none" id="sliderHandle" style="left: 50%;"><div class="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center shadow-xl font-bold text-xs"><i class="fa-solid fa-arrows-left-right"></i></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="interactive" class="py-16 px-4 max-w-7xl mx-auto">
+    <div class="text-center mb-12"><h2 class="text-xs font-mono tracking-widest text-slate-400 uppercase mb-2">// ANATOMIA DEL DISPOSITIVO</h2><h3 class="text-3xl md:text-5xl font-extrabold text-white">Estandares de calidad BarsukON</h3><p class="text-slate-400 mt-2">Haz clic en cada componente para ver nuestra metodologia.</p></div>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div onclick="showLayerDetails('screen')" class="layer-box glass-panel p-6 rounded-3xl cursor-pointer border border-white/10 flex flex-col justify-between group"><div><div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-white mb-4 group-hover:bg-white group-hover:text-black transition-all"><i class="fa-solid fa-mobile-button text-xl"></i></div><span class="text-xs font-mono text-slate-400">Capa 01</span><h4 class="text-lg font-bold text-white mt-1 mb-2">Modulo display OLED</h4><p class="text-xs text-slate-400 leading-relaxed">OLED/AMOLED con tasa de refresco original 120Hz y calibracion TrueTone.</p></div><div class="mt-6 flex items-center justify-between text-xs font-mono text-slate-300"><span>Mas detalles</span><i class="fa-solid fa-plus"></i></div></div>
+      <div onclick="showLayerDetails('battery')" class="layer-box glass-panel p-6 rounded-3xl cursor-pointer border border-white/10 flex flex-col justify-between group"><div><div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-white mb-4 group-hover:bg-white group-hover:text-black transition-all"><i class="fa-solid fa-battery-full text-xl"></i></div><span class="text-xs font-mono text-slate-400">Capa 02</span><h4 class="text-lg font-bold text-white mt-1 mb-2">Bateria litio premium</h4><p class="text-xs text-slate-400 leading-relaxed">Celdas nuevas con gestion de carga original y 0 ciclos previos.</p></div><div class="mt-6 flex items-center justify-between text-xs font-mono text-slate-300"><span>Mas detalles</span><i class="fa-solid fa-plus"></i></div></div>
+      <div onclick="showLayerDetails('board')" class="layer-box glass-panel p-6 rounded-3xl cursor-pointer border border-white/10 flex flex-col justify-between group"><div><div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-white mb-4 group-hover:bg-white group-hover:text-black transition-all"><i class="fa-solid fa-microchip text-xl"></i></div><span class="text-xs font-mono text-slate-400">Capa 03</span><h4 class="text-lg font-bold text-white mt-1 mb-2">Placa base BGA</h4><p class="text-xs text-slate-400 leading-relaxed">Microsoldadura bajo microscopio 40x para sistemas de carga y audio.</p></div><div class="mt-6 flex items-center justify-between text-xs font-mono text-slate-300"><span>Mas detalles</span><i class="fa-solid fa-plus"></i></div></div>
+      <div onclick="showLayerDetails('seal')" class="layer-box glass-panel p-6 rounded-3xl cursor-pointer border border-white/10 flex flex-col justify-between group"><div><div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-white mb-4 group-hover:bg-white group-hover:text-black transition-all"><i class="fa-solid fa-droplet-slash text-xl"></i></div><span class="text-xs font-mono text-slate-400">Capa 04</span><h4 class="text-lg font-bold text-white mt-1 mb-2">Sellado estanco IP68</h4><p class="text-xs text-slate-400 leading-relaxed">Aplicamos sellador termico y comprobamos estanqueidad final.</p></div><div class="mt-6 flex items-center justify-between text-xs font-mono text-slate-300"><span>Mas detalles</span><i class="fa-solid fa-plus"></i></div></div>
+    </div>
+  </section>
+
+  <section id="services" class="py-16 px-4 max-w-7xl mx-auto">
+    <div class="text-center mb-12"><h2 class="text-xs font-mono tracking-widest text-slate-400 uppercase mb-2">// ESPECIALIZACION</h2><h3 class="text-3xl md:text-5xl font-extrabold text-white">Servicios principales</h3></div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div class="glass-panel rounded-3xl p-6 border border-white/10"><div class="text-sky-300 text-2xl mb-4"><i class="fa-solid fa-mobile-screen"></i></div><h4 class="text-xl font-bold mb-3">Pantallas y vidrio</h4><p class="text-slate-400 text-sm leading-relaxed">Reparacion y sustitucion de paneles OLED, cristal, sensores y tactil con calibracion final.</p></div>
+      <div class="glass-panel rounded-3xl p-6 border border-white/10"><div class="text-sky-300 text-2xl mb-4"><i class="fa-solid fa-bolt"></i></div><h4 class="text-xl font-bold mb-3">Baterias y carga</h4><p class="text-slate-400 text-sm leading-relaxed">Diagnostico de bateria, carga lenta, puerto USB-C y fallos de alimentacion.</p></div>
+      <div class="glass-panel rounded-3xl p-6 border border-white/10"><div class="text-sky-300 text-2xl mb-4"><i class="fa-solid fa-microchip"></i></div><h4 class="text-xl font-bold mb-3">Microsoldadura</h4><p class="text-slate-400 text-sm leading-relaxed">Reparacion de placa base, alimentacion, audio y carga mediante BGA.</p></div>
+    </div>
+  </section>
+
+  <section id="tracker" class="py-16 px-4 max-w-7xl mx-auto">
+    <div class="glass-panel rounded-3xl p-6 md:p-10 border border-white/10 shadow-2xl">
+      <div class="text-center mb-8"><h2 class="text-xs font-mono tracking-widest text-slate-400 uppercase mb-2">// TRACKING</h2><h3 class="text-3xl md:text-5xl font-extrabold text-white">Seguimiento de reparacion</h3></div>
+      <div class="max-w-2xl mx-auto">
+        <div class="flex flex-col sm:flex-row gap-3"><input id="trackerInput" type="text" placeholder="Ej: BARSUK-1001" class="flex-1 bg-black/70 border border-white/20 rounded-xl px-4 py-3 text-white font-mono text-sm focus:outline-none focus:border-sky-400" /><button onclick="trackOrder()" class="px-6 py-3 bg-sky-400 text-black font-bold rounded-xl hover:bg-sky-300 transition-all">Comprobar</button></div>
+        <div class="text-[11px] text-slate-500 mt-4">Codigos demo: <button onclick="setTrackCode('BARSUK-1001')" class="underline hover:text-white">BARSUK-1001</button>, <button onclick="setTrackCode('BARSUK-777')" class="underline hover:text-white">BARSUK-777</button></div>
+        <div id="trackerResult" class="mt-6 rounded-2xl border border-white/10 bg-black/40 p-5 hidden"><div class="flex items-center justify-between gap-3 flex-wrap"><div><div class="text-[11px] uppercase font-mono text-slate-400">Dispositivo</div><div id="trackDevice" class="text-xl font-bold mt-1">iPhone 14 Pro Max</div></div><span id="trackBadge" class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300">Listo para recogida</span></div><div class="mt-6 space-y-4"><div class="flex items-center gap-3 text-sm text-slate-300"><span class="w-3 h-3 rounded-full bg-emerald-400"></span> 01. Intake & Diagnostics (Completed)</div><div class="flex items-center gap-3 text-sm text-slate-300"><span class="w-3 h-3 rounded-full bg-emerald-400"></span> 02. OLED Module replacement (In progress)</div><div class="flex items-center gap-3 text-sm text-slate-300"><span class="w-3 h-3 rounded-full bg-sky-400"></span> 03. Quality control & waterproofing</div><div class="flex items-center gap-3 text-sm text-slate-500"><span class="w-3 h-3 rounded-full bg-slate-600"></span> 04. Ready for pick up</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="border-t border-white/10 py-10 px-4 mt-16">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-6 text-sm text-slate-400"><div><div class="font-mono font-extrabold text-white text-lg">BARSUKON</div><p class="mt-2 max-w-md">Precision en cada reparacion: pantallas, baterias, placas y restauracion tras mojado.</p></div><div><div class="text-white font-semibold mb-2">Horario</div><div>Lun-Sab: 10:00-19:00</div><div>Dom: Cerrado / por cita</div></div><div><div class="text-white font-semibold mb-2">Ubicacion</div><div>Centro de reparacion movil</div><div>Madrid • Barcelona • Online</div></div></div>
+    <div class="max-w-7xl mx-auto mt-8 pt-6 border-t border-white/10 text-center text-slate-500 text-xs">© 2026 BarsukON Services. Todos los derechos reservados.</div>
+  </footer>
+
+  <div id="bookingModal" class="fixed inset-0 bg-black/70 hidden justify-center items-center z-50 p-4"><div class="glass-panel rounded-3xl w-full max-w-xl p-6 border border-white/10"><div class="flex items-center justify-between mb-5"><h3 class="text-2xl font-bold text-white">Reserva tu cita en BarsukON</h3><button onclick="closeBookingModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div><form onsubmit="submitBooking(event)"><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><label class="block"><span class="block text-xs font-mono text-slate-400 uppercase mb-2">Nombre</span><input type="text" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-400" placeholder="Tu nombre" required /></label><label class="block"><span class="block text-xs font-mono text-slate-400 uppercase mb-2">Telefono</span><input type="tel" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-400" placeholder="+34 600 000 000" required /></label></div><label class="block mt-4"><span class="block text-xs font-mono text-slate-400 uppercase mb-2">Detalles del dano</span><textarea id="modalNotesText" rows="4" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-400" placeholder="Modelo, dano, prioridad..."></textarea></label><div class="mt-5 flex items-center justify-between gap-3 flex-wrap"><div class="text-sm text-slate-400">Presupuesto inicial: <span id="modalTotal" class="font-bold text-white">0 €</span></div><button type="submit" class="px-6 py-3 rounded-xl bg-white text-black font-bold hover:bg-slate-200 transition-all">Confirmar cita</button></div></form></div></div>
+
+  <div id="empresaModal" class="fixed inset-0 bg-black/80 hidden justify-center items-center z-50 p-4"><div class="glass-panel rounded-3xl max-w-3xl w-full p-6 border border-white/10"><div class="flex items-center justify-between mb-6"><div class="text-xs font-mono uppercase text-sky-300">SCHOOL PROJECT • EMPRESA COURSE</div><button onclick="toggleEmpresaModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div><h3 class="text-2xl font-bold text-white mb-4">Plan de negocio "BarsukON"</h3><div class="space-y-4 text-slate-300 text-sm leading-relaxed"><p><strong class="text-white">Idea de negocio:</strong> creacion de un servicio agil y especializado en reparacion de smartphones para estudiantes y vecinos, con precios transparentes y diagnostico online.</p><p><strong class="text-white">Forma legal:</strong> autonomo / FOP, con baja inversion inicial y alta flexibilidad operativa.</p><p><strong class="text-white">Diferenciacion:</strong> diseno minimalista, seguimiento online del pedido y proteccion de pantalla incluida con reservas por web.</p></div><div class="mt-6 pt-4 border-t border-white/10"><h4 class="text-lg font-bold text-white mb-3">Riesgos y soluciones</h4><ul class="space-y-2 text-sm text-slate-300 list-disc pl-5"><li>Piezas defectuosas: inspeccion de calidad previa al montaje y acuerdos con proveedores certificados.</li><li>Danos por manipulacion: fondo de contingencia del 5% para reemplazos inmediatos.</li></ul></div><button onclick="toggleEmpresaModal()" class="mt-6 px-5 py-2.5 bg-white text-black rounded-xl font-bold hover:bg-slate-200 transition-all">Aceptar</button></div></div>
+
+  <div id="paymentModal" class="fixed inset-0 bg-black/70 hidden justify-center items-center z-[60] p-4"><div class="glass-panel rounded-3xl w-full max-w-lg p-6 border border-white/10"><div class="flex items-center justify-between mb-5"><h3 class="text-2xl font-bold text-white">Pago simulado</h3><button onclick="closePaymentModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div><div class="space-y-4 text-sm text-slate-300"><div class="rounded-2xl border border-white/10 bg-black/40 p-4"><div class="flex items-center justify-between"><span>Pedido</span><span id="paymentModelLabel" class="font-mono text-white">Modelo no seleccionado</span></div><div class="flex items-center justify-between mt-2"><span>Total</span><span id="paymentTotalLabel" class="text-xl font-bold text-white">0 €</span></div></div><div class="grid grid-cols-2 gap-3"><label class="block"><span class="block text-xs font-mono text-slate-400 uppercase mb-2">Titular</span><input type="text" placeholder="Tu nombre" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-400" /></label><label class="block"><span class="block text-xs font-mono text-slate-400 uppercase mb-2">Tarjeta</span><input type="text" placeholder="4242 4242 4242 4242" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-400" /></label></div><div class="grid grid-cols-2 gap-3"><label class="block"><span class="block text-xs font-mono text-slate-400 uppercase mb-2">MM/YY</span><input type="text" placeholder="12/29" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-400" /></label><label class="block"><span class="block text-xs font-mono text-slate-400 uppercase mb-2">CVV</span><input type="text" placeholder="123" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-400" /></label></div><div class="flex items-center gap-2 text-[11px] text-amber-300"><i class="fa-solid fa-circle-info"></i><span>Esto es una simulacion segura: no se procesa ninguna transaccion real.</span></div><button onclick="simulatePayment()" class="w-full mt-2 py-3 bg-white text-black font-bold rounded-xl hover:bg-slate-200 transition-all">Pagar con simulacion</button></div></div></div>
+
+  <div id="otherDeviceModal" class="fixed inset-0 bg-black/70 hidden justify-center items-center z-[60] p-4"><div class="glass-panel rounded-3xl w-full max-w-xl p-6 border border-white/10"><div class="flex items-center justify-between mb-5"><h3 class="text-2xl font-bold text-white">Otros dispositivos</h3><button onclick="closeOtherDeviceModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div><form onsubmit="submitOtherDeviceRequest(event)"><div class="space-y-4"><label class="block"><span class="block text-xs font-mono text-slate-400 uppercase mb-2">Nombre del dispositivo</span><input id="otherDeviceType" type="text" placeholder="ej. Huawei P40, tablet, smartwatch..." class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-400" required /></label><label class="block"><span class="block text-xs font-mono text-slate-400 uppercase mb-2">Problema</span><select id="otherDeviceIssue" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-400" required><option value="">Selecciona un problema</option><option value="Pantalla rota">Pantalla rota</option><option value="Batería">Batería</option><option value="Puerto de carga">Puerto de carga</option><option value="Problema de software">Problema de software</option><option value="Mojado / limpieza">Mojado / limpieza</option><option value="Otro">Otro</option></select></label><div class="grid grid-cols-1 md:grid-cols-2 gap-3"><label class="block"><span class="block text-xs font-mono text-slate-400 uppercase mb-2">Nombre</span><input id="otherDeviceName" type="text" placeholder="Tu nombre" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-400" required /></label><label class="block"><span class="block text-xs font-mono text-slate-400 uppercase mb-2">Email</span><input id="otherDeviceEmail" type="email" placeholder="tu@email.com" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-400" required /></label></div><label class="block"><span class="block text-xs font-mono text-slate-400 uppercase mb-2">Telefono</span><input id="otherDevicePhone" type="tel" placeholder="+34 600 000 000" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-400" required /></label></div><div class="mt-5 flex justify-between items-center gap-3"><span class="text-sm text-slate-400">Estimacion aproximada:<span id="otherDeviceEstimate" class="text-white font-bold ml-2">€ 45-180</span></span><button type="submit" class="px-5 py-3 rounded-xl bg-white text-black font-bold hover:bg-slate-200 transition-all">Enviar solicitud</button></div></form></div></div>
+
+  <script>
+    const modelsData = {
+      apple: ['iPhone 18 Pro Max','iPhone 18 Pro','iPhone 18','iPhone 17 Pro Max','iPhone 17 Pro','iPhone 17','iPhone 16 Pro Max','iPhone 16 Pro','iPhone 16','iPhone 15 Pro Max','iPhone 15 Pro','iPhone 15','iPhone 14 Pro Max','iPhone 14 Pro','iPhone 14','iPhone 13 Pro Max','iPhone 13 Pro','iPhone 13','iPhone 12 Pro Max','iPhone 12 Pro','iPhone 12','iPhone 11 Pro','iPhone 11','iPhone XS Max','iPhone XS','iPhone XR','iPhone X','iPhone SE (2022)','iPhone SE (2020)'],
+      samsung: ['Galaxy S25 Ultra','Galaxy S25+','Galaxy S25','Galaxy S24 Ultra','Galaxy S24+','Galaxy S24','Galaxy S23 Ultra','Galaxy S23+','Galaxy S23','Galaxy S22 Ultra','Galaxy S22+','Galaxy S22','Galaxy S21 Ultra','Galaxy S21+','Galaxy S21','Galaxy S20 Ultra','Galaxy S20+','Galaxy S20','Galaxy Note 20 Ultra','Galaxy Note 20','Galaxy A95','Galaxy A74','Galaxy A54','Galaxy A34','Galaxy A24','Galaxy Z Fold 6','Galaxy Z Fold 5','Galaxy Z Flip 6','Galaxy Z Flip 5','Galaxy Z Flip 4'],
+      xiaomi: ['Xiaomi 15 Pro','Xiaomi 15','Xiaomi 14 Pro','Xiaomi 14','Xiaomi 13T Pro','Xiaomi 13T','Xiaomi 13 Pro','Xiaomi 13','Redmi Note 14 Pro','Redmi Note 14','Redmi Note 13 Pro','Redmi Note 13','Redmi Note 12 Pro','Redmi Note 12','POCO F7 Pro','POCO F6 Pro','POCO X7 Pro','POCO X6 Pro','POCO X5 Pro'],
+      pixel: ['Google Pixel 9 Pro XL','Google Pixel 9 Pro','Google Pixel 9','Google Pixel 8 Pro','Google Pixel 8','Google Pixel 8a','Google Pixel 7 Pro','Google Pixel 7','Google Pixel 7a','Google Pixel 6 Pro','Google Pixel 6','Google Pixel 6a','Google Pixel 5','Google Pixel 4a','Google Pixel 4','Google Pixel 3a'],
+      other: ['Modelo Universal','OnePlus 12','Huawei P60 Pro','Motorola Edge 50','Nokia G60']
+    };
+
+    const priceByBrand = {
+      apple: { screen: 120, battery: 75, charging: 65, water: 90, software: 55, soldering: 180 },
+      samsung: { screen: 105, battery: 68, charging: 60, water: 82, software: 48, soldering: 165 },
+      xiaomi: { screen: 88, battery: 55, charging: 52, water: 70, software: 40, soldering: 150 },
+      pixel: { screen: 98, battery: 62, charging: 58, water: 76, software: 44, soldering: 160 },
+      other: { screen: 110, battery: 70, charging: 60, water: 80, software: 45, soldering: 170 }
+    };
+
+    const issuesData = [
+      { id: 'screen', name: 'Pantalla / cristal roto', basePrice: 95, time: 55 },
+      { id: 'battery', name: 'Bateria (se descarga rapido)', basePrice: 58, time: 35 },
+      { id: 'charging', name: 'Puerto de carga / USB-C', basePrice: 48, time: 40 },
+      { id: 'water', name: 'Limpieza tras mojado', basePrice: 72, time: 75 },
+      { id: 'software', name: 'Desbloqueo FRP / software', basePrice: 42, time: 45 },
+      { id: 'soldering', name: 'Soldadura en placa base', basePrice: 140, time: 140 }
+    ];
+
+    let selectedBrand = 'apple';
+    let selectedIssues = ['screen'];
+    let currentLang = 'es';
+
+    function hashModel(model) { const cleaned = model.toLowerCase().replace(/[^a-z0-9]/g, ''); let hash = 0; for (const ch of cleaned) hash = ((hash * 31) + ch.charCodeAt(0)) >>> 0; return hash; }
+    function isModelPending(model) { if (!model) return false; const hash = hashModel(model); return (hash % 11 === 0) || (hash % 9 === 0); }
+
+    function renderModels() {
+      const input = document.getElementById('modelSearch');
+      const list = document.getElementById('modelOptions');
+      const models = modelsData[selectedBrand];
+      list.innerHTML = '';
+      models.forEach(model => { const option = document.createElement('option'); option.value = model; list.appendChild(option); });
+      input.value = '';
+      updateModelStatus();
+    }
+
+    function updateModelStatus() {
+      const model = document.getElementById('modelSearch').value.trim();
+      const status = document.getElementById('modelStatus');
+      if (!model) { status.textContent = 'Selecciona o escribe un modelo'; status.className = 'text-[11px] text-slate-300 font-mono leading-relaxed'; return; }
+      if (isModelPending(model)) { status.textContent = `Piezas pendientes para ${model}: llegara en 3-6 dias.`; status.className = 'text-[11px] text-amber-300 font-mono leading-relaxed'; }
+      else { status.textContent = `Disponible para diagnostico: ${model}.`; status.className = 'text-[11px] text-emerald-300 font-mono leading-relaxed'; }
+    }
+
+    function getBrandBasePrice(issueId) {
+      const brandPrices = priceByBrand[selectedBrand] || priceByBrand.apple;
+      return brandPrices[issueId] || 0;
+    }
+
+    function selectBrand(brand, btn) {
+      selectedBrand = brand;
+      document.querySelectorAll('.brand-btn').forEach(button => { button.classList.remove('active','bg-white/10','border-white/30','text-white'); button.classList.add('bg-white/5','border-white/10','text-slate-400'); });
+      btn.classList.add('active','border-white/30','text-white');
+      btn.classList.remove('bg-white/5','border-white/10','text-slate-400');
+      renderModels();
+      updateCalculation();
+    }
+
+    function renderIssues() {
+      const container = document.getElementById('issuesContainer');
+      container.innerHTML = '';
+      issuesData.forEach(issue => {
+        const checked = selectedIssues.includes(issue.id);
+        const price = getBrandBasePrice(issue.id) || issue.basePrice;
+        const label = document.createElement('label');
+        label.className = `cursor-pointer p-3 rounded-xl border transition-all flex items-center justify-between text-xs ${checked ? 'border-white bg-white/10 text-white' : 'border-white/10 bg-white/5 text-slate-400 hover:bg-white/10'}`;
+        label.innerHTML = `
+          <div class="flex items-center gap-2">
+            <input type="checkbox" value="${issue.id}" ${checked ? 'checked' : ''} onchange="toggleIssue('${issue.id}')" class="accent-white" />
+            <span>${issue.name}</span>
+          </div>
+          <span class="font-mono text-slate-300">${price} €</span>
+        `;
+        container.appendChild(label);
+      });
+    }
+
+    function toggleIssue(id) {
+      if (selectedIssues.includes(id)) {
+        if (selectedIssues.length > 1) selectedIssues = selectedIssues.filter(item => item !== id);
+      } else { selectedIssues.push(id); }
+      renderIssues();
+      updateCalculation();
+    }
+
+    function updateCalculation() {
+      const summaryList = document.getElementById('summaryList');
+      summaryList.innerHTML = '';
+      let total = 0;
+      let totalTime = 0;
+      const model = document.getElementById('modelSearch').value.trim();
+      const quality = document.querySelector('input[name="partQuality"]:checked').value;
+      const multiplier = quality === 'copy' ? 0.75 : 1;
+
+      if (isModelPending(model)) {
+        const row = document.createElement('div');
+        row.className = 'flex justify-between text-slate-300';
+        row.innerHTML = '<span>• Espera de piezas</span><span class="text-amber-300">3–6 dias</span>';
+        summaryList.appendChild(row);
+      }
+
+      selectedIssues.forEach(issueId => {
+        const issue = issuesData.find(item => item.id === issueId);
+        if (!issue) return;
+        const brandBase = getBrandBasePrice(issueId);
+        const adjustedBase = brandBase || issue.basePrice;
+        const price = Math.round(adjustedBase * multiplier);
+        total += price;
+        totalTime += issue.time;
+        const row = document.createElement('div');
+        row.className = 'flex justify-between text-slate-300';
+        row.innerHTML = `<span>• ${issue.name}</span><span class="text-white">${price} €</span>`;
+        summaryList.appendChild(row);
+      });
+
+      document.getElementById('totalPrice').textContent = total;
+      document.getElementById('estimatedTime').textContent = `${Math.max(25, totalTime - 10)}-${totalTime + 15} min`;
+      document.getElementById('modalTotal').textContent = `${total} €`;
+      document.getElementById('paymentTotalLabel').textContent = `${total} €`;
+      document.getElementById('paymentModelLabel').textContent = model || 'Modelo no seleccionado';
+      document.getElementById('otherDeviceEstimate').textContent = `${Math.max(45, Math.round(total * 0.6))}-${Math.round(total + 80)} €`;
+    }
+
+    function trackOrder() {
+      const code = document.getElementById('trackerInput').value.trim().toUpperCase();
+      const box = document.getElementById('trackerResult');
+      const device = document.getElementById('trackDevice');
+      const badge = document.getElementById('trackBadge');
+      box.classList.remove('hidden');
+      if (code === 'BARSUK-777') { device.textContent = 'Samsung Galaxy S23 Ultra'; badge.textContent = 'Listo para recogida'; badge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300'; }
+      else { device.textContent = 'iPhone 14 Pro Max'; badge.textContent = 'En taller'; badge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300'; }
+    }
+    function setTrackCode(code) { document.getElementById('trackerInput').value = code; trackOrder(); }
+    function openBookingModal() { const modal = document.getElementById('bookingModal'); modal.classList.remove('hidden'); modal.classList.add('flex'); }
+    function closeBookingModal() { const modal = document.getElementById('bookingModal'); modal.classList.add('hidden'); modal.classList.remove('flex'); }
+    function openPaymentModal() { const modal = document.getElementById('paymentModal'); modal.classList.remove('hidden'); modal.classList.add('flex'); }
+    function closePaymentModal() { const modal = document.getElementById('paymentModal'); modal.classList.add('hidden'); modal.classList.remove('flex'); }
+    function openOtherDeviceModal() { const modal = document.getElementById('otherDeviceModal'); modal.classList.remove('hidden'); modal.classList.add('flex'); }
+    function closeOtherDeviceModal() { const modal = document.getElementById('otherDeviceModal'); modal.classList.add('hidden'); modal.classList.remove('flex'); }
+    function bookCalculatedRepair() { const model = document.getElementById('modelSearch').value || 'Modelo no seleccionado'; document.getElementById('modalNotesText').value = `Modelo: ${model}. Presupuesto estimado en calculadora.`; openBookingModal(); }
+    function simulatePayment() {
+      closePaymentModal();
+      const toast = document.createElement('div');
+      toast.className = 'fixed top-20 right-4 z-[60] bg-white text-black px-6 py-4 rounded-2xl shadow-2xl font-mono text-sm border border-slate-300 flex items-center gap-3';
+      toast.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-500 text-xl"></i> <span>Simulacion de pago exitosa. Se ha guardado la reserva en BarsukON.</span>';
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 4000);
+    }
+    function submitBooking(event) { event.preventDefault(); const toast = document.createElement('div'); toast.className = 'fixed top-20 right-4 z-[60] bg-white text-black px-6 py-4 rounded-2xl shadow-2xl font-mono text-sm border border-slate-300 flex items-center gap-3'; toast.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-500 text-xl"></i> <span>¡Gracias! Cita registrada en BarsukON. Te contactaremos en breve.</span>'; document.body.appendChild(toast); setTimeout(() => toast.remove(), 4000); closeBookingModal(); }
+    function submitOtherDeviceRequest(event) {
+      event.preventDefault();
+      const device = document.getElementById('otherDeviceType').value.trim();
+      const issue = document.getElementById('otherDeviceIssue').value.trim();
+      const name = document.getElementById('otherDeviceName').value.trim();
+      const email = document.getElementById('otherDeviceEmail').value.trim();
+      const phone = document.getElementById('otherDevicePhone').value.trim();
+      const toast = document.createElement('div');
+      toast.className = 'fixed top-20 right-4 z-[60] bg-white text-black px-6 py-4 rounded-2xl shadow-2xl font-mono text-sm border border-slate-300 flex items-center gap-3';
+      toast.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-500 text-xl"></i> <span>Solicitud recibida: ${device} / ${issue}. Te contactaremos a ${name} por ${email} o ${phone}.</span>`;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 5000);
+      closeOtherDeviceModal();
+      event.target.reset();
+    }
+    function toggleEmpresaModal() { const modal = document.getElementById('empresaModal'); modal.classList.toggle('hidden'); modal.classList.toggle('flex'); }
+    function showLayerDetails(key) { const details = { screen:'Utilizamos matrices originales o relaminamos el cristal superior roto con control de calidad y calibracion final.', battery:'Las baterias premium incluyen control de ciclos y prueba de capacidad antes del montaje.', board:'Microsoldadura bajo microscopio para restaurar alimentacion, audio y carga.', seal:'Aplicamos sellado termico y comprobamos la estanqueidad para prevenir futuras filtraciones.' }; const toast = document.createElement('div'); toast.className = 'fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-slate-900/90 border border-white/10 text-white px-5 py-3 rounded-xl text-sm shadow-lg'; toast.innerHTML = details[key] || 'Revision tecnica completada.'; document.body.appendChild(toast); setTimeout(() => toast.remove(), 2200); }
+    function mobileMenuToggle() { document.getElementById('mobileMenu').classList.toggle('hidden'); }
+    document.getElementById('mobileMenuBtn')?.addEventListener('click', mobileMenuToggle);
+    document.getElementById('modelSearch').addEventListener('input', () => { updateModelStatus(); updateCalculation(); });
+
+    function setupBeforeAfterSlider() {
+      const container = document.getElementById('sliderContainer');
+      const overlay = document.getElementById('sliderOverlay');
+      const handle = document.getElementById('sliderHandle');
+      let dragging = false;
+      const setPosition = (x) => { const rect = container.getBoundingClientRect(); let ratio = (x-rect.left)/rect.width; if (ratio < 0) ratio = 0; if (ratio > 1) ratio = 1; overlay.style.width = `${ratio * 100}%`; handle.style.left = `${ratio * 100}%`; };
+      container.addEventListener('mousedown', e => { dragging=true; setPosition(e.clientX); });
+      window.addEventListener('mouseup', () => dragging = false);
+      window.addEventListener('mousemove', e => { if (dragging) setPosition(e.clientX); });
+      container.addEventListener('touchstart', e => { dragging=true; setPosition(e.touches[0].clientX); });
+      window.addEventListener('touchend', () => dragging = false);
+      window.addEventListener('touchmove', e => { if (dragging) setPosition(e.touches[0].clientX); });
+    }
+    function toggleLanguage() { currentLang = currentLang === 'es' ? 'en' : 'es'; document.getElementById('currentLangLabel').textContent = currentLang.toUpperCase(); renderIssues(); updateCalculation(); }
+
+    renderModels();
+    renderIssues();
+    updateCalculation();
+    setupBeforeAfterSlider();
+  </script>
+</body>
+</html>
