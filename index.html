@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] } } } };
   </script>
@@ -64,6 +65,8 @@
         <button id="themeButton" onclick="toggleTheme()" class="px-3 py-1.5 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 font-mono text-xs text-white transition-all flex items-center gap-2" title="Cambiar tema"><i id="themeIcon" class="fa-solid fa-sun text-slate-400"></i><span id="themeLabel">Tema</span></button>
         <button onclick="toggleLanguage()" class="px-3 py-1.5 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 font-mono text-xs text-white transition-all flex items-center gap-2"><i class="fa-solid fa-globe text-slate-400"></i><span id="currentLangLabel" class="font-bold">ES</span></button>
         <button id="bookButton" onclick="openBookingModal()" class="px-5 py-2.5 bg-white text-black font-semibold text-sm rounded-xl hover:bg-slate-200 transition-all shadow-md shadow-white/5 active:scale-95 flex items-center gap-2"><i class="fa-solid fa-bolt-lightning text-xs"></i><span>Reservar Cita</span></button>
+        <button onclick="openAuthModal()" class="px-3 py-1.5 rounded-xl border border-sky-400/30 bg-sky-400/10 hover:bg-sky-400/20 font-mono text-xs text-sky-200 transition-all"><i class="fa-solid fa-user"></i> <span id="authButtonLabel">Acceder</span></button>
+        <button id="dashboardButton" onclick="openDashboardModal()" class="hidden px-3 py-1.5 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 font-mono text-xs text-white transition-all"><i class="fa-solid fa-gauge"></i> Panel</button>
         <button id="mobileMenuBtn" class="md:hidden text-2xl text-slate-300 p-2"><i class="fa-solid fa-bars"></i></button>
       </div>
     </div>
@@ -92,6 +95,25 @@
         <div class="glass-panel p-4 rounded-2xl"><div class="font-mono text-3xl font-extrabold text-white mb-1">99.2%</div><div class="text-xs text-slate-400">Piezas originales OEM</div></div>
         <div class="glass-panel p-4 rounded-2xl"><div class="font-mono text-3xl font-extrabold text-white mb-1">180 dias</div><div class="text-xs text-slate-400">Garantia escrita</div></div>
       </div>
+    </div>
+  </section>
+
+  <section id="promotions" class="py-12 px-4 max-w-7xl mx-auto">
+    <div class="text-center mb-8"><h2 class="text-xs font-mono tracking-widest text-slate-400 uppercase mb-2">// OFERTAS</h2><h3 class="text-3xl md:text-4xl font-extrabold text-white">Promociones activas</h3></div>
+    <div id="promotionsList" class="grid grid-cols-1 md:grid-cols-3 gap-5"><p class="text-center text-slate-400 md:col-span-3">Cargando promociones...</p></div>
+  </section>
+
+  <section id="reviews" class="py-12 px-4 max-w-7xl mx-auto">
+    <div class="text-center mb-8"><h2 class="text-xs font-mono tracking-widest text-slate-400 uppercase mb-2">// EXPERIENCIAS</h2><h3 class="text-3xl md:text-4xl font-extrabold text-white">Opiniones verificadas</h3></div>
+    <div id="reviewsList" class="grid grid-cols-1 md:grid-cols-3 gap-5"><p class="text-center text-slate-400 md:col-span-3">Cargando opiniones...</p></div>
+  </section>
+
+  <section id="problemWizard" class="py-12 px-4 max-w-7xl mx-auto">
+    <div class="glass-panel rounded-3xl p-6 md:p-10 border border-white/10 text-center">
+      <h2 class="text-xs font-mono tracking-widest text-slate-400 uppercase mb-2">// DIAGNÓSTICO GUIADO</h2>
+      <h3 class="text-3xl md:text-4xl font-extrabold text-white mb-3">¿Qué le ocurre a tu dispositivo?</h3>
+      <p class="text-slate-400 mb-6">Responde en cuatro pasos y prepara tu solicitud de reparación.</p>
+      <button onclick="openWizardModal()" class="px-6 py-3 bg-sky-400 text-black font-bold rounded-xl hover:bg-sky-300 transition-all">Comenzar diagnóstico</button>
     </div>
   </section>
 
@@ -203,7 +225,7 @@
     <div class="max-w-7xl mx-auto mt-8 pt-6 border-t border-white/10 text-center text-slate-500 text-xs">© 2026 BarsukON Services. Todos los derechos reservados.</div>
   </footer>
 
-  <div id="bookingModal" class="fixed inset-0 bg-black/70 hidden justify-center items-center z-50 p-4"><div class="glass-panel rounded-3xl w-full max-w-xl p-6 border border-white/10"><div class="flex items-center justify-between mb-5"><h3 class="text-2xl font-bold text-white">Reserva tu cita en BarsukON</h3><button onclick="closeBookingModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div><form onsubmit="submitBooking(event)"><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><label class="block"><span class="block text-xs font-mono text-slate-400 uppercase mb-2">Nombre</span><input type="text" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-400" placeholder="Tu nombre" required /></label><label class="block"><span class="block text-xs font-mono text-slate-400 uppercase mb-2">Telefono</span><input type="tel" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-400" placeholder="+34 600 000 000" required /></label></div><label class="block mt-4"><span class="block text-xs font-mono text-slate-400 uppercase mb-2">Detalles del dano</span><textarea id="modalNotesText" rows="4" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-400" placeholder="Modelo, dano, prioridad..."></textarea></label><div class="mt-5 flex items-center justify-between gap-3 flex-wrap"><div class="text-sm text-slate-400">Presupuesto inicial: <span id="modalTotal" class="font-bold text-white">0 €</span></div><button type="submit" class="px-6 py-3 rounded-xl bg-white text-black font-bold hover:bg-slate-200 transition-all">Confirmar cita</button></div></form></div></div>
+  <div id="bookingModal" class="fixed inset-0 bg-black/70 hidden justify-center items-center z-50 p-4"><div class="glass-panel rounded-3xl w-full max-w-xl p-6 border border-white/10"><div class="flex items-center justify-between mb-5"><h3 class="text-2xl font-bold text-white">Reserva tu cita en BarsukON</h3><button onclick="closeBookingModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div><form onsubmit="submitBooking(event)"><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><label class="block"><span class="block text-xs font-mono text-slate-400 uppercase mb-2">Nombre</span><input id="bookingName" type="text" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-400" placeholder="Tu nombre" required /></label><label class="block"><span class="block text-xs font-mono text-slate-400 uppercase mb-2">Telefono</span><input id="bookingPhone" type="tel" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-400" placeholder="+34 600 000 000" required /></label></div><label class="block mt-4"><span class="block text-xs font-mono text-slate-400 uppercase mb-2">Detalles del dano</span><textarea id="modalNotesText" rows="4" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-400" placeholder="Modelo, dano, prioridad..."></textarea></label><div class="mt-5 flex items-center justify-between gap-3 flex-wrap"><div class="text-sm text-slate-400">Presupuesto inicial: <span id="modalTotal" class="font-bold text-white">0 €</span></div><button type="submit" class="px-6 py-3 rounded-xl bg-white text-black font-bold hover:bg-slate-200 transition-all">Confirmar cita</button></div></form></div></div>
 
   <div id="empresaModal" class="fixed inset-0 bg-black/80 hidden justify-center items-center z-50 p-4"><div class="glass-panel rounded-3xl max-w-3xl w-full p-6 border border-white/10"><div class="flex items-center justify-between mb-6"><div class="text-xs font-mono uppercase text-sky-300">SCHOOL PROJECT • EMPRESA COURSE</div><button onclick="toggleEmpresaModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div><h3 class="text-2xl font-bold text-white mb-4">Plan de negocio "BarsukON"</h3><div class="space-y-4 text-slate-300 text-sm leading-relaxed"><p><strong class="text-white">Idea de negocio:</strong> creacion de un servicio agil y especializado en reparacion de smartphones para estudiantes y vecinos, con precios transparentes y diagnostico online.</p><p><strong class="text-white">Forma legal:</strong> autonomo / FOP, con baja inversion inicial y alta flexibilidad operativa.</p><p><strong class="text-white">Diferenciacion:</strong> diseno minimalista, seguimiento online del pedido y proteccion de pantalla incluida con reservas por web.</p></div><div class="mt-6 pt-4 border-t border-white/10"><h4 class="text-lg font-bold text-white mb-3">Riesgos y soluciones</h4><ul class="space-y-2 text-sm text-slate-300 list-disc pl-5"><li>Piezas defectuosas: inspeccion de calidad previa al montaje y acuerdos con proveedores certificados.</li><li>Danos por manipulacion: fondo de contingencia del 5% para reemplazos inmediatos.</li></ul></div><button onclick="toggleEmpresaModal()" class="mt-6 px-5 py-2.5 bg-white text-black rounded-xl font-bold hover:bg-slate-200 transition-all">Aceptar</button></div></div>
 
@@ -211,7 +233,16 @@
 
   <div id="otherDeviceModal" class="fixed inset-0 bg-black/70 hidden justify-center items-center z-[60] p-4"><div class="glass-panel rounded-3xl w-full max-w-xl p-6 border border-white/10"><div class="flex items-center justify-between mb-5"><h3 class="text-2xl font-bold text-white">Otros dispositivos</h3><button onclick="closeOtherDeviceModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div><form onsubmit="submitOtherDeviceRequest(event)"><div class="space-y-4"><label class="block"><span class="block text-xs font-mono text-slate-400 uppercase mb-2">Nombre del dispositivo</span><input id="otherDeviceType" type="text" placeholder="ej. Huawei P40, tablet, smartwatch..." class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-400" required /></label><label class="block"><span class="block text-xs font-mono text-slate-400 uppercase mb-2">Problema</span><select id="otherDeviceIssue" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-400" required><option value="">Selecciona un problema</option><option value="Pantalla rota">Pantalla rota</option><option value="Batería">Batería</option><option value="Puerto de carga">Puerto de carga</option><option value="Problema de software">Problema de software</option><option value="Mojado / limpieza">Mojado / limpieza</option><option value="Otro">Otro</option></select></label><div class="grid grid-cols-1 md:grid-cols-2 gap-3"><label class="block"><span class="block text-xs font-mono text-slate-400 uppercase mb-2">Nombre</span><input id="otherDeviceName" type="text" placeholder="Tu nombre" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-400" required /></label><label class="block"><span class="block text-xs font-mono text-slate-400 uppercase mb-2">Email</span><input id="otherDeviceEmail" type="email" placeholder="tu@email.com" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-400" required /></label></div><label class="block"><span class="block text-xs font-mono text-slate-400 uppercase mb-2">Telefono</span><input id="otherDevicePhone" type="tel" placeholder="+34 600 000 000" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-400" required /></label></div><div class="mt-5 flex justify-between items-center gap-3"><span class="text-sm text-slate-400">Estimacion aproximada:<span id="otherDeviceEstimate" class="text-white font-bold ml-2">€ 45-180</span></span><button type="submit" class="px-5 py-3 rounded-xl bg-white text-black font-bold hover:bg-slate-200 transition-all">Enviar solicitud</button></div></form></div></div>
 
+  <div id="authModal" class="fixed inset-0 bg-black/80 hidden justify-center items-center z-[70] p-4"><div class="glass-panel rounded-3xl w-full max-w-md p-6 border border-white/10"><div class="flex items-center justify-between mb-5"><h3 class="text-2xl font-bold text-white">Tu cuenta BarsukON</h3><button onclick="closeAuthModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div><form onsubmit="submitAuth(event)" class="space-y-4"><input id="authEmail" type="email" required placeholder="tu@email.com" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3"><input id="authPassword" type="password" required minlength="6" placeholder="Contraseña (mínimo 6)" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3"><div class="grid grid-cols-2 gap-3"><button type="submit" data-auth-mode="signin" class="py-3 rounded-xl bg-white text-black font-bold">Iniciar sesión</button><button type="button" onclick="signUp()" class="py-3 rounded-xl border border-white/20 text-white font-bold">Crear cuenta</button></div><p id="authStatus" class="text-sm text-slate-400"></p></form></div></div>
+  <div id="dashboardModal" class="fixed inset-0 bg-black/80 hidden justify-center items-center z-[70] p-4"><div class="glass-panel rounded-3xl w-full max-w-3xl max-h-[90vh] overflow-auto p-6 border border-white/10"><div class="flex items-center justify-between mb-5"><h3 class="text-2xl font-bold text-white">Mi panel</h3><div class="flex gap-2"><button onclick="signOut()" class="px-3 py-2 rounded-xl border border-red-300/30 text-red-200 text-sm">Salir</button><button onclick="closeDashboardModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div></div><p id="dashboardEmail" class="text-slate-400 text-sm mb-5"></p><div id="dashboardContent" class="space-y-5"></div></div></div>
+  <div id="wizardModal" class="fixed inset-0 bg-black/80 hidden justify-center items-center z-[70] p-4"><div class="glass-panel rounded-3xl w-full max-w-xl p-6 border border-white/10"><div class="flex items-center justify-between mb-5"><h3 class="text-2xl font-bold text-white">Diagnóstico guiado</h3><button onclick="closeWizardModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div><div id="wizardSteps"><label class="block text-sm text-slate-300 mb-2">Paso 1/4 · Marca y modelo</label><div class="grid grid-cols-2 gap-3"><input id="wizardBrand" placeholder="Marca" class="bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3"><input id="wizardModel" placeholder="Modelo" class="bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3"></div><label class="block text-sm text-slate-300 mt-4 mb-2">Síntoma principal</label><textarea id="wizardSymptom" rows="3" placeholder="Describe qué ocurre..." class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3"></textarea><div class="rounded-xl bg-amber-400/10 border border-amber-300/20 text-amber-100 text-sm p-3 mt-4">Recomendación: no cargues ni enciendas el dispositivo si está mojado o se calienta.</div><p class="text-sm text-slate-400 mt-3">Diagnóstico inicial: revisaremos el equipo y confirmaremos el presupuesto antes de reparar.</p><button onclick="submitWizard()" class="mt-5 w-full py-3 rounded-xl bg-white text-black font-bold">Solicitar cita</button></div></div></div>
+
   <script>
+    const SUPABASE_URL = 'https://zjfkrqkuezdvhgbudjnt.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_ngq1y4Zr9wCu86KTBgocSw_HmmmwEY6';
+    const SUPABASE_PUBLISHABLE_KEY = SUPABASE_ANON_KEY;
+    const supabaseClient = window.supabase?.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+    let currentUser = null;
     const modelsData = {
       apple: ['iPhone 18 Pro Max','iPhone 18 Pro','iPhone 18','iPhone 17 Pro Max','iPhone 17 Pro','iPhone 17','iPhone 16 Pro Max','iPhone 16 Pro','iPhone 16','iPhone 15 Pro Max','iPhone 15 Pro','iPhone 15','iPhone 14 Pro Max','iPhone 14 Pro','iPhone 14','iPhone 13 Pro Max','iPhone 13 Pro','iPhone 13','iPhone 12 Pro Max','iPhone 12 Pro','iPhone 12','iPhone 11 Pro','iPhone 11','iPhone XS Max','iPhone XS','iPhone XR','iPhone X','iPhone SE (2022)','iPhone SE (2020)'],
       samsung: ['Galaxy S25 Ultra','Galaxy S25+','Galaxy S25','Galaxy S24 Ultra','Galaxy S24+','Galaxy S24','Galaxy S23 Ultra','Galaxy S23+','Galaxy S23','Galaxy S22 Ultra','Galaxy S22+','Galaxy S22','Galaxy S21 Ultra','Galaxy S21+','Galaxy S21','Galaxy S20 Ultra','Galaxy S20+','Galaxy S20','Galaxy Note 20 Ultra','Galaxy Note 20','Galaxy A95','Galaxy A74','Galaxy A54','Galaxy A34','Galaxy A24','Galaxy Z Fold 6','Galaxy Z Fold 5','Galaxy Z Flip 6','Galaxy Z Flip 5','Galaxy Z Flip 4'],
@@ -501,21 +532,95 @@
       document.body.appendChild(toast);
       setTimeout(() => toast.remove(), 4000);
     }
-    function submitBooking(event) { event.preventDefault(); const toast = document.createElement('div'); toast.className = 'fixed top-20 right-4 z-[60] bg-white text-black px-6 py-4 rounded-2xl shadow-2xl font-mono text-sm border border-slate-300 flex items-center gap-3'; toast.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-500 text-xl"></i> <span>¡Gracias! Cita registrada en BarsukON. Te contactaremos en breve.</span>'; document.body.appendChild(toast); setTimeout(() => toast.remove(), 4000); closeBookingModal(); }
-    function submitOtherDeviceRequest(event) {
+    async function submitBooking(event) {
+      event.preventDefault();
+      const details = document.getElementById('modalNotesText').value.trim();
+      const request = { device_brand: selectedBrand, device_model: document.getElementById('modelSearch').value.trim() || 'Modelo no seleccionado', issue: selectedIssues.join(', '), notes: `${details} | Contacto: ${document.getElementById('bookingName').value.trim()} / ${document.getElementById('bookingPhone').value.trim()}`, estimated_price: Number(document.getElementById('totalPrice').textContent) || null };
+      if (currentUser && supabaseClient) {
+        const { error } = await supabaseClient.from('repair_requests').insert({ ...request, user_id: currentUser.id });
+        if (error) { showToast('No se pudo guardar la solicitud. Revisa que el esquema esté instalado.'); return; }
+        showToast('¡Solicitud guardada! Puedes verla en tu panel.');
+      } else {
+        showToast('¡Gracias! Cita registrada en modo demo. Inicia sesión para guardarla en tu cuenta.');
+      }
+      closeBookingModal(); event.target.reset();
+    }
+    async function submitOtherDeviceRequest(event) {
       event.preventDefault();
       const device = document.getElementById('otherDeviceType').value.trim();
       const issue = document.getElementById('otherDeviceIssue').value.trim();
       const name = document.getElementById('otherDeviceName').value.trim();
       const email = document.getElementById('otherDeviceEmail').value.trim();
       const phone = document.getElementById('otherDevicePhone').value.trim();
-      const toast = document.createElement('div');
-      toast.className = 'fixed top-20 right-4 z-[60] bg-white text-black px-6 py-4 rounded-2xl shadow-2xl font-mono text-sm border border-slate-300 flex items-center gap-3';
-      toast.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-500 text-xl"></i> <span>Solicitud recibida: ${device} / ${issue}. Te contactaremos a ${name} por ${email} o ${phone}.</span>`;
-      document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 5000);
+      if (currentUser && supabaseClient) {
+        const { error } = await supabaseClient.from('repair_requests').insert({ user_id: currentUser.id, device_model: device, issue, notes: `Contacto: ${name} / ${email} / ${phone}` });
+        if (error) { showToast('No se pudo guardar la solicitud. Revisa que el esquema esté instalado.'); return; }
+        showToast('Solicitud guardada en tu cuenta.');
+      } else showToast(`Solicitud demo recibida: ${device} / ${issue}. Inicia sesión para guardarla.`);
       closeOtherDeviceModal();
       event.target.reset();
+    }
+    function showToast(message) {
+      const toast = document.createElement('div');
+      toast.className = 'fixed top-20 right-4 z-[80] bg-white text-black px-6 py-4 rounded-2xl shadow-2xl font-mono text-sm border border-slate-300 flex items-center gap-3';
+      const icon = document.createElement('i');
+      icon.className = 'fa-solid fa-circle-check text-emerald-500 text-xl';
+      const text = document.createElement('span');
+      text.textContent = message;
+      toast.append(icon, text);
+      document.body.appendChild(toast); setTimeout(() => toast.remove(), 4500);
+    }
+    function escapeHTML(value) {
+      return String(value ?? '').replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[character]));
+    }
+    function openAuthModal() { if (currentUser) { openDashboardModal(); return; } document.getElementById('authModal').classList.remove('hidden'); document.getElementById('authModal').classList.add('flex'); }
+    function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); document.getElementById('authModal').classList.remove('flex'); }
+    async function submitAuth(event) {
+      event.preventDefault();
+      const { error } = await supabaseClient.auth.signInWithPassword({ email: document.getElementById('authEmail').value.trim(), password: document.getElementById('authPassword').value });
+      document.getElementById('authStatus').textContent = error ? error.message : 'Sesión iniciada.';
+      if (!error) { closeAuthModal(); await refreshAuth(); }
+    }
+    async function signUp() {
+      const { error } = await supabaseClient.auth.signUp({ email: document.getElementById('authEmail').value.trim(), password: document.getElementById('authPassword').value });
+      document.getElementById('authStatus').textContent = error ? error.message : 'Cuenta creada. Revisa tu email si la confirmación está activa.';
+    }
+    async function signOut() { if (supabaseClient) await supabaseClient.auth.signOut(); closeDashboardModal(); }
+    function openDashboardModal() { document.getElementById('dashboardModal').classList.remove('hidden'); document.getElementById('dashboardModal').classList.add('flex'); loadDashboard(); }
+    function closeDashboardModal() { document.getElementById('dashboardModal').classList.add('hidden'); document.getElementById('dashboardModal').classList.remove('flex'); }
+    async function refreshAuth() {
+      if (!supabaseClient) return;
+      const { data } = await supabaseClient.auth.getUser(); currentUser = data.user || null;
+      document.getElementById('dashboardButton').classList.toggle('hidden', !currentUser);
+      document.getElementById('authButtonLabel').textContent = currentUser ? 'Cuenta' : 'Acceder';
+      if (currentUser) loadDashboard();
+    }
+    async function loadDashboard() {
+      if (!currentUser || !supabaseClient) return;
+      document.getElementById('dashboardEmail').textContent = currentUser.email;
+      const [requests, devices, reviews] = await Promise.all([
+        supabaseClient.from('repair_requests').select('device_model,issue,status,created_at').eq('user_id', currentUser.id).order('created_at', { ascending: false }),
+        supabaseClient.from('devices').select('brand,model,created_at').eq('user_id', currentUser.id).order('created_at', { ascending: false }),
+        supabaseClient.from('reviews').select('rating,body,approved,created_at').eq('user_id', currentUser.id).order('created_at', { ascending: false })
+      ]);
+      const list = (title, rows, fields) => `<div><h4 class="text-lg font-bold text-white mb-2">${title}</h4>${rows?.length ? `<div class="space-y-2">${rows.map(row => `<div class="rounded-xl border border-white/10 bg-black/30 p-3 text-sm text-slate-300">${fields.map(field => `<span class="mr-4">${escapeHTML(row[field] || '—')}</span>`).join('')}</div>`).join('')}</div>` : '<p class="text-sm text-slate-500">Sin datos todavía.</p>'}</div>`;
+      document.getElementById('dashboardContent').innerHTML = list('Solicitudes', requests.data, ['device_model', 'issue', 'status']) + list('Dispositivos', devices.data, ['brand', 'model']) + list('Opiniones', reviews.data, ['rating', 'body']);
+    }
+    function openWizardModal() { document.getElementById('wizardModal').classList.remove('hidden'); document.getElementById('wizardModal').classList.add('flex'); }
+    function closeWizardModal() { document.getElementById('wizardModal').classList.add('hidden'); document.getElementById('wizardModal').classList.remove('flex'); }
+    async function submitWizard() {
+      const brand = document.getElementById('wizardBrand').value.trim(), model = document.getElementById('wizardModel').value.trim(), symptom = document.getElementById('wizardSymptom').value.trim();
+      if (!brand || !model || !symptom) { showToast('Completa marca, modelo y síntoma.'); return; }
+      if (!currentUser) { closeWizardModal(); openAuthModal(); document.getElementById('authStatus').textContent = 'Inicia sesión para enviar el diagnóstico.'; return; }
+      const { error } = await supabaseClient.from('repair_requests').insert({ user_id: currentUser.id, device_brand: brand, device_model: model, issue: symptom, notes: 'Diagnóstico guiado: no usar ni cargar si está mojado o se calienta.' });
+      if (error) showToast('No se pudo guardar el diagnóstico.'); else { closeWizardModal(); showToast('Diagnóstico enviado. Te contactaremos pronto.'); loadDashboard(); }
+    }
+    async function loadPublicContent() {
+      if (!supabaseClient) return;
+      const [promos, reviews] = await Promise.all([supabaseClient.from('promotions').select('title,description,discount').order('created_at', { ascending: false }), supabaseClient.from('reviews').select('author_name,rating,body').eq('approved', true).order('created_at', { ascending: false })]);
+      const promoEl = document.getElementById('promotionsList'), reviewEl = document.getElementById('reviewsList');
+      promoEl.innerHTML = promos.error || !promos.data?.length ? '<p class="text-center text-slate-500 md:col-span-3">No hay promociones activas ahora.</p>' : promos.data.map(item => `<article class="glass-panel rounded-2xl p-5 border border-white/10"><h4 class="font-bold text-white">${escapeHTML(item.title)}</h4><p class="text-sm text-slate-400 mt-2">${escapeHTML(item.description)}</p><span class="inline-block mt-4 text-sky-300 font-mono text-sm">${escapeHTML(item.discount)}</span></article>`).join('');
+      reviewEl.innerHTML = reviews.error || !reviews.data?.length ? '<p class="text-center text-slate-500 md:col-span-3">Aún no hay opiniones publicadas.</p>' : reviews.data.map(item => `<article class="glass-panel rounded-2xl p-5 border border-white/10"><div class="text-amber-300">${'★'.repeat(Number(item.rating))}${'☆'.repeat(5 - Number(item.rating))}</div><p class="text-sm text-slate-300 mt-3">“${escapeHTML(item.body)}”</p><p class="text-xs text-slate-500 mt-3">${escapeHTML(item.author_name)}</p></article>`).join('');
     }
     function toggleEmpresaModal() { const modal = document.getElementById('empresaModal'); modal.classList.toggle('hidden'); modal.classList.toggle('flex'); }
     function showLayerDetails(key) { const details = { screen:'Utilizamos matrices originales o relaminamos el cristal superior roto con control de calidad y calibracion final.', battery:'Las baterias premium incluyen control de ciclos y prueba de capacidad antes del montaje.', board:'Microsoldadura bajo microscopio para restaurar alimentacion, audio y carga.', seal:'Aplicamos sellado termico y comprobamos la estanqueidad para prevenir futuras filtraciones.' }; const toast = document.createElement('div'); toast.className = 'fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-slate-900/90 border border-white/10 text-white px-5 py-3 rounded-xl text-sm shadow-lg'; toast.innerHTML = details[key] || 'Revision tecnica completada.'; document.body.appendChild(toast); setTimeout(() => toast.remove(), 2200); }
@@ -565,6 +670,14 @@
     setupBeforeAfterSlider();
     updateBrandSchedule();
     setInterval(updateBrandSchedule, 60000);
+    if (supabaseClient) {
+      refreshAuth();
+      loadPublicContent();
+      supabaseClient.auth.onAuthStateChange((_event, session) => { currentUser = session?.user || null; refreshAuth(); });
+    } else {
+      document.getElementById('promotionsList').innerHTML = '<p class="text-center text-slate-500 md:col-span-3">Contenido online no disponible; la demo sigue funcionando.</p>';
+      document.getElementById('reviewsList').innerHTML = '<p class="text-center text-slate-500 md:col-span-3">Opiniones online no disponibles; la demo sigue funcionando.</p>';
+    }
   </script>
 </body>
 </html>
