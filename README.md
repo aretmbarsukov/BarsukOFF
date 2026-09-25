@@ -9,3 +9,15 @@
 5. Add promotions and approved reviews from the Supabase dashboard. Public visitors can read active promotions and approved reviews; signed-in users can create requests and see their own data.
 
 The SQL is intentionally not run by the static site. Never commit a secret key.
+
+### Administrator
+
+Create the administrator account through the site's **Acceder → Crear cuenta** form. Then copy that user's UUID from **Authentication → Users** and run this in Supabase SQL Editor:
+
+```sql
+UPDATE public.profiles
+SET role = 'admin'
+WHERE id = 'AUTH-USER-UUID';
+```
+
+After signing in again, the account will show the admin panel with repair requests, review moderation, and promotion creation, activation, and deletion. Never put an account password in the frontend or repository; if a password was shared in chat, change it before using the account.
