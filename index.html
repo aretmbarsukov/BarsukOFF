@@ -26,6 +26,21 @@
     ::-webkit-scrollbar { width:8px; }
     ::-webkit-scrollbar-track { background:var(--bg); }
     ::-webkit-scrollbar-thumb { background:#2d3748; border-radius:999px; }
+    body.light { --bg:#eef2f7; --panel:rgba(255,255,255,.82); --text:#172033; --muted:#526078; background:var(--bg); color:var(--text); }
+    body.light .grid-bg { background-image:radial-gradient(circle, rgba(15,23,42,.10) 1px, transparent 1px); }
+    body.light .glass-panel { background:rgba(255,255,255,.82); border-color:rgba(15,23,42,.12); }
+    body.light .text-white { color:#172033 !important; }
+    body.light .text-slate-100, body.light .text-slate-200 { color:#263247 !important; }
+    body.light .text-slate-300, body.light .text-slate-400 { color:#526078 !important; }
+    body.light .text-slate-500 { color:#68758a !important; }
+    body.light .bg-black\/80, body.light .bg-black\/70, body.light .bg-black\/60, body.light .bg-black\/40 { background-color:rgba(255,255,255,.72) !important; }
+    body.light .bg-white\/5 { background-color:rgba(15,23,42,.05) !important; }
+    body.light .border-white\/10, body.light .border-white\/15, body.light .border-white\/20 { border-color:rgba(15,23,42,.14) !important; }
+    body.light .hover\:bg-white\/10:hover, body.light .hover\:bg-white\/15:hover { background-color:rgba(15,23,42,.08) !important; }
+    body.light .bg-white { background-color:#172033 !important; color:#fff !important; }
+    body.light .text-black { color:#fff !important; }
+    body.light ::-webkit-scrollbar-track { background:#eef2f7; }
+    body.light ::-webkit-scrollbar-thumb { background:#b8c1cf; }
   </style>
 </head>
 <body class="antialiased grid-bg text-slate-100 selection:bg-white selection:text-black">
@@ -46,6 +61,7 @@
         <button onclick="toggleEmpresaModal()" class="px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-xs font-mono text-slate-300 hover:bg-white/10 transition-all flex items-center gap-1.5"><i class="fa-solid fa-graduation-cap text-slate-400"></i> <span id="navEmpresa">Proyecto Empresa</span></button>
       </nav>
       <div class="flex items-center gap-3">
+        <button id="themeButton" onclick="toggleTheme()" class="px-3 py-1.5 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 font-mono text-xs text-white transition-all flex items-center gap-2" title="Cambiar tema"><i id="themeIcon" class="fa-solid fa-sun text-slate-400"></i><span id="themeLabel">Tema</span></button>
         <button onclick="toggleLanguage()" class="px-3 py-1.5 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 font-mono text-xs text-white transition-all flex items-center gap-2"><i class="fa-solid fa-globe text-slate-400"></i><span id="currentLangLabel" class="font-bold">ES</span></button>
         <button id="bookButton" onclick="openBookingModal()" class="px-5 py-2.5 bg-white text-black font-semibold text-sm rounded-xl hover:bg-slate-200 transition-all shadow-md shadow-white/5 active:scale-95 flex items-center gap-2"><i class="fa-solid fa-bolt-lightning text-xs"></i><span>Reservar Cita</span></button>
         <button id="mobileMenuBtn" class="md:hidden text-2xl text-slate-300 p-2"><i class="fa-solid fa-bars"></i></button>
@@ -116,8 +132,8 @@
         <div>
           <label id="calcStep4" class="block text-xs font-mono text-slate-400 uppercase tracking-wider mb-2">4. Calidad del repuesto</label>
           <div class="grid grid-cols-2 gap-3">
-            <label class="cursor-pointer flex items-center justify-between p-3 rounded-xl border border-white/20 bg-white/5 hover:bg-white/10 transition-all"><div class="flex items-center gap-2"><input type="radio" name="partQuality" value="oem" checked onchange="updateCalculation()" class="accent-white"><span class="text-sm font-semibold text-white">Original OEM</span></div><span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">100% fabrica</span></label>
-            <label class="cursor-pointer flex items-center justify-between p-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all"><div class="flex items-center gap-2"><input type="radio" name="partQuality" value="copy" onchange="updateCalculation()" class="accent-white"><span class="text-sm font-semibold text-slate-300">Compatible AAA</span></div><span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">-25% precio</span></label>
+            <label class="cursor-pointer flex items-center justify-between p-3 rounded-xl border border-white/20 bg-white/5 hover:bg-white/10 transition-all"><div class="flex items-center gap-2"><input type="radio" name="partQuality" value="oem" checked onchange="updateCalculation(); savePreferences()" class="accent-white"><span class="text-sm font-semibold text-white">Original OEM</span></div><span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">100% fabrica</span></label>
+            <label class="cursor-pointer flex items-center justify-between p-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all"><div class="flex items-center gap-2"><input type="radio" name="partQuality" value="copy" onchange="updateCalculation(); savePreferences()" class="accent-white"><span class="text-sm font-semibold text-slate-300">Compatible AAA</span></div><span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">-25% precio</span></label>
           </div>
         </div>
       </div>
@@ -237,7 +253,8 @@
         qualityOem:'Original OEM', qualityCopy:'Compatible AAA', reserve:'Reservar este precio', pay:'Pagar con simulación',
         other:'Otro dispositivo', summary:'Resumen de reparación', warranty:'Garantía incluida', time:'Tiempo estimado:',
         total:'Total estimado:', free:'*Diagnóstico gratuito al reparar en BarsukON', track:'Comprobar',
-        hours:'Horario', footerDesc:'Precisión en cada reparación: pantallas, baterías, placas y restauración tras mojado.'
+        hours:'Horario', footerDesc:'Precisión en cada reparación: pantallas, baterías, placas y restauración tras mojado.',
+        theme:'Tema', lightTheme:'Claro', darkTheme:'Oscuro'
       },
       en: {
         navCalc:'Calculator', navTech:'Anatomy', navServices:'Services', navStatus:'Status',
@@ -251,12 +268,54 @@
         qualityOem:'Original OEM', qualityCopy:'Compatible AAA', reserve:'Reserve this price', pay:'Pay with simulation',
         other:'Other device', summary:'Repair summary', warranty:'Warranty included', time:'Estimated time:',
         total:'Estimated total:', free:'*Free diagnosis when repairing at BarsukON', track:'Check',
-        hours:'Opening hours', footerDesc:'Precision in every repair: screens, batteries, boards, and liquid damage recovery.'
+        hours:'Opening hours', footerDesc:'Precision in every repair: screens, batteries, boards, and liquid damage recovery.',
+        theme:'Theme', lightTheme:'Light', darkTheme:'Dark'
       }
     };
     const issueTranslationKeys = { screen:'issueScreen', battery:'issueBattery', charging:'issueCharging', water:'issueWater', software:'issueSoftware', soldering:'issueSoldering' };
 
     function t(key) { return translations[currentLang][key] || translations.es[key] || key; }
+
+    function savePreferences() {
+      try {
+        localStorage.setItem('barsukon-preferences', JSON.stringify({
+          theme: document.body.classList.contains('light') ? 'light' : 'dark',
+          language: currentLang,
+          brand: selectedBrand,
+          model: document.getElementById('modelSearch').value,
+          issues: selectedIssues,
+          quality: document.querySelector('input[name="partQuality"]:checked')?.value || 'oem'
+        }));
+      } catch (error) {
+        console.warn('No se pudieron guardar las preferencias locales.', error);
+      }
+    }
+
+    function loadPreferences() {
+      try {
+        const saved = JSON.parse(localStorage.getItem('barsukon-preferences') || '{}');
+        if (saved.theme === 'light') document.body.classList.add('light');
+        if (saved.language === 'en' || saved.language === 'es') currentLang = saved.language;
+        if (modelsData[saved.brand]) selectedBrand = saved.brand;
+        if (Array.isArray(saved.issues) && saved.issues.length) selectedIssues = saved.issues.filter(id => issuesData.some(issue => issue.id === id));
+        return saved;
+      } catch (error) {
+        console.warn('No se pudieron leer las preferencias locales.', error);
+        return {};
+      }
+    }
+
+    function updateThemeControl() {
+      const light = document.body.classList.contains('light');
+      document.getElementById('themeIcon').className = `fa-solid ${light ? 'fa-moon' : 'fa-sun'} text-slate-400`;
+      document.getElementById('themeLabel').textContent = light ? t('lightTheme') : t('darkTheme');
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('light');
+      updateThemeControl();
+      savePreferences();
+    }
 
     function isOpenNow(date = new Date()) {
       const day = date.getDay();
@@ -297,6 +356,7 @@
       });
       document.getElementById('currentLangLabel').textContent = currentLang.toUpperCase();
       document.documentElement.lang = currentLang;
+      updateThemeControl();
       document.getElementById('footerHoursWeek').textContent = currentLang === 'es' ? 'Lun-Vie: 09:00-14:00 y 16:00-19:00' : 'Mon-Fri: 09:00-14:00 and 16:00-19:00';
       document.getElementById('footerHoursSaturday').textContent = currentLang === 'es' ? 'Sábado: 09:00-14:00' : 'Saturday: 09:00-14:00';
       document.getElementById('footerHoursSunday').textContent = currentLang === 'es' ? 'Domingo: Cerrado' : 'Sunday: Closed';
@@ -347,6 +407,7 @@
       btn.classList.remove('bg-white/5','border-white/10','text-slate-400');
       renderModels();
       updateCalculation();
+      savePreferences();
     }
 
     function renderIssues() {
@@ -374,6 +435,7 @@
       } else { selectedIssues.push(id); }
       renderIssues();
       updateCalculation();
+      savePreferences();
     }
 
     function updateCalculation() {
@@ -459,7 +521,7 @@
     function showLayerDetails(key) { const details = { screen:'Utilizamos matrices originales o relaminamos el cristal superior roto con control de calidad y calibracion final.', battery:'Las baterias premium incluyen control de ciclos y prueba de capacidad antes del montaje.', board:'Microsoldadura bajo microscopio para restaurar alimentacion, audio y carga.', seal:'Aplicamos sellado termico y comprobamos la estanqueidad para prevenir futuras filtraciones.' }; const toast = document.createElement('div'); toast.className = 'fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-slate-900/90 border border-white/10 text-white px-5 py-3 rounded-xl text-sm shadow-lg'; toast.innerHTML = details[key] || 'Revision tecnica completada.'; document.body.appendChild(toast); setTimeout(() => toast.remove(), 2200); }
     function mobileMenuToggle() { document.getElementById('mobileMenu').classList.toggle('hidden'); }
     document.getElementById('mobileMenuBtn')?.addEventListener('click', mobileMenuToggle);
-    document.getElementById('modelSearch').addEventListener('input', () => { updateModelStatus(); renderIssues(); updateCalculation(); });
+    document.getElementById('modelSearch').addEventListener('input', () => { updateModelStatus(); renderIssues(); updateCalculation(); savePreferences(); });
 
     function setupBeforeAfterSlider() {
       const container = document.getElementById('sliderContainer');
@@ -477,10 +539,27 @@
     function toggleLanguage() {
       currentLang = currentLang === 'es' ? 'en' : 'es';
       applyLanguage();
+      savePreferences();
     }
 
+    const savedPreferences = loadPreferences();
     applyLanguage();
     renderModels();
+    if (savedPreferences.model) document.getElementById('modelSearch').value = savedPreferences.model;
+    updateModelStatus();
+    if (savedPreferences.quality) {
+      const savedQuality = document.querySelector(`input[name="partQuality"][value="${savedPreferences.quality}"]`);
+      if (savedQuality) savedQuality.checked = true;
+    }
+    document.querySelectorAll('.brand-btn').forEach(button => {
+      const selected = button.getAttribute('onclick')?.includes(`'${selectedBrand}'`);
+      button.classList.toggle('active', selected);
+      button.classList.toggle('bg-white/5', !selected);
+      button.classList.toggle('border-white/10', !selected);
+      button.classList.toggle('text-slate-400', !selected);
+      button.classList.toggle('border-white/30', selected);
+      button.classList.toggle('text-white', selected);
+    });
     renderIssues();
     updateCalculation();
     setupBeforeAfterSlider();
