@@ -82,6 +82,8 @@ create policy "requests own access" on public.repair_requests for all to authent
 create policy "reviews public approved read" on public.reviews for select to anon, authenticated using (approved = true or user_id = auth.uid() or public.is_admin());
 create policy "reviews own insert" on public.reviews for insert to authenticated with check (user_id = auth.uid());
 create policy "reviews own update" on public.reviews for update to authenticated using (user_id = auth.uid() or public.is_admin()) with check (user_id = auth.uid() or public.is_admin());
+drop policy if exists "reviews admin delete" on public.reviews;
+create policy "reviews admin delete" on public.reviews for delete to authenticated using (public.is_admin());
 create policy "parts admin access" on public.parts for all to authenticated using (public.is_admin()) with check (public.is_admin());
 create policy "promotions public active read" on public.promotions for select to anon, authenticated using (active = true and starts_at <= now() and (ends_at is null or ends_at >= now()) or public.is_admin());
 create policy "promotions admin access" on public.promotions for all to authenticated using (public.is_admin()) with check (public.is_admin());

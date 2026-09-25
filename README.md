@@ -21,3 +21,12 @@ WHERE id = 'AUTH-USER-UUID';
 ```
 
 After signing in again, the account will show the admin panel with repair requests, review moderation, and promotion creation, activation, and deletion. Never put an account password in the frontend or repository; if a password was shared in chat, change it before using the account.
+
+If the schema was already executed before review deletion was added, run this small migration once in Supabase SQL Editor:
+
+```sql
+drop policy if exists "reviews admin delete" on public.reviews;
+create policy "reviews admin delete"
+on public.reviews for delete to authenticated
+using (public.is_admin());
+```
