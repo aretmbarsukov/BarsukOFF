@@ -47,6 +47,47 @@
     body.light .text-black { color:#fff !important; }
     body.light ::-webkit-scrollbar-track { background:#eef2f7; }
     body.light ::-webkit-scrollbar-thumb { background:#b8c1cf; }
+    .diagnostic-section { color:#111827; background:#fff; }
+    .diagnostic-card, .faq-card { width:min(100% - 32px, 900px); margin:0 auto; }
+    .diagnostic-card { padding:clamp(18px,4vw,32px); border:1px solid #d8dee8; border-radius:22px; background:#fff; box-shadow:0 14px 40px rgb(17 24 39 / 7%); }
+    .diagnostic-progress-head { display:flex; justify-content:space-between; gap:12px; margin-bottom:10px; color:#596579; font-size:.9rem; font-weight:650; }
+    .diagnostic-progress { height:8px; overflow:hidden; border-radius:999px; background:#e8ecf2; }
+    .diagnostic-progress span { display:block; height:100%; border-radius:inherit; background:#111827; transition:width .2s ease; }
+    .diagnostic-question { margin:24px 0 16px; color:#111827; font-size:clamp(1.25rem,3vw,1.65rem); }
+    .diagnostic-options { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+    .diagnostic-choice, .diagnostic-action { display:inline-flex; min-height:48px; align-items:center; justify-content:center; padding:12px 16px; border:1px solid #111827; border-radius:12px; background:#fff; color:#111827; font:inherit; font-weight:650; text-align:center; cursor:pointer; }
+    .diagnostic-choice:hover, .diagnostic-action:hover { background:#f1f3f6; }
+    .diagnostic-choice[aria-pressed="true"], .diagnostic-primary { background:#111827; color:#fff; }
+    .diagnostic-primary:hover { background:#2b3444; }
+    .diagnostic-field { display:grid; gap:8px; margin:14px 0 20px; color:#111827; font-weight:650; }
+    .diagnostic-input { width:100%; min-height:48px; padding:12px 14px; border:1px solid #9ba5b4; border-radius:12px; background:#fff; color:#111827; font:inherit; }
+    .diagnostic-radio-list { display:grid; gap:10px; }
+    .diagnostic-radio { display:flex; min-height:54px; align-items:center; gap:12px; padding:12px 14px; border:1px solid #d8dee8; border-radius:12px; color:#111827; cursor:pointer; }
+    .diagnostic-radio:has(input:checked) { border-color:#111827; background:#f3f5f8; }
+    .diagnostic-radio input { width:18px; height:18px; accent-color:#111827; }
+    .diagnostic-radio small { display:block; margin-top:3px; color:#596579; font-weight:400; }
+    .diagnostic-actions { display:flex; justify-content:space-between; gap:12px; margin-top:24px; }
+    .diagnostic-error { min-height:1.3em; margin:10px 0 0; color:#b42318; font-size:.9rem; }
+    .diagnostic-result { margin-top:24px; padding-top:22px; border-top:1px solid #d8dee8; color:#111827; }
+    .diagnostic-result h4 { margin:0 0 12px; color:#111827; font-size:1.25rem; }
+    .diagnostic-table-wrap { overflow-x:auto; }
+    .diagnostic-table { width:100%; border-collapse:collapse; color:#111827; text-align:left; }
+    .diagnostic-table th, .diagnostic-table td { padding:11px 8px; border-bottom:1px solid #d8dee8; }
+    .diagnostic-table th:last-child, .diagnostic-table td:last-child { text-align:right; white-space:nowrap; }
+    .diagnostic-recommendation { margin:18px 0; padding:14px 16px; border-radius:12px; background:#f3f5f8; line-height:1.55; }
+    .diagnostic-total { margin:16px 0; font-size:1.2rem; font-weight:800; }
+    .faq-section { background:#fff; color:#111827; }
+    .faq-card { padding:0 0 36px; }
+    .faq-category { margin:26px 0 12px; color:#596579; font-size:.78rem; font-weight:800; letter-spacing:.12em; }
+    .faq-item { border-bottom:1px solid #d8dee8; }
+    .faq-question { display:flex; width:100%; min-height:54px; align-items:center; justify-content:space-between; gap:16px; padding:14px 4px; border:0; background:transparent; color:#111827; font:inherit; font-weight:700; text-align:left; cursor:pointer; }
+    .faq-answer { padding:0 4px 18px; color:#596579; line-height:1.7; }
+    @media(max-width:560px) {
+      .diagnostic-card, .faq-card { width:min(100% - 24px, 900px); }
+      .diagnostic-options { grid-template-columns:1fr; }
+      .diagnostic-choice, .diagnostic-action { width:100%; }
+      .diagnostic-actions { flex-direction:column-reverse; }
+    }
   </style>
 </head>
 <body class="antialiased grid-bg text-slate-100 selection:bg-white selection:text-black">
@@ -64,6 +105,7 @@
         <a id="navTech" href="#interactive" class="hover:text-white transition-colors">Anatomia</a>
         <a id="navServices" href="#services" class="hover:text-white transition-colors">Servicios</a>
         <a id="navStatus" href="#tracker" class="hover:text-white transition-colors">Estado</a>
+        <a id="navFaq" href="#faq" class="hover:text-white transition-colors">Preguntas</a>
         <button onclick="toggleEmpresaModal()" class="px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-xs font-mono text-slate-300 hover:bg-white/10 transition-all flex items-center gap-1.5"><i class="fa-solid fa-graduation-cap text-slate-400"></i> <span id="navEmpresa">Proyecto Empresa</span></button>
       </nav>
       <div class="flex items-center gap-3">
@@ -82,6 +124,7 @@
       <a id="mobileNavTech" href="#interactive" class="py-2 hover:text-white">Anatomía</a>
       <a id="mobileNavServices" href="#services" class="py-2 hover:text-white">Servicios</a>
       <a id="mobileNavStatus" href="#tracker" class="py-2 hover:text-white">Estado</a>
+      <a id="mobileNavFaq" href="#faq" class="py-2 hover:text-white">Preguntas frecuentes</a>
       <button onclick="toggleEmpresaModal(); mobileMenuToggle(false)" class="text-left py-2 text-slate-400 flex items-center gap-2"><i class="fa-solid fa-graduation-cap"></i> <span id="mobileNavEmpresa">Proyecto Empresa</span></button>
       <div class="grid grid-cols-2 gap-2 border-t border-white/10 pt-3">
         <button id="mobileThemeButton" onclick="toggleTheme()" class="px-3 py-2 rounded-xl border border-white/15 bg-white/5 text-left text-xs flex items-center gap-2"><i id="mobileThemeIcon" class="fa-solid fa-sun text-slate-400"></i><span id="mobileThemeLabel">Tema</span></button>
@@ -122,12 +165,19 @@
     <div id="reviewsList" class="grid grid-cols-1 md:grid-cols-3 gap-5"><p class="text-center text-slate-400 md:col-span-3">Cargando opiniones...</p></div>
   </section>
 
-  <section id="problemWizard" class="py-12 px-4 max-w-7xl mx-auto">
-    <div class="glass-panel rounded-3xl p-6 md:p-10 border border-white/10 text-center">
-      <h2 class="text-xs font-mono tracking-widest text-slate-400 uppercase mb-2">// DIAGNÓSTICO GUIADO</h2>
-      <h3 class="text-3xl md:text-4xl font-extrabold text-white mb-3">¿Qué le ocurre a tu dispositivo?</h3>
-      <p class="text-slate-400 mb-6">Responde en cuatro pasos y prepara tu solicitud de reparación.</p>
-      <button onclick="openWizardModal()" class="px-6 py-3 bg-sky-400 text-black font-bold rounded-xl hover:bg-sky-300 transition-all">Comenzar diagnóstico</button>
+  <section id="problemWizard" class="diagnostic-section py-12 px-4">
+    <div class="diagnostic-card" aria-live="polite">
+      <h2 id="diagnosticHeading" class="text-xs font-mono tracking-widest uppercase mb-2" style="color:#596579">// DIAGNÓSTICO GUIADO</h2>
+      <h3 id="diagnosticIntro" class="text-3xl md:text-4xl font-extrabold mb-3" style="color:#111827">Diagnóstico paso a paso</h3>
+      <p id="diagnosticLead" class="mb-6" style="color:#596579">Responde unas preguntas para obtener una estimación inicial.</p>
+      <div id="diagnosticFlow"></div>
+    </div>
+  </section>
+
+  <section id="faq" class="faq-section py-12 px-4">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-8"><h2 id="faqEyebrow" class="text-xs font-mono tracking-widest uppercase mb-2" style="color:#596579">// PREGUNTAS FRECUENTES</h2><h3 id="faqHeading" class="text-3xl md:text-4xl font-extrabold" style="color:#111827">Preguntas frecuentes</h3></div>
+      <div id="faqList" class="faq-card"></div>
     </div>
   </section>
 
@@ -287,7 +337,7 @@
     let currentLang = 'es';
     const translations = {
       es: {
-        navCalc:'Calculadora', navTech:'Anatomía', navServices:'Servicios', navStatus:'Estado',
+        navCalc:'Calculadora', navTech:'Anatomía', navServices:'Servicios', navStatus:'Estado', navFaq:'Preguntas',
         navEmpresa:'Proyecto Empresa', book:'Reservar cita', heroBadge:'Reparación exprés desde 20 min • Garantía 6 meses',
         heroTitle:'Precisión quirúrgica para tu', heroDesc:'Servicio técnico minimalista de alta gama BarsukON. Sustitución de módulos, microsoldadura BGA y restauración tras mojado.',
         calcTitle:'Calculadora de presupuesto', calcSub:'Selecciona la marca, busca el modelo y obtén un presupuesto instantáneo.',
@@ -302,7 +352,7 @@
         theme:'Tema', lightTheme:'Claro', darkTheme:'Oscuro'
       },
       en: {
-        navCalc:'Calculator', navTech:'Anatomy', navServices:'Services', navStatus:'Status',
+        navCalc:'Calculator', navTech:'Anatomy', navServices:'Services', navStatus:'Status', navFaq:'FAQ',
         navEmpresa:'Business project', book:'Book appointment', heroBadge:'Express repair from 20 min • 6-month warranty',
         heroTitle:'Surgical precision for your', heroDesc:'High-end technical service by BarsukON. Module replacement, BGA microsoldering, and liquid damage recovery.',
         calcTitle:'Repair estimate calculator', calcSub:'Select a brand, search a model, and get an instant estimate.',
@@ -389,7 +439,7 @@
       const map = {
         '#navCalc': 'navCalc', '#navTech': 'navTech', '#navServices': 'navServices', '#navStatus': 'navStatus',
         '#mobileNavCalc': 'navCalc', '#mobileNavTech': 'navTech', '#mobileNavServices': 'navServices', '#mobileNavStatus': 'navStatus',
-        '#navEmpresa': 'navEmpresa', '#heroBadge': 'heroBadge', '#heroTitle': 'heroTitle', '#heroDesc': 'heroDesc',
+        '#navEmpresa': 'navEmpresa', '#navFaq': 'navFaq', '#mobileNavFaq': 'navFaq', '#heroBadge': 'heroBadge', '#heroTitle': 'heroTitle', '#heroDesc': 'heroDesc',
         '#calcTitle': 'calcTitle', '#calcSub': 'calcSub', '#calcStep1': 'stepBrand', '#calcStep2': 'stepModel',
         '#calcStep3': 'stepIssue', '#calcStep4': 'stepQuality', '#modelSearch': 'modelPlaceholder',
         '#summaryTitle': 'summary', '#warrantyLabel': 'warranty', '#timeLabel': 'time', '#totalLabel': 'total',
@@ -414,6 +464,7 @@
       renderIssues();
       updateModelStatus();
       updateCalculation();
+      if (typeof updateBarsukonModulesLanguage === 'function') updateBarsukonModulesLanguage();
     }
 
     function hashModel(model) { const cleaned = model.toLowerCase().replace(/[^a-z0-9]/g, ''); let hash = 0; for (const ch of cleaned) hash = ((hash * 31) + ch.charCodeAt(0)) >>> 0; return hash; }
@@ -770,6 +821,229 @@
       document.getElementById('promotionsList').innerHTML = '<p class="text-center text-slate-500 md:col-span-3">Contenido online no disponible; la demo sigue funcionando.</p>';
       document.getElementById('reviewsList').innerHTML = '<p class="text-center text-slate-500 md:col-span-3">Opiniones online no disponibles; la demo sigue funcionando.</p>';
     }
+  </script>
+  <script>
+    (() => {
+      const diagnosticFlow = document.getElementById('diagnosticFlow');
+      const faqList = document.getElementById('faqList');
+      if (!diagnosticFlow || !faqList) return;
+
+      const moduleText = {
+        es: {
+          diagnosticHeading: '// DIAGNÓSTICO GUIADO', diagnosticIntro: 'Diagnóstico paso a paso',
+          diagnosticLead: 'Responde unas preguntas para obtener una estimación inicial.',
+          questionIssue: '¿Qué le ocurrió al dispositivo?', issueOptions: ['Se cayó', 'Se mojó', 'No carga', 'La pantalla no funciona', 'No tiene sonido', 'Otro'],
+          followFall: '¿Qué se dañó tras la caída?', fallOptions: ['Pantalla rota', 'Batería dañada', 'Carcasa rota', 'Otros daños'],
+          followWater: '¿Qué pasó tras mojarse?', waterOptions: ['Entró agua', 'Lo desmonté yo', 'Limpieza antes de desmontar'],
+          questionBrand: '¿Cuál es la marca del dispositivo?', brandOptions: ['Apple', 'Samsung', 'Xiaomi', 'Google', 'Otra'],
+          questionModel: '¿Cuál es el modelo del dispositivo?', modelLabel: 'Escribe o selecciona el modelo',
+          modelPlaceholder: 'Por ejemplo, iPhone 14 Pro', qualityQuestion: 'Elige la calidad de la pieza',
+          qualityOEM: 'Original OEM', qualityAAA: 'Compatible AAA', warranty: 'Garantía de 6 meses',
+          fullPrice: 'Precio completo', discount: '25% de descuento', step: 'Paso', next: 'Siguiente', back: 'Atrás',
+          calculate: 'Calcular presupuesto', booking: 'Continuar con la reserva', errorChoice: 'Selecciona una opción para continuar.',
+          errorModel: 'Introduce el modelo del dispositivo.', errorQuality: 'Elige la calidad de la pieza.',
+          resultTitle: 'Presupuesto aproximado para', repairType: 'Tipo de reparación', estimate: 'Precio estimado',
+          screen: 'Pantalla OLED', battery: 'Batería', soldering: 'Microsoldadura', charging: 'Puerto de carga',
+          recommended: ' · recomendado', total: 'Total aproximado:', recommendationWater: '⚡ Apaga el dispositivo y no lo cargues. Necesita secado y diagnóstico urgente.',
+          recommendationScreen: '🛠️ Se recomienda revisar y sustituir el módulo OLED.',
+          recommendationBattery: '🔋 Se recomienda diagnosticar la batería y sustituirla si es necesario.',
+          recommendationCharging: '🔌 Se recomienda revisar el puerto de carga y el circuito de alimentación.',
+          recommendationBoard: '🔧 Para este problema se recomienda diagnosticar la placa y realizar microsoldadura.',
+          brand: 'Marca', part: 'Pieza', faqEyebrow: '// PREGUNTAS FRECUENTES', faqHeading: 'Preguntas frecuentes',
+          faqGroups: [
+            { category: 'GARANTÍA', questions: [
+              { q: '¿Cuánto dura la garantía de vuestro trabajo?', a: '6 meses para reparaciones estándar. Con piezas Original OEM, la garantía cubre defectos de material. La estanqueidad IP68 se garantiza en condiciones estándar. Los daños intencionados no están cubiertos.' },
+              { q: '¿Qué hago si el problema vuelve después de 2 meses?', a: 'Los problemas dentro del periodo de garantía incluyen diagnóstico y reparación gratuitos. Reserva una cita e indica el número del pedido original. Volveremos a probar el dispositivo y lo repararemos. El tiempo depende del problema (normalmente 30-60 minutos).' },
+              { q: '¿La garantía cubre daños por agua después de 4 meses?', a: 'La garantía cubre defectos de nuestro trabajo, no daños externos. Si la pantalla deja de funcionar por un golpe después de la reparación, se considera un daño nuevo. Si una microsoldadura falla, es responsabilidad nuestra.' }
+            ] },
+            { category: 'PROCESO', questions: [
+              { q: '¿Cuánto tarda el diagnóstico?', a: 'El diagnóstico inicial tarda 15-20 minutos y es gratuito. Después comunicamos el precio exacto. Si aceptas, la reparación suele tardar entre 35 y 45 minutos.' },
+              { q: '¿Puedo dejar el dispositivo e irme o tengo que esperar?', a: '¡Como prefieras! Si lo dejas, te enviaremos un SMS cuando esté listo. Si esperas, puedes ver cómo trabajamos. Para reparaciones complejas de placa y microsoldadura, quédate o vuelve en unas 2 horas.' }
+            ] }
+          ]
+        },
+        en: {
+          diagnosticHeading: '// GUIDED DIAGNOSTICS', diagnosticIntro: 'Step-by-step diagnostics',
+          diagnosticLead: 'Answer a few questions to get an initial estimate.',
+          questionIssue: 'What happened to the device?', issueOptions: ['Dropped', 'Got wet', 'Will not charge', 'Screen not working', 'No sound', 'Other'],
+          followFall: 'What was damaged in the fall?', fallOptions: ['Cracked screen', 'Damaged battery', 'Broken casing', 'Other damage'],
+          followWater: 'What happened after it got wet?', waterOptions: ['Water got inside', 'I took it apart myself', 'Cleaning before disassembly'],
+          questionBrand: 'What is the device brand?', brandOptions: ['Apple', 'Samsung', 'Xiaomi', 'Google', 'Other'],
+          questionModel: 'What is the device model?', modelLabel: 'Type or select the model',
+          modelPlaceholder: 'For example, iPhone 14 Pro', qualityQuestion: 'Choose the part quality',
+          qualityOEM: 'Original OEM', qualityAAA: 'Compatible AAA', warranty: '6-month warranty',
+          fullPrice: 'Full price', discount: '25% off', step: 'Step', next: 'Next', back: 'Back',
+          calculate: 'Calculate estimate', booking: 'Continue to booking', errorChoice: 'Select an option to continue.',
+          errorModel: 'Enter the device model.', errorQuality: 'Choose a part quality.',
+          resultTitle: 'Estimated repair costs for', repairType: 'Repair type', estimate: 'Estimated price',
+          screen: 'OLED screen', battery: 'Battery', soldering: 'Microsoldering', charging: 'Charging port',
+          recommended: ' · recommended', total: 'Estimated total:', recommendationWater: '⚡ Turn the device off and do not charge it. It needs urgent drying and diagnostics.',
+          recommendationScreen: '🛠️ An OLED module inspection and replacement is recommended.',
+          recommendationBattery: '🔋 Battery diagnostics and replacement if needed are recommended.',
+          recommendationCharging: '🔌 A charging port and power circuit inspection is recommended.',
+          recommendationBoard: '🔧 Board diagnostics and microsoldering are recommended for this issue.',
+          brand: 'Brand', part: 'Part', faqEyebrow: '// FREQUENTLY ASKED QUESTIONS', faqHeading: 'Frequently asked questions',
+          faqGroups: [
+            { category: 'WARRANTY', questions: [
+              { q: 'How long is the warranty on your work?', a: '6 months for standard repairs. With Original OEM parts, the warranty covers material defects. IP68 water resistance is guaranteed under standard conditions. Intentional damage is not covered.' },
+              { q: 'What should I do if the problem returns after 2 months?', a: 'Problems during the warranty period include free diagnostics and repair. Book an appointment and provide the original order number. We will retest and fix the device. Repair time depends on the issue (usually 30-60 minutes).' },
+              { q: 'Does the warranty cover water damage after 4 months?', a: 'The warranty covers defects in our work, not external damage. A screen damaged by an impact after repair is new damage. If a microsoldered connection fails, that is our responsibility.' }
+            ] },
+            { category: 'PROCESS', questions: [
+              { q: 'How long does diagnostics take?', a: 'Initial diagnostics take 15-20 minutes and are free. We then provide the exact price. If you approve, repairs usually take 35-45 minutes.' },
+              { q: 'Can I leave the device or do I need to wait?', a: 'It is up to you! If you leave it, we will text you when it is ready. If you wait, you can watch us work. For complex board and microsoldering repairs, please wait or return in about 2 hours.' }
+            ] }
+          ]
+        }
+      };
+      const models = {
+        Apple: ['iPhone 14', 'iPhone 14 Pro', 'iPhone 13', 'iPhone 13 Pro', 'iPhone 12', 'iPhone 11', 'iPhone SE'],
+        Samsung: ['Galaxy S24', 'Galaxy S23', 'Galaxy A54', 'Galaxy A34'],
+        Xiaomi: ['Xiaomi 14', 'Xiaomi 13', 'Xiaomi 12'],
+        Google: ['Pixel 9', 'Pixel 8', 'Pixel 7'],
+        Otra: [], Other: []
+      };
+      const repairs = [
+        { id: 'screen', key: 'screen', base: 180 },
+        { id: 'battery', key: 'battery', base: 100 },
+        { id: 'soldering', key: 'soldering', base: 200 },
+        { id: 'charging', key: 'charging', base: 120 }
+      ];
+      const state = { issue: '', detail: '', brand: '', model: '', quality: '', result: null };
+      const text = () => moduleText[currentLang] || moduleText.es;
+      const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+      const followUps = {
+        es: { 'Se cayó': 'fallOptions', 'Se mojó': 'waterOptions' },
+        en: { Dropped: 'fallOptions', 'Got wet': 'waterOptions' }
+      };
+      const issueFollowUpKey = () => followUps[currentLang]?.[state.issue];
+      const steps = () => issueFollowUpKey() ? [1, 2, 3, 4, 5] : [1, 3, 4, 5];
+
+      function renderFAQ() {
+        const copy = text();
+        document.getElementById('faqEyebrow').textContent = copy.faqEyebrow;
+        document.getElementById('faqHeading').textContent = copy.faqHeading;
+        faqList.innerHTML = copy.faqGroups.map((group, gi) => `<section aria-label="${esc(group.category)}"><h4 class="faq-category">${esc(group.category)}</h4>${group.questions.map((item, qi) => {
+          const id = `barsukon-faq-${gi}-${qi}`;
+          return `<article class="faq-item"><button type="button" class="faq-question" aria-expanded="false" aria-controls="${id}"><span>${esc(item.q)}</span><span aria-hidden="true">+</span></button><div class="faq-answer" id="${id}" hidden>${esc(item.a)}</div></article>`;
+        }).join('')}</section>`).join('');
+      }
+
+      function recommendation() {
+        const copy = text();
+        if (state.issue === copy.issueOptions[1]) return copy.recommendationWater;
+        if (state.issue === copy.issueOptions[0] && state.detail === copy.fallOptions[0]) return copy.recommendationScreen;
+        if (state.issue === copy.issueOptions[0] && state.detail === copy.fallOptions[1]) return copy.recommendationBattery;
+        if (state.issue === copy.issueOptions[2]) return copy.recommendationCharging;
+        if (state.issue === copy.issueOptions[3]) return copy.recommendationScreen;
+        return copy.recommendationBoard;
+      }
+
+      function selectedRepair() {
+        const copy = text();
+        if (state.issue === copy.issueOptions[0]) {
+          if (state.detail === copy.fallOptions[0]) return 'screen';
+          if (state.detail === copy.fallOptions[1]) return 'battery';
+          return 'soldering';
+        }
+        if (state.issue === copy.issueOptions[2]) return 'charging';
+        if (state.issue === copy.issueOptions[3]) return 'screen';
+        return 'soldering';
+      }
+
+      function renderResult() {
+        const copy = text();
+        if (!state.result) return '';
+        return `<div class="diagnostic-result"><h4>${esc(copy.resultTitle)} ${esc(state.model)}</h4><div class="diagnostic-table-wrap"><table class="diagnostic-table"><thead><tr><th>${esc(copy.repairType)}</th><th>${esc(copy.estimate)}</th></tr></thead><tbody>${state.result.rows.map(row => `<tr><td>${esc(copy[row.key])}${row.id === state.result.selectedId ? esc(copy.recommended) : ''}</td><td>${row.price.toFixed(2)} €</td></tr>`).join('')}</tbody></table></div><p class="diagnostic-total">${esc(copy.total)} ${state.result.total.toFixed(2)} €</p><p class="diagnostic-recommendation">${esc(recommendation())}</p><p>${esc(copy.brand)}: ${esc(state.brand)} · ${esc(copy.part)}: ${state.quality === 'oem' ? copy.qualityOEM : copy.qualityAAA} · ${esc(copy.warranty)}.</p></div>`;
+      }
+
+      function renderDiagnostic(step) {
+        const copy = text();
+        diagnosticFlow.dataset.step = String(step);
+        const progress = Math.round(step / 5 * 100);
+        const content = {
+          1: `<h4 class="diagnostic-question">${esc(copy.questionIssue)}</h4><div class="diagnostic-options">${copy.issueOptions.map((item, i) => `<button type="button" class="diagnostic-choice" data-action="issue" data-index="${i}">${esc(item)}</button>`).join('')}</div>`,
+          2: `<h4 class="diagnostic-question">${esc(state.issue === copy.issueOptions[0] ? copy.followFall : copy.followWater)}</h4><div class="diagnostic-options">${(copy[issueFollowUpKey()] || []).map((item, i) => `<button type="button" class="diagnostic-choice" data-action="detail" data-index="${i}">${esc(item)}</button>`).join('')}</div>`,
+          3: `<h4 class="diagnostic-question">${esc(copy.questionBrand)}</h4><div class="diagnostic-options">${copy.brandOptions.map((item, i) => `<button type="button" class="diagnostic-choice" data-action="brand" data-index="${i}">${esc(item)}</button>`).join('')}</div>`,
+          4: `<h4 class="diagnostic-question">${esc(copy.questionModel)}</h4><label class="diagnostic-field">${esc(copy.modelLabel)}<input class="diagnostic-input" id="diagnosticModel" list="diagnosticModels" value="${esc(state.model)}" placeholder="${esc(copy.modelPlaceholder)}" autocomplete="off"><datalist id="diagnosticModels">${(models[state.brand] || []).map(model => `<option value="${esc(model)}"></option>`).join('')}</datalist></label>`,
+          5: `<h4 class="diagnostic-question">${esc(copy.qualityQuestion)}</h4><div class="diagnostic-radio-list"><label class="diagnostic-radio"><input type="radio" name="diagnosticQuality" value="oem" ${state.quality === 'oem' ? 'checked' : ''}><span>${esc(copy.qualityOEM)}<small>${esc(copy.warranty)} · ${esc(copy.fullPrice)}</small></span></label><label class="diagnostic-radio"><input type="radio" name="diagnosticQuality" value="aaa" ${state.quality === 'aaa' ? 'checked' : ''}><span>${esc(copy.qualityAAA)}<small>${esc(copy.warranty)} · ${esc(copy.discount)}</small></span></label></div>${renderResult()}`
+        }[step];
+        diagnosticFlow.innerHTML = `<div class="diagnostic-progress-head"><span>${esc(copy.step)} ${step} / 5</span><span>${progress}%</span></div><div class="diagnostic-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progress}"><span style="width:${progress}%"></span></div>${content}<p id="diagnosticError" class="diagnostic-error" role="alert"></p><div class="diagnostic-actions">${step > 1 ? `<button type="button" class="diagnostic-action" data-action="back">${esc(copy.back)}</button>` : '<span></span>'}${step === 4 ? `<button type="button" class="diagnostic-action diagnostic-primary" data-action="next">${esc(copy.next)}</button>` : step === 5 ? state.result ? `<button type="button" class="diagnostic-action diagnostic-primary" data-action="booking">${esc(copy.booking)}</button>` : `<button type="button" class="diagnostic-action diagnostic-primary" data-action="calculate">${esc(copy.calculate)}</button>` : '<span></span>'}</div>`;
+        const input = document.getElementById('diagnosticModel');
+        if (input) input.addEventListener('input', () => { state.model = input.value; });
+        diagnosticFlow.querySelectorAll('input[name="diagnosticQuality"]').forEach(radio => radio.addEventListener('change', () => { state.quality = radio.value; state.result = null; }));
+      }
+
+      diagnosticFlow.addEventListener('click', event => {
+        const button = event.target.closest('button[data-action]');
+        if (!button) return;
+        const copy = text();
+        const action = button.dataset.action;
+        const index = Number(button.dataset.index);
+        if (action === 'issue') {
+          state.issue = copy.issueOptions[index]; state.detail = ''; state.result = null;
+          renderDiagnostic(issueFollowUpKey() ? 2 : 3);
+          return;
+        }
+        if (action === 'detail') {
+          state.detail = copy[issueFollowUpKey()][index]; state.result = null; renderDiagnostic(3); return;
+        }
+        if (action === 'brand') {
+          state.brand = copy.brandOptions[index]; state.model = ''; state.result = null; renderDiagnostic(4); return;
+        }
+        const current = Number(diagnosticFlow.dataset.step);
+        if (action === 'back') {
+          const flowSteps = steps();
+          renderDiagnostic(flowSteps[Math.max(0, flowSteps.indexOf(current) - 1)]);
+          return;
+        }
+        if (action === 'next') {
+          const modelInput = document.getElementById('diagnosticModel');
+          if (modelInput) state.model = modelInput.value.trim();
+          if (current === 4 && !state.model) {
+            document.getElementById('diagnosticError').textContent = copy.errorModel;
+            return;
+          }
+          if (current === 4) renderDiagnostic(5);
+          return;
+        }
+        if (action === 'calculate') {
+          if (!state.quality) {
+            document.getElementById('diagnosticError').textContent = copy.errorQuality;
+            return;
+          }
+          const factor = (state.quality === 'aaa' ? .75 : 1) * (state.brand === 'Apple' ? 1.1 : 1);
+          const id = selectedRepair();
+          const rows = repairs.map(repair => ({ ...repair, price: Math.round(repair.base * factor * 100) / 100 }));
+          state.result = { rows, selectedId: id, total: rows.find(row => row.id === id).price };
+          renderDiagnostic(5);
+          return;
+        }
+        if (action === 'booking' && state.result) {
+          window.alert(`${copy.booking}\n${copy.questionIssue}: ${state.issue}${state.detail ? ` — ${state.detail}` : ''}\n${state.brand} ${state.model}\n${copy.total} ${state.result.total.toFixed(2)} €`);
+        }
+      });
+
+      faqList.addEventListener('click', event => {
+        const button = event.target.closest('.faq-question');
+        if (!button) return;
+        const answer = document.getElementById(button.getAttribute('aria-controls'));
+        const expanded = button.getAttribute('aria-expanded') !== 'true';
+        button.setAttribute('aria-expanded', String(expanded));
+        button.querySelector('span:last-child').textContent = expanded ? '−' : '+';
+        answer.hidden = !expanded;
+      });
+
+      window.updateBarsukonModulesLanguage = () => {
+        const copy = text();
+        document.getElementById('diagnosticHeading').textContent = copy.diagnosticHeading;
+        document.getElementById('diagnosticIntro').textContent = copy.diagnosticIntro;
+        document.getElementById('diagnosticLead').textContent = copy.diagnosticLead;
+        renderFAQ();
+        renderDiagnostic(Number(diagnosticFlow.dataset.step || 1));
+      };
+      window.updateBarsukonModulesLanguage();
+    })();
   </script>
 </body>
 </html>
