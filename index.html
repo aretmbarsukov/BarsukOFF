@@ -59,7 +59,7 @@
           <span class="text-[10px] text-slate-400 tracking-widest uppercase font-mono">Precision Repair Lab</span>
         </div>
       </a>
-      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+      <nav class="hidden xl:flex items-center gap-8 text-sm font-medium text-slate-300">
         <a id="navCalc" href="#calculator" class="hover:text-white transition-colors">Calculadora</a>
         <a id="navTech" href="#interactive" class="hover:text-white transition-colors">Anatomia</a>
         <a id="navServices" href="#services" class="hover:text-white transition-colors">Servicios</a>
@@ -67,17 +67,17 @@
         <button onclick="toggleEmpresaModal()" class="px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-xs font-mono text-slate-300 hover:bg-white/10 transition-all flex items-center gap-1.5"><i class="fa-solid fa-graduation-cap text-slate-400"></i> <span id="navEmpresa">Proyecto Empresa</span></button>
       </nav>
       <div class="flex items-center gap-3">
-        <div class="hidden md:flex items-center gap-3">
+        <div class="hidden xl:flex items-center gap-3">
           <button id="themeButton" onclick="toggleTheme()" class="px-3 py-1.5 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 font-mono text-xs text-white transition-all flex items-center gap-2" title="Cambiar tema"><i id="themeIcon" class="fa-solid fa-sun text-slate-400"></i><span id="themeLabel">Tema</span></button>
           <button onclick="toggleLanguage()" class="px-3 py-1.5 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 font-mono text-xs text-white transition-all flex items-center gap-2"><i class="fa-solid fa-globe text-slate-400"></i><span id="currentLangLabel" class="font-bold">ES</span></button>
           <button id="bookButton" onclick="openBookingModal()" class="px-5 py-2.5 bg-white text-black font-semibold text-sm rounded-xl hover:bg-slate-200 transition-all shadow-md shadow-white/5 active:scale-95 flex items-center gap-2"><i class="fa-solid fa-bolt-lightning text-xs"></i><span>Reservar Cita</span></button>
           <button onclick="openAuthModal()" class="px-3 py-1.5 rounded-xl border border-sky-400/30 bg-sky-400/10 hover:bg-sky-400/20 font-mono text-xs text-sky-200 transition-all"><i class="fa-solid fa-user"></i> <span id="authButtonLabel">Acceder</span></button>
           <button id="dashboardButton" onclick="openDashboardModal()" class="hidden px-3 py-1.5 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 font-mono text-xs text-white transition-all"><i class="fa-solid fa-gauge"></i> Panel</button>
         </div>
-        <button id="mobileMenuBtn" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileMenu" onclick="mobileMenuToggle()" class="md:hidden text-2xl text-slate-300 p-2"><i class="fa-solid fa-bars"></i></button>
+        <button id="mobileMenuBtn" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileMenu" onclick="mobileMenuToggle()" class="xl:hidden text-2xl text-slate-300 p-2"><i class="fa-solid fa-bars"></i></button>
       </div>
     </div>
-    <div id="mobileMenu" aria-hidden="true" class="hidden md:hidden pt-4 pb-2 border-t border-white/10 mt-3 flex flex-col gap-3 font-medium text-sm text-slate-300">
+    <div id="mobileMenu" aria-hidden="true" class="hidden xl:hidden pt-4 pb-2 border-t border-white/10 mt-3 flex flex-col gap-3 font-medium text-sm text-slate-300">
       <a id="mobileNavCalc" href="#calculator" class="py-2 hover:text-white">Calculadora</a>
       <a id="mobileNavTech" href="#interactive" class="py-2 hover:text-white">Anatomía</a>
       <a id="mobileNavServices" href="#services" class="py-2 hover:text-white">Servicios</a>
