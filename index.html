@@ -47,41 +47,60 @@
     body.light .text-black { color:#fff !important; }
     body.light ::-webkit-scrollbar-track { background:#eef2f7; }
     body.light ::-webkit-scrollbar-thumb { background:#b8c1cf; }
-    .diagnostic-section { color:#111827; background:#fff; }
+    .diagnostic-section, .faq-section { color:var(--text); background:transparent; }
     .diagnostic-card, .faq-card { width:min(100% - 32px, 900px); margin:0 auto; }
-    .diagnostic-card { padding:clamp(18px,4vw,32px); border:1px solid #d8dee8; border-radius:22px; background:#fff; box-shadow:0 14px 40px rgb(17 24 39 / 7%); }
-    .diagnostic-progress-head { display:flex; justify-content:space-between; gap:12px; margin-bottom:10px; color:#596579; font-size:.9rem; font-weight:650; }
-    .diagnostic-progress { height:8px; overflow:hidden; border-radius:999px; background:#e8ecf2; }
-    .diagnostic-progress span { display:block; height:100%; border-radius:inherit; background:#111827; transition:width .2s ease; }
-    .diagnostic-question { margin:24px 0 16px; color:#111827; font-size:clamp(1.25rem,3vw,1.65rem); }
+    .diagnostic-card { padding:clamp(18px,4vw,32px); border:1px solid rgba(255,255,255,.1); border-radius:24px; background:rgba(17,20,28,.78); box-shadow:0 18px 55px rgb(0 0 0 / 24%); backdrop-filter:blur(16px); }
+    .diagnostic-progress-head { display:flex; justify-content:space-between; gap:12px; margin-bottom:10px; color:#a6adba; font-size:.9rem; font-weight:650; }
+    .diagnostic-progress { height:8px; overflow:hidden; border-radius:999px; background:rgba(255,255,255,.1); }
+    .diagnostic-progress span { display:block; height:100%; border-radius:inherit; background:#7dd3fc; transition:width .2s ease; }
+    .diagnostic-question { margin:24px 0 16px; color:#f4f5f7; font-size:clamp(1.25rem,3vw,1.65rem); }
     .diagnostic-options { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
-    .diagnostic-choice, .diagnostic-action { display:inline-flex; min-height:48px; align-items:center; justify-content:center; padding:12px 16px; border:1px solid #111827; border-radius:12px; background:#fff; color:#111827; font:inherit; font-weight:650; text-align:center; cursor:pointer; }
-    .diagnostic-choice:hover, .diagnostic-action:hover { background:#f1f3f6; }
-    .diagnostic-choice[aria-pressed="true"], .diagnostic-primary { background:#111827; color:#fff; }
-    .diagnostic-primary:hover { background:#2b3444; }
-    .diagnostic-field { display:grid; gap:8px; margin:14px 0 20px; color:#111827; font-weight:650; }
-    .diagnostic-input { width:100%; min-height:48px; padding:12px 14px; border:1px solid #9ba5b4; border-radius:12px; background:#fff; color:#111827; font:inherit; }
+    .diagnostic-choice, .diagnostic-action { display:inline-flex; min-height:48px; align-items:center; justify-content:center; padding:12px 16px; border:1px solid rgba(255,255,255,.2); border-radius:12px; background:rgba(255,255,255,.04); color:#e2e8f0; font:inherit; font-weight:650; text-align:center; cursor:pointer; transition:background .15s ease,border-color .15s ease,color .15s ease; }
+    .diagnostic-choice:hover, .diagnostic-action:hover { background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.35); }
+    .diagnostic-choice[aria-pressed="true"], .diagnostic-primary { background:#7dd3fc; border-color:#7dd3fc; color:#07111a; }
+    .diagnostic-primary:hover { background:#bae6fd; }
+    .diagnostic-field { display:grid; gap:8px; margin:14px 0 20px; color:#e2e8f0; font-weight:650; }
+    .diagnostic-input { width:100%; min-height:48px; padding:12px 14px; border:1px solid rgba(255,255,255,.18); border-radius:12px; background:rgba(0,0,0,.35); color:#fff; font:inherit; }
     .diagnostic-radio-list { display:grid; gap:10px; }
-    .diagnostic-radio { display:flex; min-height:54px; align-items:center; gap:12px; padding:12px 14px; border:1px solid #d8dee8; border-radius:12px; color:#111827; cursor:pointer; }
-    .diagnostic-radio:has(input:checked) { border-color:#111827; background:#f3f5f8; }
-    .diagnostic-radio input { width:18px; height:18px; accent-color:#111827; }
-    .diagnostic-radio small { display:block; margin-top:3px; color:#596579; font-weight:400; }
+    .diagnostic-radio { display:flex; min-height:54px; align-items:center; gap:12px; padding:12px 14px; border:1px solid rgba(255,255,255,.12); border-radius:12px; color:#e2e8f0; cursor:pointer; }
+    .diagnostic-radio:has(input:checked) { border-color:rgba(125,211,252,.7); background:rgba(125,211,252,.08); }
+    .diagnostic-radio input { width:18px; height:18px; accent-color:#7dd3fc; }
+    .diagnostic-radio small { display:block; margin-top:3px; color:#a6adba; font-weight:400; }
     .diagnostic-actions { display:flex; justify-content:space-between; gap:12px; margin-top:24px; }
-    .diagnostic-error { min-height:1.3em; margin:10px 0 0; color:#b42318; font-size:.9rem; }
-    .diagnostic-result { margin-top:24px; padding-top:22px; border-top:1px solid #d8dee8; color:#111827; }
-    .diagnostic-result h4 { margin:0 0 12px; color:#111827; font-size:1.25rem; }
+    .diagnostic-error { min-height:1.3em; margin:10px 0 0; color:#fca5a5; font-size:.9rem; }
+    .diagnostic-result { margin-top:24px; padding-top:22px; border-top:1px solid rgba(255,255,255,.12); color:#cbd5e1; }
+    .diagnostic-result h4 { margin:0 0 12px; color:#f8fafc; font-size:1.25rem; }
     .diagnostic-table-wrap { overflow-x:auto; }
-    .diagnostic-table { width:100%; border-collapse:collapse; color:#111827; text-align:left; }
-    .diagnostic-table th, .diagnostic-table td { padding:11px 8px; border-bottom:1px solid #d8dee8; }
+    .diagnostic-table { width:100%; border-collapse:collapse; color:#e2e8f0; text-align:left; }
+    .diagnostic-table th, .diagnostic-table td { padding:11px 8px; border-bottom:1px solid rgba(255,255,255,.1); }
     .diagnostic-table th:last-child, .diagnostic-table td:last-child { text-align:right; white-space:nowrap; }
-    .diagnostic-recommendation { margin:18px 0; padding:14px 16px; border-radius:12px; background:#f3f5f8; line-height:1.55; }
-    .diagnostic-total { margin:16px 0; font-size:1.2rem; font-weight:800; }
-    .faq-section { background:#fff; color:#111827; }
+    .diagnostic-recommendation { margin:18px 0; padding:14px 16px; border:1px solid rgba(125,211,252,.2); border-radius:12px; background:rgba(125,211,252,.08); color:#dbeafe; line-height:1.55; }
+    .diagnostic-total { margin:16px 0; color:#fff; font-size:1.2rem; font-weight:800; }
+    .diagnostic-installment { display:grid; grid-template-columns:1fr auto; align-items:center; gap:12px; margin-top:18px; padding:14px 16px; border:1px solid rgba(255,255,255,.12); border-radius:14px; background:rgba(255,255,255,.04); }
+    .diagnostic-installment label { color:#cbd5e1; font-size:.9rem; }
+    .diagnostic-installment select { min-height:42px; padding:8px 12px; border:1px solid rgba(255,255,255,.2); border-radius:10px; background:#11141c; color:#fff; font:inherit; }
+    .diagnostic-installment strong { grid-column:1 / -1; color:#7dd3fc; font-size:1.1rem; }
+    .diagnostic-disclaimer { grid-column:1 / -1; color:#94a3b8; font-size:.76rem; line-height:1.5; }
     .faq-card { padding:0 0 36px; }
-    .faq-category { margin:26px 0 12px; color:#596579; font-size:.78rem; font-weight:800; letter-spacing:.12em; }
-    .faq-item { border-bottom:1px solid #d8dee8; }
-    .faq-question { display:flex; width:100%; min-height:54px; align-items:center; justify-content:space-between; gap:16px; padding:14px 4px; border:0; background:transparent; color:#111827; font:inherit; font-weight:700; text-align:left; cursor:pointer; }
-    .faq-answer { padding:0 4px 18px; color:#596579; line-height:1.7; }
+    .faq-category { margin:26px 0 12px; color:#7dd3fc; font-size:.78rem; font-weight:800; letter-spacing:.12em; }
+    .faq-item { margin-bottom:8px; border:1px solid rgba(255,255,255,.1); border-radius:14px; background:rgba(17,20,28,.65); }
+    .faq-question { display:flex; width:100%; min-height:54px; align-items:center; justify-content:space-between; gap:16px; padding:14px 16px; border:0; border-radius:14px; background:transparent; color:#e2e8f0; font:inherit; font-weight:700; text-align:left; cursor:pointer; }
+    .faq-question span:last-child { color:#7dd3fc; font-size:1.3rem; }
+    .faq-answer { padding:0 16px 18px; color:#a6adba; line-height:1.7; }
+    body.light .diagnostic-card { background:rgba(255,255,255,.88); border-color:rgba(15,23,42,.14); }
+    body.light .diagnostic-question, body.light .diagnostic-result h4 { color:#172033; }
+    body.light .diagnostic-progress-head, body.light .diagnostic-field, body.light .diagnostic-result, body.light .diagnostic-table { color:#263247; }
+    body.light .diagnostic-choice, body.light .diagnostic-action, body.light .diagnostic-radio { color:#263247; border-color:rgba(15,23,42,.2); }
+    body.light .diagnostic-primary, body.light .diagnostic-choice[aria-pressed="true"] { color:#07111a; border-color:#7dd3fc; }
+    body.light .diagnostic-input, body.light .diagnostic-installment select { background:#fff; color:#172033; border-color:rgba(15,23,42,.24); }
+    body.light .diagnostic-radio small, body.light .diagnostic-installment label, body.light .diagnostic-disclaimer { color:#526078; }
+    body.light .diagnostic-total { color:#172033; }
+    body.light .diagnostic-installment strong { color:#0369a1; }
+    body.light .diagnostic-recommendation { background:rgba(14,165,233,.08); color:#263247; border-color:rgba(14,165,233,.2); }
+    body.light .faq-item { background:rgba(255,255,255,.75); border-color:rgba(15,23,42,.12); }
+    body.light .faq-question { color:#172033; }
+    body.light .faq-answer { color:#526078; }
+    body.light .faq-category { color:#0369a1; }
     @media(max-width:560px) {
       .diagnostic-card, .faq-card { width:min(100% - 24px, 900px); }
       .diagnostic-options { grid-template-columns:1fr; }
@@ -589,7 +608,7 @@
     }
     function setTrackCode(code) { document.getElementById('trackerInput').value = code; trackOrder(); }
     function openBookingModal() { const modal = document.getElementById('bookingModal'); modal.classList.remove('hidden'); modal.classList.add('flex'); }
-    function closeBookingModal() { const modal = document.getElementById('bookingModal'); modal.classList.add('hidden'); modal.classList.remove('flex'); }
+    function closeBookingModal() { const modal = document.getElementById('bookingModal'); modal.classList.add('hidden'); modal.classList.remove('flex'); delete modal.dataset.overrideBrand; delete modal.dataset.overrideModel; delete modal.dataset.overrideIssue; delete modal.dataset.overridePrice; }
     function openPaymentModal() { const modal = document.getElementById('paymentModal'); modal.classList.remove('hidden'); modal.classList.add('flex'); }
     function closePaymentModal() { const modal = document.getElementById('paymentModal'); modal.classList.add('hidden'); modal.classList.remove('flex'); }
     function openOtherDeviceModal() { const modal = document.getElementById('otherDeviceModal'); modal.classList.remove('hidden'); modal.classList.add('flex'); }
@@ -606,14 +625,26 @@
     async function submitBooking(event) {
       event.preventDefault();
       const details = document.getElementById('modalNotesText').value.trim();
-      const request = { device_brand: selectedBrand, device_model: document.getElementById('modelSearch').value.trim() || 'Modelo no seleccionado', issue: selectedIssues.join(', '), notes: `${details} | Contacto: ${document.getElementById('bookingName').value.trim()} / ${document.getElementById('bookingPhone').value.trim()}`, estimated_price: Number(document.getElementById('totalPrice').textContent) || null };
-      if (currentUser && supabaseClient) {
-        const { error } = await supabaseClient.from('repair_requests').insert({ ...request, user_id: currentUser.id });
-        if (error) { showToast('No se pudo guardar la solicitud. Revisa que el esquema esté instalado.'); return; }
-        showToast('¡Solicitud guardada! Puedes verla en tu panel.');
+      const bookingModal = document.getElementById('bookingModal');
+      const request = {
+        device_brand: bookingModal.dataset.overrideBrand || selectedBrand,
+        device_model: bookingModal.dataset.overrideModel || document.getElementById('modelSearch').value.trim() || 'Modelo no seleccionado',
+        issue: bookingModal.dataset.overrideIssue || selectedIssues.join(', '),
+        notes: `${details} | Contacto: ${document.getElementById('bookingName').value.trim()} / ${document.getElementById('bookingPhone').value.trim()}${currentUser?.email ? ` / ${currentUser.email}` : ''}`,
+        estimated_price: Number(bookingModal.dataset.overridePrice) || Number(document.getElementById('totalPrice').textContent) || null,
+        user_id: currentUser?.id || null
+      };
+      if (supabaseClient) {
+        const { error } = await supabaseClient.from('repair_requests').insert(request);
+        if (error) { showToast(`No se pudo guardar la solicitud: ${error.message}`); return; }
+        showToast(currentUser ? '¡Solicitud guardada! Puedes verla en tu panel.' : '¡Solicitud enviada! Te contactaremos pronto.');
       } else {
         showToast('¡Gracias! Cita registrada en modo demo. Inicia sesión para guardarla en tu cuenta.');
       }
+      delete bookingModal.dataset.overrideBrand;
+      delete bookingModal.dataset.overrideModel;
+      delete bookingModal.dataset.overrideIssue;
+      delete bookingModal.dataset.overridePrice;
       closeBookingModal(); event.target.reset();
     }
     async function submitOtherDeviceRequest(event) {
@@ -623,11 +654,11 @@
       const name = document.getElementById('otherDeviceName').value.trim();
       const email = document.getElementById('otherDeviceEmail').value.trim();
       const phone = document.getElementById('otherDevicePhone').value.trim();
-      if (currentUser && supabaseClient) {
-        const { error } = await supabaseClient.from('repair_requests').insert({ user_id: currentUser.id, device_model: device, issue, notes: `Contacto: ${name} / ${email} / ${phone}` });
-        if (error) { showToast('No se pudo guardar la solicitud. Revisa que el esquema esté instalado.'); return; }
-        showToast('Solicitud guardada en tu cuenta.');
-      } else showToast(`Solicitud demo recibida: ${device} / ${issue}. Inicia sesión para guardarla.`);
+      if (supabaseClient) {
+        const { error } = await supabaseClient.from('repair_requests').insert({ user_id: currentUser?.id || null, device_model: device, issue, notes: `Contacto: ${name} / ${email} / ${phone}` });
+        if (error) { showToast(`No se pudo guardar la solicitud: ${error.message}`); return; }
+        showToast(currentUser ? 'Solicitud guardada en tu cuenta.' : 'Solicitud enviada. Te contactaremos pronto.');
+      } else showToast(`Solicitud demo recibida: ${device} / ${issue}.`);
       closeOtherDeviceModal();
       event.target.reset();
     }
@@ -682,7 +713,7 @@
       const list = (title, rows, fields) => `<div><h4 class="text-lg font-bold text-white mb-2">${title}</h4>${rows?.length ? `<div class="space-y-2">${rows.map(row => `<div class="rounded-xl border border-white/10 bg-black/30 p-3 text-sm text-slate-300">${fields.map(field => `<span class="mr-4">${escapeHTML(row[field] || '—')}</span>`).join('')}</div>`).join('')}</div>` : '<p class="text-sm text-slate-500">Sin datos todavía.</p>'}</div>`;
       const reviewForm = `<div class="rounded-2xl border border-sky-300/20 bg-sky-400/5 p-5"><h4 class="text-lg font-bold text-white mb-3">Deja tu opinión</h4><form onsubmit="submitReview(event)" class="space-y-3"><div class="grid grid-cols-1 sm:grid-cols-2 gap-3"><input id="reviewAuthor" required maxlength="80" placeholder="Tu nombre" value="${escapeHTML(profile.data?.full_name || '')}" class="w-full bg-black/50 border border-white/15 text-white rounded-xl px-4 py-3"><select id="reviewRating" required class="w-full bg-black/50 border border-white/15 text-white rounded-xl px-4 py-3"><option value="">Valoración</option><option value="5">5 estrellas</option><option value="4">4 estrellas</option><option value="3">3 estrellas</option><option value="2">2 estrellas</option><option value="1">1 estrella</option></select></div><textarea id="reviewBody" required maxlength="1000" rows="3" placeholder="Cuéntanos cómo fue tu experiencia..." class="w-full bg-black/50 border border-white/15 text-white rounded-xl px-4 py-3"></textarea><button class="px-5 py-2.5 rounded-xl bg-white text-black font-bold">Enviar opinión</button><p class="text-xs text-slate-400">Tu opinión será visible después de la moderación.</p></form></div>`;
       document.getElementById('dashboardContent').innerHTML = reviewForm + list('Mis solicitudes', requests.data, ['device_model', 'issue', 'status']) + list('Mis dispositivos', devices.data, ['brand', 'model']) + list('Mis opiniones', reviews.data, ['rating', 'body', 'approved']) + (isAdmin ? '<div id="adminContent" class="pt-4 border-t border-white/10"></div>' : '');
-      if (isAdmin) loadAdminDashboard();
+      if (isAdmin) await loadAdminDashboard();
     }
     async function submitReview(event) {
       event.preventDefault();
@@ -701,13 +732,13 @@
         supabaseClient.from('reviews').select('id,author_name,rating,body,approved,created_at').order('created_at', { ascending: false }),
         supabaseClient.from('promotions').select('id,title,description,discount,active,starts_at,ends_at').order('created_at', { ascending: false })
       ]);
-      const statusOptions = ['received', 'diagnosing', 'repairing', 'ready', 'closed'];
+      const statusOptions = ['received', 'diagnosing', 'repairing', 'ready', 'closed', 'rejected'];
       adminEl.innerHTML = `<h4 class="text-xl font-bold text-white mb-4">Administración</h4>
         <div class="grid grid-cols-1 xl:grid-cols-2 gap-5">
           <section class="rounded-2xl border border-white/10 bg-black/20 p-4"><h5 class="font-bold text-white mb-3">Crear promoción</h5><form onsubmit="savePromotion(event)" class="space-y-3"><input id="promotionTitle" required maxlength="120" placeholder="Título" class="w-full bg-black/50 border border-white/15 text-white rounded-xl px-3 py-2.5"><input id="promotionDiscount" maxlength="40" placeholder="Descuento, ej. -15%" class="w-full bg-black/50 border border-white/15 text-white rounded-xl px-3 py-2.5"><textarea id="promotionDescription" rows="2" placeholder="Descripción" class="w-full bg-black/50 border border-white/15 text-white rounded-xl px-3 py-2.5"></textarea><button class="px-4 py-2 rounded-xl bg-sky-300 text-black font-bold">Crear promoción</button></form><div class="space-y-2 mt-4">${(promotions.data || []).map(item => `<div class="rounded-xl border border-white/10 p-3 text-sm"><div class="flex justify-between gap-3"><strong class="text-white">${escapeHTML(item.title)}</strong><button onclick="deletePromotion('${item.id}')" class="text-red-300">Eliminar</button></div><p class="text-slate-400">${escapeHTML(item.description || '')}</p><button onclick="togglePromotion('${item.id}', ${!item.active})" class="text-xs text-sky-300 mt-2">${item.active ? 'Desactivar' : 'Activar'}</button></div>`).join('') || '<p class="text-sm text-slate-500">No hay promociones.</p>'}</div></section>
           <section class="rounded-2xl border border-white/10 bg-black/20 p-4"><h5 class="font-bold text-white mb-3">Moderar opiniones</h5><div class="space-y-2">${(reviews.data || []).map(item => `<div class="rounded-xl border border-white/10 p-3 text-sm"><div class="flex flex-wrap justify-between gap-3"><strong class="text-white">${escapeHTML(item.author_name)} · ${item.rating}/5</strong><div class="flex gap-3"><button onclick="moderateReview('${item.id}', ${!item.approved})" class="text-sky-300">${item.approved ? 'Ocultar' : 'Publicar'}</button><button onclick="deleteReview('${item.id}')" class="text-red-300">Eliminar</button></div></div><p class="text-slate-300 mt-1">${escapeHTML(item.body)}</p><p class="text-xs text-slate-500 mt-2">${item.approved ? 'Publicado' : 'Pendiente'}</p></div>`).join('') || '<p class="text-sm text-slate-500">No hay opiniones.</p>'}</div></section>
         </div>
-        <section class="rounded-2xl border border-white/10 bg-black/20 p-4 mt-5"><h5 class="font-bold text-white mb-3">Solicitudes de reparación</h5><div class="space-y-2">${(requests.data || []).map(item => `<div class="rounded-xl border border-white/10 p-3 text-sm"><div class="flex flex-wrap items-center justify-between gap-3"><span class="text-white font-semibold">${escapeHTML(item.device_brand || '')} ${escapeHTML(item.device_model || '')}</span><select onchange="updateRequestStatus('${item.id}', this.value)" class="bg-black/60 border border-white/15 text-white rounded-lg px-2 py-1">${statusOptions.map(status => `<option value="${status}" ${item.status === status ? 'selected' : ''}>${status}</option>`).join('')}</select></div><p class="text-slate-400 mt-1">${escapeHTML(item.issue || '')}</p><p class="text-xs text-slate-500 mt-1">${escapeHTML(item.notes || '')}</p></div>`).join('') || '<p class="text-sm text-slate-500">No hay solicitudes.</p>'}</div></section>`;
+        <section class="rounded-2xl border border-white/10 bg-black/20 p-4 mt-5"><h5 class="font-bold text-white mb-3">Solicitudes de reparación</h5><div class="space-y-3">${requests.error ? `<p class="text-sm text-red-300">No se pudieron cargar las solicitudes: ${escapeHTML(requests.error.message)}</p>` : (requests.data || []).map(item => `<article class="rounded-xl border border-white/10 bg-black/20 p-4 text-sm"><div class="flex flex-wrap items-center justify-between gap-3"><span class="text-white font-semibold">${escapeHTML(item.device_brand || '')} ${escapeHTML(item.device_model || '')}</span><select aria-label="Estado de solicitud" onchange="updateRequestStatus('${item.id}', this.value)" class="bg-black/60 border border-white/15 text-white rounded-lg px-2 py-2">${statusOptions.map(status => `<option value="${status}" ${item.status === status ? 'selected' : ''}>${status}</option>`).join('')}</select></div><p class="text-slate-300 mt-2">${escapeHTML(item.issue || '')}</p><p class="text-xs text-slate-400 mt-2 whitespace-pre-wrap">${escapeHTML(item.notes || 'Sin datos de contacto')}</p><p class="text-xs text-slate-500 mt-2">${new Date(item.created_at).toLocaleString()}</p><div class="flex flex-wrap gap-2 mt-3"><button onclick="updateRequestStatus('${item.id}', 'diagnosing')" class="px-3 py-2 rounded-lg bg-sky-300/10 text-sky-200 border border-sky-300/20">Aceptar / Diagnosticar</button><button onclick="updateRequestStatus('${item.id}', 'rejected')" class="px-3 py-2 rounded-lg bg-amber-300/10 text-amber-200 border border-amber-300/20">Rechazar</button><button onclick="deleteRepairRequest('${item.id}')" class="px-3 py-2 rounded-lg bg-red-300/10 text-red-200 border border-red-300/20">Eliminar</button></div></article>`).join('') || '<p class="text-sm text-slate-500">No hay solicitudes.</p>'}</div></section>`;
     }
     async function savePromotion(event) {
       event.preventDefault();
@@ -738,7 +769,15 @@
     }
     async function updateRequestStatus(id, status) {
       const { error } = await supabaseClient.from('repair_requests').update({ status }).eq('id', id);
-      if (error) showToast(`No se pudo actualizar la solicitud: ${error.message}`); else showToast('Estado actualizado.');
+      if (error) showToast(`No se pudo actualizar la solicitud: ${error.message}`);
+      else { showToast(status === 'rejected' ? 'Solicitud rechazada.' : 'Estado actualizado.'); await loadDashboard(); }
+    }
+    async function deleteRepairRequest(id) {
+      if (!window.confirm('¿Eliminar definitivamente esta solicitud?')) return;
+      const { error } = await supabaseClient.from('repair_requests').delete().eq('id', id);
+      if (error) { showToast(`No se pudo eliminar la solicitud: ${error.message}`); return; }
+      showToast('Solicitud eliminada.');
+      await loadDashboard();
     }
     function openWizardModal() { document.getElementById('wizardModal').classList.remove('hidden'); document.getElementById('wizardModal').classList.add('flex'); }
     function closeWizardModal() { document.getElementById('wizardModal').classList.add('hidden'); document.getElementById('wizardModal').classList.remove('flex'); }
@@ -841,6 +880,7 @@
           qualityOEM: 'Original OEM', qualityAAA: 'Compatible AAA', warranty: 'Garantía de 6 meses',
           fullPrice: 'Precio completo', discount: '25% de descuento', step: 'Paso', next: 'Siguiente', back: 'Atrás',
           calculate: 'Calcular presupuesto', booking: 'Continuar con la reserva', errorChoice: 'Selecciona una opción para continuar.',
+          installmentLabel: 'Dividir el pago (estimación)', months: 'meses', installmentNote: 'Cálculo informativo en partes iguales; no es una financiación ni genera una transacción.',
           errorModel: 'Introduce el modelo del dispositivo.', errorQuality: 'Elige la calidad de la pieza.',
           resultTitle: 'Presupuesto aproximado para', repairType: 'Tipo de reparación', estimate: 'Precio estimado',
           screen: 'Pantalla OLED', battery: 'Batería', soldering: 'Microsoldadura', charging: 'Puerto de carga',
@@ -859,6 +899,13 @@
             { category: 'PROCESO', questions: [
               { q: '¿Cuánto tarda el diagnóstico?', a: 'El diagnóstico inicial tarda 15-20 minutos y es gratuito. Después comunicamos el precio exacto. Si aceptas, la reparación suele tardar entre 35 y 45 minutos.' },
               { q: '¿Puedo dejar el dispositivo e irme o tengo que esperar?', a: '¡Como prefieras! Si lo dejas, te enviaremos un SMS cuando esté listo. Si esperas, puedes ver cómo trabajamos. Para reparaciones complejas de placa y microsoldadura, quédate o vuelve en unas 2 horas.' }
+            ] },
+            { category: 'SERVICIO', questions: [
+              { q: '¿La estimación del diagnóstico es el precio final?', a: 'No necesariamente. La estimación es orientativa. Primero revisamos el dispositivo y te comunicamos el diagnóstico y el precio definitivo; el trabajo se inicia después de tu aprobación.' },
+              { q: '¿Tengo que hacer una copia de seguridad antes de la reparación?', a: 'Recomendamos guardar una copia de seguridad antes de entregar cualquier dispositivo. Algunas reparaciones requieren pruebas o reinicios; no introduzcas contraseñas de tus cuentas en la solicitud.' },
+              { q: '¿Qué diferencia hay entre Original OEM y Compatible AAA?', a: 'Original OEM se refiere a una pieza de calidad original del fabricante o de su cadena de suministro. Compatible AAA es una alternativa compatible. La disponibilidad y las características pueden variar según el modelo; confirmaremos la opción antes de reparar.' },
+              { q: '¿Me avisarán antes de hacer una reparación adicional?', a: 'Sí. Si durante el diagnóstico aparece otro problema o cambia el presupuesto, te informaremos y esperaremos tu aprobación antes de continuar.' },
+              { q: '¿Qué hago si no aparece mi modelo en la lista?', a: 'Escribe el modelo manualmente en el diagnóstico o envía una solicitud desde «Otro dispositivo». Confirmaremos si podemos repararlo y la disponibilidad de las piezas.' }
             ] }
           ]
         },
@@ -874,6 +921,7 @@
           qualityOEM: 'Original OEM', qualityAAA: 'Compatible AAA', warranty: '6-month warranty',
           fullPrice: 'Full price', discount: '25% off', step: 'Step', next: 'Next', back: 'Back',
           calculate: 'Calculate estimate', booking: 'Continue to booking', errorChoice: 'Select an option to continue.',
+          installmentLabel: 'Split payment (estimate)', months: 'months', installmentNote: 'Informational equal-part estimate only; this is not financing and no transaction is made.',
           errorModel: 'Enter the device model.', errorQuality: 'Choose a part quality.',
           resultTitle: 'Estimated repair costs for', repairType: 'Repair type', estimate: 'Estimated price',
           screen: 'OLED screen', battery: 'Battery', soldering: 'Microsoldering', charging: 'Charging port',
@@ -892,6 +940,13 @@
             { category: 'PROCESS', questions: [
               { q: 'How long does diagnostics take?', a: 'Initial diagnostics take 15-20 minutes and are free. We then provide the exact price. If you approve, repairs usually take 35-45 minutes.' },
               { q: 'Can I leave the device or do I need to wait?', a: 'It is up to you! If you leave it, we will text you when it is ready. If you wait, you can watch us work. For complex board and microsoldering repairs, please wait or return in about 2 hours.' }
+            ] },
+            { category: 'SERVICE', questions: [
+              { q: 'Is the diagnostic estimate the final price?', a: 'Not necessarily. The estimate is preliminary. We inspect the device, share the diagnosis and final price, and start work only after you approve it.' },
+              { q: 'Should I back up my device before repair?', a: 'We recommend backing up your device before handing it in. Some repairs require testing or a reset; do not include your account passwords in the request.' },
+              { q: 'What is the difference between Original OEM and Compatible AAA?', a: 'Original OEM refers to an original-quality part from the manufacturer or its supply chain. Compatible AAA is an alternative compatible part. Availability and specifications vary by model; we will confirm the option before repair.' },
+              { q: 'Will you ask before doing additional repair work?', a: 'Yes. If diagnostics find another issue or the estimate changes, we will contact you and wait for your approval before continuing.' },
+              { q: 'What if my model is not listed?', a: 'Enter the model manually in the diagnostic form or submit a request under “Other device”. We will confirm repair availability and parts.' }
             ] }
           ]
         }
@@ -909,7 +964,8 @@
         { id: 'soldering', key: 'soldering', base: 200 },
         { id: 'charging', key: 'charging', base: 120 }
       ];
-      const state = { issue: '', detail: '', brand: '', model: '', quality: '', result: null };
+      const state = { issue: '', detail: '', brand: '', model: '', quality: '', months: 2, result: null };
+      let moduleLang = currentLang;
       const text = () => moduleText[currentLang] || moduleText.es;
       const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
       const followUps = {
@@ -954,7 +1010,7 @@
       function renderResult() {
         const copy = text();
         if (!state.result) return '';
-        return `<div class="diagnostic-result"><h4>${esc(copy.resultTitle)} ${esc(state.model)}</h4><div class="diagnostic-table-wrap"><table class="diagnostic-table"><thead><tr><th>${esc(copy.repairType)}</th><th>${esc(copy.estimate)}</th></tr></thead><tbody>${state.result.rows.map(row => `<tr><td>${esc(copy[row.key])}${row.id === state.result.selectedId ? esc(copy.recommended) : ''}</td><td>${row.price.toFixed(2)} €</td></tr>`).join('')}</tbody></table></div><p class="diagnostic-total">${esc(copy.total)} ${state.result.total.toFixed(2)} €</p><p class="diagnostic-recommendation">${esc(recommendation())}</p><p>${esc(copy.brand)}: ${esc(state.brand)} · ${esc(copy.part)}: ${state.quality === 'oem' ? copy.qualityOEM : copy.qualityAAA} · ${esc(copy.warranty)}.</p></div>`;
+        return `<div class="diagnostic-result"><h4>${esc(copy.resultTitle)} ${esc(state.model)}</h4><div class="diagnostic-table-wrap"><table class="diagnostic-table"><thead><tr><th>${esc(copy.repairType)}</th><th>${esc(copy.estimate)}</th></tr></thead><tbody>${state.result.rows.map(row => `<tr><td>${esc(copy[row.key])}${row.id === state.result.selectedId ? esc(copy.recommended) : ''}</td><td>${row.price.toFixed(2)} €</td></tr>`).join('')}</tbody></table></div><p class="diagnostic-total">${esc(copy.total)} ${state.result.total.toFixed(2)} €</p><div class="diagnostic-installment"><label for="diagnosticMonths">${esc(copy.installmentLabel)}</label><select id="diagnosticMonths">${[2,3,4,5,6].map(months => `<option value="${months}" ${state.months === months ? 'selected' : ''}>${months} ${esc(copy.months)}</option>`).join('')}</select><strong id="diagnosticMonthly">${(state.result.total / state.months).toFixed(2)} € / ${esc(copy.months)}</strong><small class="diagnostic-disclaimer">${esc(copy.installmentNote)}</small></div><p class="diagnostic-recommendation">${esc(recommendation())}</p><p>${esc(copy.brand)}: ${esc(state.brand)} · ${esc(copy.part)}: ${state.quality === 'oem' ? copy.qualityOEM : copy.qualityAAA} · ${esc(copy.warranty)}.</p></div>`;
       }
 
       function renderDiagnostic(step) {
@@ -972,6 +1028,11 @@
         const input = document.getElementById('diagnosticModel');
         if (input) input.addEventListener('input', () => { state.model = input.value; });
         diagnosticFlow.querySelectorAll('input[name="diagnosticQuality"]').forEach(radio => radio.addEventListener('change', () => { state.quality = radio.value; state.result = null; }));
+        const monthsSelect = document.getElementById('diagnosticMonths');
+        if (monthsSelect) monthsSelect.addEventListener('change', () => {
+          state.months = Number(monthsSelect.value);
+          document.getElementById('diagnosticMonthly').textContent = `${(state.result.total / state.months).toFixed(2)} € / ${text().months}`;
+        });
       }
 
       diagnosticFlow.addEventListener('click', event => {
@@ -1020,7 +1081,23 @@
           return;
         }
         if (action === 'booking' && state.result) {
-          window.alert(`${copy.booking}\n${copy.questionIssue}: ${state.issue}${state.detail ? ` — ${state.detail}` : ''}\n${state.brand} ${state.model}\n${copy.total} ${state.result.total.toFixed(2)} €`);
+          const brandKey = { Apple: 'apple', Samsung: 'samsung', Xiaomi: 'xiaomi', Google: 'pixel' }[state.brand] || 'other';
+          const brandButton = Array.from(document.querySelectorAll('.brand-btn')).find(item => item.getAttribute('onclick')?.includes(`'${brandKey}'`));
+          if (brandButton) selectBrand(brandKey, brandButton);
+          document.getElementById('modelSearch').value = state.model;
+          selectedIssues = [state.result.selectedId];
+          const qualityInput = document.querySelector(`input[name="partQuality"][value="${state.quality}"]`);
+          if (qualityInput) qualityInput.checked = true;
+          renderIssues();
+          updateCalculation();
+          const bookingModal = document.getElementById('bookingModal');
+          bookingModal.dataset.overrideBrand = state.brand;
+          bookingModal.dataset.overrideModel = state.model;
+          bookingModal.dataset.overrideIssue = `${state.issue}${state.detail ? ` — ${state.detail}` : ''}`;
+          bookingModal.dataset.overridePrice = String(state.result.total);
+          document.getElementById('modalNotesText').value = `${recommendation()} Parte estimada en ${state.months} ${copy.months}: ${(state.result.total / state.months).toFixed(2)} € por parte (cálculo informativo, no financiación).`;
+          document.getElementById('modalTotal').textContent = `${state.result.total.toFixed(2)} €`;
+          openBookingModal();
         }
       });
 
@@ -1035,6 +1112,22 @@
       });
 
       window.updateBarsukonModulesLanguage = () => {
+        if (moduleLang !== currentLang) {
+          const previous = moduleText[moduleLang] || moduleText.es;
+          const next = text();
+          const oldIssue = state.issue;
+          const issueIndex = previous.issueOptions.indexOf(oldIssue);
+          if (issueIndex >= 0) state.issue = next.issueOptions[issueIndex];
+          const oldFollowKey = followUps[moduleLang]?.[oldIssue];
+          const newFollowKey = followUps[currentLang]?.[state.issue];
+          if (oldFollowKey && newFollowKey && state.detail) {
+            const detailIndex = previous[oldFollowKey].indexOf(state.detail);
+            if (detailIndex >= 0) state.detail = next[newFollowKey][detailIndex];
+          }
+          const brandIndex = previous.brandOptions.indexOf(state.brand);
+          if (brandIndex >= 0) state.brand = next.brandOptions[brandIndex];
+          moduleLang = currentLang;
+        }
         const copy = text();
         document.getElementById('diagnosticHeading').textContent = copy.diagnosticHeading;
         document.getElementById('diagnosticIntro').textContent = copy.diagnosticIntro;

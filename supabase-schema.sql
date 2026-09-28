@@ -19,12 +19,13 @@ create table if not exists public.devices (
 );
 create table if not exists public.repair_requests (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references auth.users(id) on delete cascade,
+  user_id uuid references auth.users(id) on delete cascade,
   device_id uuid references public.devices(id) on delete set null,
   device_brand text, device_model text, issue text not null,
   notes text, status text not null default 'received',
   estimated_price numeric(10,2), created_at timestamptz not null default now()
 );
+alter table public.repair_requests alter column user_id drop not null;
 create table if not exists public.reviews (
   id uuid primary key default gen_random_uuid(),
   user_id uuid references auth.users(id) on delete set null,
@@ -78,7 +79,12 @@ create policy "profiles own read" on public.profiles for select to authenticated
 create policy "profiles own update" on public.profiles for update to authenticated using (id = auth.uid() or public.is_admin()) with check (id = auth.uid() or public.is_admin());
 create policy "profiles self insert" on public.profiles for insert to authenticated with check (id = auth.uid());
 create policy "devices own access" on public.devices for all to authenticated using (user_id = auth.uid() or public.is_admin()) with check (user_id = auth.uid() or public.is_admin());
-create policy "requests own access" on public.repair_requests for all to authenticated using (user_id = auth.uid() or public.is_admin()) with check (user_id = auth.uid() or public.is_admin());
+drop policy if exists "requests own access" on public.repair_requests;
+create policy "requests own read" on public.repair_requests for select to authenticated using (user_id = auth.uid() or public.is_admin());
+create policy "requests own insert" on public.repair_requests for insert to authenticated with check (user_id = auth.uid());
+create policy "requests admin access" on public.repair_requests for all to authenticated using (public.is_admin()) with check (public.is_admin());
+drop policy if exists "requests public intake" on public.repair_requests;
+create policy "requests public intake" on public.repair_requests for insert to anon with check (user_id is null);
 create policy "reviews public approved read" on public.reviews for select to anon, authenticated using (approved = true or user_id = auth.uid() or public.is_admin());
 create policy "reviews own insert" on public.reviews for insert to authenticated with check (user_id = auth.uid());
 create policy "reviews own update" on public.reviews for update to authenticated using (user_id = auth.uid() or public.is_admin()) with check (user_id = auth.uid() or public.is_admin());

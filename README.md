@@ -30,3 +30,7 @@ create policy "reviews admin delete"
 on public.reviews for delete to authenticated
 using (public.is_admin());
 ```
+
+### Public repair requests
+
+For signed-in and guest repair requests to appear in the admin dashboard, run `supabase-request-intake-migration.sql` once in Supabase SQL Editor. It allows anonymous visitors to submit requests only; they cannot read or modify requests. An administrator can review each request, change its status, reject it, or delete it from the account panel.
