@@ -77,7 +77,10 @@ $$;
 
 create policy "profiles own read" on public.profiles for select to authenticated using (id = auth.uid() or public.is_admin());
 create policy "profiles own update" on public.profiles for update to authenticated using (id = auth.uid() or public.is_admin()) with check (id = auth.uid() or public.is_admin());
-create policy "profiles self insert" on public.profiles for insert to authenticated with check (id = auth.uid());
+drop policy if exists "profiles self insert" on public.profiles;
+create policy "profiles self insert" on public.profiles for insert to authenticated with check (id = auth.uid() and role = 'customer');
+revoke update on public.profiles from anon, authenticated, public;
+grant update (full_name, phone) on public.profiles to authenticated;
 create policy "devices own access" on public.devices for all to authenticated using (user_id = auth.uid() or public.is_admin()) with check (user_id = auth.uid() or public.is_admin());
 drop policy if exists "requests own access" on public.repair_requests;
 create policy "requests own read" on public.repair_requests for select to authenticated using (user_id = auth.uid() or public.is_admin());

@@ -101,6 +101,17 @@
     body.light .faq-question { color:#172033; }
     body.light .faq-answer { color:#526078; }
     body.light .faq-category { color:#0369a1; }
+    .dashboard-tabs { display:flex; gap:8px; overflow-x:auto; padding:0 0 12px; border-bottom:1px solid rgba(255,255,255,.12); }
+    .dashboard-tab { flex:0 0 auto; min-height:42px; padding:9px 13px; border:1px solid rgba(255,255,255,.14); border-radius:12px; background:rgba(255,255,255,.04); color:#cbd5e1; font-size:.84rem; font-weight:650; cursor:pointer; }
+    .dashboard-tab[aria-selected="true"] { border-color:rgba(125,211,252,.55); background:rgba(125,211,252,.12); color:#bae6fd; }
+    .dashboard-panel { padding-top:18px; }
+    .dashboard-order { border:1px solid rgba(255,255,255,.12); border-radius:16px; background:rgba(0,0,0,.2); padding:16px; }
+    .dashboard-status { display:inline-flex; border-radius:999px; padding:4px 9px; background:rgba(125,211,252,.1); color:#bae6fd; font-size:.75rem; font-weight:700; }
+    body.light .dashboard-tabs { border-color:rgba(15,23,42,.14); }
+    body.light .dashboard-tab { color:#334155; border-color:rgba(15,23,42,.16); }
+    body.light .dashboard-tab[aria-selected="true"] { color:#075985; border-color:rgba(2,132,199,.4); background:rgba(14,165,233,.1); }
+    body.light .dashboard-order { background:rgba(255,255,255,.72); border-color:rgba(15,23,42,.14); }
+    body.light .dashboard-status { color:#075985; background:rgba(14,165,233,.1); }
     @media(max-width:560px) {
       .diagnostic-card, .faq-card { width:min(100% - 24px, 900px); }
       .diagnostic-options { grid-template-columns:1fr; }
@@ -125,6 +136,7 @@
         <a id="navCalc" href="#calculator" class="hover:text-white transition-colors">Calculadora</a>
         <a id="navTech" href="#interactive" class="hover:text-white transition-colors">Anatomia</a>
         <a id="navServices" href="#services" class="hover:text-white transition-colors">Servicios</a>
+        <a id="navMobileService" href="#mobile-service" class="hover:text-white transition-colors">Reparación a domicilio</a>
         <a id="navStatus" href="#tracker" class="hover:text-white transition-colors">Estado</a>
         <a id="navFaq" href="#faq" class="hover:text-white transition-colors">Preguntas</a>
         <button onclick="toggleEmpresaModal()" class="px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-xs font-mono text-slate-300 hover:bg-white/10 transition-all flex items-center gap-1.5"><i class="fa-solid fa-graduation-cap text-slate-400"></i> <span id="navEmpresa">Proyecto Empresa</span></button>
@@ -144,6 +156,7 @@
       <a id="mobileNavCalc" href="#calculator" class="py-2 hover:text-white">Calculadora</a>
       <a id="mobileNavTech" href="#interactive" class="py-2 hover:text-white">Anatomía</a>
       <a id="mobileNavServices" href="#services" class="py-2 hover:text-white">Servicios</a>
+      <a id="mobileNavMobileService" href="#mobile-service" class="py-2 hover:text-white">Reparación a domicilio</a>
       <a id="mobileNavStatus" href="#tracker" class="py-2 hover:text-white">Estado</a>
       <a id="mobileNavDiagnostic" href="#problemWizard" class="py-2 hover:text-white">Diagnóstico guiado</a>
       <a id="mobileNavFaq" href="#faq" class="py-2 hover:text-white">Preguntas frecuentes</a>
@@ -174,6 +187,18 @@
         <div class="glass-panel p-4 rounded-2xl"><div class="font-mono text-3xl font-extrabold text-white mb-1">99.2%</div><div class="text-xs text-slate-400">Piezas originales OEM</div></div>
         <div class="glass-panel p-4 rounded-2xl"><div class="font-mono text-3xl font-extrabold text-white mb-1">180 dias</div><div class="text-xs text-slate-400">Garantia escrita</div></div>
       </div>
+    </div>
+  </section>
+
+  <section id="mobile-service" class="px-4 py-14 max-w-7xl mx-auto scroll-mt-24">
+    <div class="glass-panel rounded-3xl border border-sky-300/20 p-6 md:p-10 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 items-center">
+      <div>
+        <p class="text-xs font-mono tracking-widest text-sky-300 uppercase mb-3">// SERVICIO A DOMICILIO</p>
+        <h2 id="mobileServiceTitle" class="text-3xl md:text-4xl font-extrabold text-white mb-3">Reparación en furgoneta: vamos hasta ti</h2>
+        <p id="mobileServiceLead" class="text-slate-300 max-w-2xl">Solicita una visita a domicilio en Madrid o Barcelona. Elige un horario disponible y te confirmaremos la cita antes de desplazarnos.</p>
+        <p id="mobileServicePriceNote" class="text-sm text-slate-400 mt-3">Desplazamiento: +15 € sobre la estimación de reparación. No hay cobro al enviar la solicitud.</p>
+      </div>
+      <button id="mobileServiceRequestButton" type="button" onclick="openMobileRepairModal()" class="w-full lg:w-auto px-6 py-4 rounded-xl bg-sky-300 text-slate-950 font-extrabold hover:bg-sky-200 transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-truck-fast"></i><span id="mobileServiceCta">Solicitar visita</span></button>
     </div>
   </section>
 
@@ -331,8 +356,39 @@
 
   <div id="otherDeviceModal" class="fixed inset-0 bg-black/70 hidden justify-center items-center z-[60] p-4"><div class="glass-panel rounded-3xl w-full max-w-xl p-6 border border-white/10"><div class="flex items-center justify-between mb-5"><h3 class="text-2xl font-bold text-white">Otros dispositivos</h3><button onclick="closeOtherDeviceModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div><form onsubmit="submitOtherDeviceRequest(event)"><div class="space-y-4"><label class="block"><span class="block text-xs font-mono text-slate-400 uppercase mb-2">Nombre del dispositivo</span><input id="otherDeviceType" type="text" placeholder="ej. Huawei P40, tablet, smartwatch..." class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-400" required /></label><label class="block"><span class="block text-xs font-mono text-slate-400 uppercase mb-2">Problema</span><select id="otherDeviceIssue" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-400" required><option value="">Selecciona un problema</option><option value="Pantalla rota">Pantalla rota</option><option value="Batería">Batería</option><option value="Puerto de carga">Puerto de carga</option><option value="Problema de software">Problema de software</option><option value="Mojado / limpieza">Mojado / limpieza</option><option value="Otro">Otro</option></select></label><div class="grid grid-cols-1 md:grid-cols-2 gap-3"><label class="block"><span class="block text-xs font-mono text-slate-400 uppercase mb-2">Nombre</span><input id="otherDeviceName" type="text" placeholder="Tu nombre" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-400" required /></label><label class="block"><span class="block text-xs font-mono text-slate-400 uppercase mb-2">Email</span><input id="otherDeviceEmail" type="email" placeholder="tu@email.com" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-400" required /></label></div><label class="block"><span class="block text-xs font-mono text-slate-400 uppercase mb-2">Telefono</span><input id="otherDevicePhone" type="tel" placeholder="+34 600 000 000" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-400" required /></label></div><div class="mt-5 flex justify-between items-center gap-3"><span class="text-sm text-slate-400">Estimacion aproximada:<span id="otherDeviceEstimate" class="text-white font-bold ml-2">€ 45-180</span></span><button type="submit" class="px-5 py-3 rounded-xl bg-white text-black font-bold hover:bg-slate-200 transition-all">Enviar solicitud</button></div></form></div></div>
 
+  <div id="mobileRepairModal" class="fixed inset-0 bg-black/80 hidden justify-center items-center z-[70] p-4">
+    <div class="glass-panel rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 border border-white/10">
+      <div class="flex items-center justify-between gap-4 mb-5"><div><p class="text-xs font-mono text-sky-300 uppercase tracking-widest">BarsukON · Mobile Service</p><h3 id="mobileRepairModalTitle" class="text-2xl font-bold text-white mt-1">Solicitar reparación a domicilio</h3></div><button type="button" onclick="closeMobileRepairModal()" class="text-slate-400 hover:text-white" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button></div>
+      <form id="mobileRepairForm" onsubmit="submitMobileRepair(event)" class="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <label class="block text-xs text-slate-400">Ciudad<select id="mobileRepairCity" required class="mt-1 w-full bg-black/50 border border-white/15 text-white rounded-xl px-3 py-3"><option value="Madrid">Madrid</option><option value="Barcelona">Barcelona</option></select></label>
+          <label class="block text-xs text-slate-400">Código postal<input id="mobileRepairZip" maxlength="20" autocomplete="postal-code" class="mt-1 w-full bg-black/50 border border-white/15 text-white rounded-xl px-3 py-3"></label>
+        </div>
+        <label class="block text-xs text-slate-400">Dirección completa<input id="mobileRepairAddress" required maxlength="300" autocomplete="street-address" class="mt-1 w-full bg-black/50 border border-white/15 text-white rounded-xl px-3 py-3" placeholder="Calle, número, piso"></label>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <label class="block text-xs text-slate-400">Fecha (disponible entre 3 y 7 días)<input id="mobileRepairDate" type="date" required class="mt-1 w-full bg-black/50 border border-white/15 text-white rounded-xl px-3 py-3"></label>
+          <label class="block text-xs text-slate-400">Horario disponible<select id="mobileRepairSlot" required disabled class="mt-1 w-full bg-black/50 border border-white/15 text-white rounded-xl px-3 py-3"><option value="">Selecciona primero una fecha</option></select></label>
+        </div>
+        <p id="mobileRepairSlotStatus" class="text-xs text-slate-400" aria-live="polite">Los horarios disponibles se consultan en tiempo real.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <label class="block text-xs text-slate-400">Marca<select id="mobileRepairBrand" required class="mt-1 w-full bg-black/50 border border-white/15 text-white rounded-xl px-3 py-3"><option value="Apple">Apple</option><option value="Samsung">Samsung</option><option value="Xiaomi">Xiaomi</option><option value="Google">Google</option><option value="Other">Otra</option></select></label>
+          <label class="block text-xs text-slate-400">Modelo<input id="mobileRepairModel" required maxlength="120" list="mobileRepairModels" class="mt-1 w-full bg-black/50 border border-white/15 text-white rounded-xl px-3 py-3" placeholder="Por ejemplo, iPhone 14 Pro"><datalist id="mobileRepairModels"></datalist></label>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <label class="block text-xs text-slate-400">Tipo de reparación<select id="mobileRepairType" required class="mt-1 w-full bg-black/50 border border-white/15 text-white rounded-xl px-3 py-3"></select></label>
+          <label class="block text-xs text-slate-400">Calidad de pieza<select id="mobileRepairQuality" class="mt-1 w-full bg-black/50 border border-white/15 text-white rounded-xl px-3 py-3"><option value="original_oem">Original OEM</option><option value="compatible_aaa">Compatible AAA (-25%)</option></select></label>
+        </div>
+        <label class="block text-xs text-slate-400">Teléfono de contacto<input id="mobileRepairPhone" type="tel" required maxlength="40" autocomplete="tel" class="mt-1 w-full bg-black/50 border border-white/15 text-white rounded-xl px-3 py-3" placeholder="+34 600 000 000"></label>
+        <div class="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-4"><p class="text-sm text-slate-300">Estimación, incluido el desplazamiento: <strong id="mobileRepairEstimate" class="text-white">15 €</strong></p><button type="submit" class="px-5 py-3 rounded-xl bg-sky-300 text-slate-950 font-extrabold">Solicitar visita (sin pago)</button></div>
+        <p id="mobileRepairFormStatus" class="text-sm text-slate-400" role="status"></p>
+        <p class="text-xs text-slate-500">La visita queda pendiente de confirmación. No se realiza ningún cargo.</p>
+      </form>
+    </div>
+  </div>
+
   <div id="authModal" class="fixed inset-0 bg-black/80 hidden justify-center items-center z-[70] p-4"><div class="glass-panel rounded-3xl w-full max-w-md p-6 border border-white/10"><div class="flex items-center justify-between mb-5"><h3 class="text-2xl font-bold text-white">Tu cuenta BarsukON</h3><button onclick="closeAuthModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div><form onsubmit="submitAuth(event)" class="space-y-4"><input id="authEmail" type="email" required placeholder="tu@email.com" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3"><input id="authPassword" type="password" required minlength="6" placeholder="Contraseña (mínimo 6)" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3"><div class="grid grid-cols-2 gap-3"><button type="submit" data-auth-mode="signin" class="py-3 rounded-xl bg-white text-black font-bold">Iniciar sesión</button><button type="button" onclick="signUp()" class="py-3 rounded-xl border border-white/20 text-white font-bold">Crear cuenta</button></div><p id="authStatus" class="text-sm text-slate-400"></p></form></div></div>
-  <div id="dashboardModal" class="fixed inset-0 bg-black/80 hidden justify-center items-center z-[70] p-4"><div class="glass-panel rounded-3xl w-full max-w-5xl max-h-[90vh] overflow-auto p-6 border border-white/10"><div class="flex items-center justify-between mb-5"><h3 id="dashboardTitle" class="text-2xl font-bold text-white">Mi panel</h3><div class="flex gap-2"><button onclick="signOut()" class="px-3 py-2 rounded-xl border border-red-300/30 text-red-200 text-sm">Salir</button><button onclick="closeDashboardModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div></div><p id="dashboardEmail" class="text-slate-400 text-sm mb-5"></p><div id="dashboardContent" class="space-y-5"></div></div></div>
+  <div id="dashboardModal" class="fixed inset-0 bg-black/80 hidden justify-center items-center z-[70] p-4"><div class="glass-panel rounded-3xl w-full max-w-5xl max-h-[90vh] overflow-auto p-6 border border-white/10"><div class="flex items-center justify-between mb-5"><h3 id="dashboardTitle" class="text-2xl font-bold text-white">Mi cuenta</h3><div class="flex gap-2"><button onclick="signOut()" class="px-3 py-2 rounded-xl border border-red-300/30 text-red-200 text-sm">Salir</button><button onclick="closeDashboardModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div></div><p id="dashboardEmail" class="text-slate-400 text-sm mb-5"></p><div id="dashboardContent" class="space-y-5"></div></div></div>
+  <div id="orderDetailsModal" class="fixed inset-0 bg-black/80 hidden justify-center items-center z-[80] p-4" role="dialog" aria-modal="true" aria-labelledby="orderDetailsTitle"><div class="glass-panel rounded-3xl w-full max-w-xl p-6 border border-white/10"><div class="flex items-center justify-between mb-5"><h3 id="orderDetailsTitle" class="text-xl font-bold text-white">Деталі замовлення</h3><button type="button" onclick="closeOrderDetails()" class="text-slate-400 hover:text-white" aria-label="Закрити"><i class="fa-solid fa-xmark"></i></button></div><div id="orderDetailsBody" class="space-y-3 text-sm text-slate-300"></div></div></div>
   <div id="wizardModal" class="fixed inset-0 bg-black/80 hidden justify-center items-center z-[70] p-4"><div class="glass-panel rounded-3xl w-full max-w-xl p-6 border border-white/10"><div class="flex items-center justify-between mb-5"><h3 class="text-2xl font-bold text-white">Diagnóstico guiado</h3><button onclick="closeWizardModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div><div id="wizardSteps"><label class="block text-sm text-slate-300 mb-2">Paso 1/4 · Marca y modelo</label><div class="grid grid-cols-2 gap-3"><input id="wizardBrand" placeholder="Marca" class="bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3"><input id="wizardModel" placeholder="Modelo" class="bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3"></div><label class="block text-sm text-slate-300 mt-4 mb-2">Síntoma principal</label><textarea id="wizardSymptom" rows="3" placeholder="Describe qué ocurre..." class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3"></textarea><div class="rounded-xl bg-amber-400/10 border border-amber-300/20 text-amber-100 text-sm p-3 mt-4">Recomendación: no cargues ni enciendas el dispositivo si está mojado o se calienta.</div><p class="text-sm text-slate-400 mt-3">Diagnóstico inicial: revisaremos el equipo y confirmaremos el presupuesto antes de reparar.</p><button onclick="submitWizard()" class="mt-5 w-full py-3 rounded-xl bg-white text-black font-bold">Solicitar cita</button></div></div></div>
 
   <script>
@@ -343,6 +399,9 @@
     let currentUser = null;
     let currentUserIsAdmin = false;
     let currentDashboardView = 'account';
+    let currentDashboardTab = 'orders';
+    let dashboardOrders = new Map();
+    let dashboardOrderLoadNotice = '';
     const modelsData = {
       apple: ['iPhone 18 Pro Max','iPhone 18 Pro','iPhone 18','iPhone 17 Pro Max','iPhone 17 Pro','iPhone 17','iPhone 16 Pro Max','iPhone 16 Pro','iPhone 16','iPhone 15 Pro Max','iPhone 15 Pro','iPhone 15','iPhone 14 Pro Max','iPhone 14 Pro','iPhone 14','iPhone 13 Pro Max','iPhone 13 Pro','iPhone 13','iPhone 12 Pro Max','iPhone 12 Pro','iPhone 12','iPhone 11 Pro','iPhone 11','iPhone XS Max','iPhone XS','iPhone XR','iPhone X','iPhone SE (2022)','iPhone SE (2020)'],
       samsung: ['Galaxy S25 Ultra','Galaxy S25+','Galaxy S25','Galaxy S24 Ultra','Galaxy S24+','Galaxy S24','Galaxy S23 Ultra','Galaxy S23+','Galaxy S23','Galaxy S22 Ultra','Galaxy S22+','Galaxy S22','Galaxy S21 Ultra','Galaxy S21+','Galaxy S21','Galaxy S20 Ultra','Galaxy S20+','Galaxy S20','Galaxy Note 20 Ultra','Galaxy Note 20','Galaxy A95','Galaxy A74','Galaxy A54','Galaxy A34','Galaxy A24','Galaxy Z Fold 6','Galaxy Z Fold 5','Galaxy Z Flip 6','Galaxy Z Flip 5','Galaxy Z Flip 4'],
@@ -373,8 +432,8 @@
     let currentLang = 'es';
     const translations = {
       es: {
-        navCalc:'Calculadora', navTech:'Anatomía', navServices:'Servicios', navStatus:'Estado', navDiagnostic:'Diagnóstico guiado', navFaq:'Preguntas',
-        navEmpresa:'Proyecto Empresa', book:'Reservar cita', heroBadge:'Reparación exprés desde 20 min • Garantía 6 meses',
+        navCalc:'Calculadora', navTech:'Anatomía', navServices:'Servicios', navMobileService:'Reparación a domicilio', navStatus:'Estado', navDiagnostic:'Diagnóstico guiado', navFaq:'Preguntas',
+        navEmpresa:'Proyecto Empresa', book:'Reservar cita', mobileServiceTitle:'Reparación en furgoneta: vamos hasta ti', mobileServiceLead:'Solicita una visita a domicilio en Madrid o Barcelona. Elige un horario disponible y te confirmaremos la cita antes de desplazarnos.', mobileServiceCta:'Solicitar visita', mobileServicePriceNote:'Desplazamiento: +15 € sobre la estimación de reparación. No hay cobro al enviar la solicitud.', heroBadge:'Reparación exprés desde 20 min • Garantía 6 meses',
         heroTitle:'Precisión quirúrgica para tu', heroDesc:'Servicio técnico minimalista de alta gama BarsukON. Sustitución de módulos, microsoldadura BGA y restauración tras mojado.',
         calcTitle:'Calculadora de presupuesto', calcSub:'Selecciona la marca, busca el modelo y obtén un presupuesto instantáneo.',
         stepBrand:'1. Selecciona la marca', stepModel:'2. Modelo del dispositivo', stepIssue:'3. Tipo de avería',
@@ -389,8 +448,8 @@
         theme:'Tema', lightTheme:'Claro', darkTheme:'Oscuro'
       },
       en: {
-        navCalc:'Calculator', navTech:'Anatomy', navServices:'Services', navStatus:'Status', navDiagnostic:'Guided diagnostics', navFaq:'FAQ',
-        navEmpresa:'Business project', book:'Book appointment', heroBadge:'Express repair from 20 min • 6-month warranty',
+        navCalc:'Calculator', navTech:'Anatomy', navServices:'Services', navMobileService:'Mobile repair', navStatus:'Status', navDiagnostic:'Guided diagnostics', navFaq:'FAQ',
+        navEmpresa:'Business project', book:'Book appointment', mobileServiceTitle:'Mobile workshop: we come to you', mobileServiceLead:'Request a home visit in Madrid or Barcelona. Choose an available time and we will confirm your appointment before travelling.', mobileServiceCta:'Request a visit', mobileServicePriceNote:'Travel fee: +€15 on top of the repair estimate. No payment is taken when you submit a request.', heroBadge:'Express repair from 20 min • 6-month warranty',
         heroTitle:'Surgical precision for your', heroDesc:'High-end technical service by BarsukON. Module replacement, BGA microsoldering, and liquid damage recovery.',
         calcTitle:'Repair estimate calculator', calcSub:'Select a brand, search a model, and get an instant estimate.',
         stepBrand:'1. Select the brand', stepModel:'2. Device model', stepIssue:'3. Type of damage',
@@ -475,14 +534,15 @@
 
     function applyLanguage() {
       const map = {
-        '#navCalc': 'navCalc', '#navTech': 'navTech', '#navServices': 'navServices', '#navStatus': 'navStatus',
-        '#mobileNavCalc': 'navCalc', '#mobileNavTech': 'navTech', '#mobileNavServices': 'navServices', '#mobileNavStatus': 'navStatus', '#mobileNavDiagnostic': 'navDiagnostic',
+        '#navCalc': 'navCalc', '#navTech': 'navTech', '#navServices': 'navServices', '#navMobileService': 'navMobileService', '#navStatus': 'navStatus',
+        '#mobileNavCalc': 'navCalc', '#mobileNavTech': 'navTech', '#mobileNavServices': 'navServices', '#mobileNavMobileService': 'navMobileService', '#mobileNavStatus': 'navStatus', '#mobileNavDiagnostic': 'navDiagnostic',
         '#navEmpresa': 'navEmpresa', '#navFaq': 'navFaq', '#mobileNavFaq': 'navFaq', '#heroBadge': 'heroBadge', '#heroTitle': 'heroTitle', '#heroDesc': 'heroDesc',
         '#calcTitle': 'calcTitle', '#calcSub': 'calcSub', '#calcStep1': 'stepBrand', '#calcStep2': 'stepModel',
         '#calcStep3': 'stepIssue', '#calcStep4': 'stepQuality', '#modelSearch': 'modelPlaceholder',
         '#summaryTitle': 'summary', '#warrantyLabel': 'warranty', '#timeLabel': 'time', '#totalLabel': 'total',
         '#calcNote': 'free', '#trackButton': 'track', '#footerHoursTitle': 'hours', '#footerDescription': 'footerDesc',
-        '#bookButton': 'book', '#payButton': 'pay', '#otherDeviceButton': 'other'
+        '#bookButton': 'book', '#payButton': 'pay', '#otherDeviceButton': 'other',
+        '#mobileServiceTitle': 'mobileServiceTitle', '#mobileServiceLead': 'mobileServiceLead', '#mobileServiceCta': 'mobileServiceCta', '#mobileServicePriceNote': 'mobileServicePriceNote'
       };
       Object.entries(map).forEach(([selector, key]) => {
         const element = document.querySelector(selector);
@@ -647,7 +707,134 @@
     function closePaymentModal() { const modal = document.getElementById('paymentModal'); modal.classList.add('hidden'); modal.classList.remove('flex'); }
     function openOtherDeviceModal() { const modal = document.getElementById('otherDeviceModal'); modal.classList.remove('hidden'); modal.classList.add('flex'); }
     function closeOtherDeviceModal() { const modal = document.getElementById('otherDeviceModal'); modal.classList.add('hidden'); modal.classList.remove('flex'); }
-    function bookCalculatedRepair() { const model = document.getElementById('modelSearch').value || 'Modelo no seleccionado'; document.getElementById('modalNotesText').value = `Modelo: ${model}. Presupuesto estimado en calculadora.`; openBookingModal(); }
+    function localDateValue(date) {
+      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    }
+    function initializeMobileRepairForm() {
+      const repairType = document.getElementById('mobileRepairType');
+      repairType.innerHTML = issuesData.map(issue => `<option value="${issue.id}">${escapeHTML(t(issueTranslationKeys[issue.id]) || issue.name)}</option>`).join('');
+      document.getElementById('mobileRepairBrand').addEventListener('change', updateMobileRepairModels);
+      document.getElementById('mobileRepairType').addEventListener('change', updateMobileRepairEstimate);
+      document.getElementById('mobileRepairBrand').addEventListener('change', updateMobileRepairEstimate);
+      document.getElementById('mobileRepairQuality').addEventListener('change', updateMobileRepairEstimate);
+      document.getElementById('mobileRepairDate').addEventListener('change', loadMobileRepairSlots);
+      updateMobileRepairModels();
+      updateMobileRepairEstimate();
+    }
+    function updateMobileRepairModels() {
+      const brand = document.getElementById('mobileRepairBrand').value;
+      const modelKey = ({ Apple: 'apple', Samsung: 'samsung', Xiaomi: 'xiaomi', Google: 'pixel', Other: 'other' })[brand];
+      document.getElementById('mobileRepairModels').innerHTML = (modelsData[modelKey] || []).map(model => `<option value="${escapeHTML(model)}"></option>`).join('');
+    }
+    function updateMobileRepairEstimate() {
+      const brand = document.getElementById('mobileRepairBrand').value;
+      const priceBrand = ({ Apple: 'apple', Samsung: 'samsung', Xiaomi: 'xiaomi', Google: 'pixel', Other: 'other' })[brand];
+      const type = document.getElementById('mobileRepairType').value;
+      const base = priceByBrand[priceBrand]?.[type] || 0;
+      const quality = document.getElementById('mobileRepairQuality').value === 'compatible_aaa' ? 0.75 : 1;
+      const apple = brand === 'Apple' ? 1.10 : 1;
+      document.getElementById('mobileRepairEstimate').textContent = `${(base * quality * apple + 15).toFixed(2)} €`;
+    }
+    async function loadMobileRepairSlots() {
+      const date = document.getElementById('mobileRepairDate').value;
+      const slotSelect = document.getElementById('mobileRepairSlot');
+      const status = document.getElementById('mobileRepairSlotStatus');
+      slotSelect.innerHTML = '<option value="">Cargando horarios...</option>';
+      slotSelect.disabled = true;
+      if (!date || !supabaseClient) {
+        status.textContent = 'La agenda no está disponible. Comprueba la configuración de Supabase.';
+        return;
+      }
+      const { data, error } = await supabaseClient.from('mobile_schedule').select('id,start_time,end_time').eq('visit_date', date).eq('status', 'available').order('start_time');
+      if (error) {
+        slotSelect.innerHTML = '<option value="">Agenda no disponible</option>';
+        status.textContent = `No se pudo cargar la agenda: ${error.message}. El administrador debe ejecutar la migración de servicio móvil.`;
+        return;
+      }
+      if (!data?.length) {
+        slotSelect.innerHTML = '<option value="">Sin horarios disponibles</option>';
+        status.textContent = 'No hay horarios disponibles para esta fecha. Elige otra o vuelve a consultar más tarde.';
+        return;
+      }
+      slotSelect.innerHTML = '<option value="">Selecciona un horario</option>' + data.map(slot => `<option value="${escapeHTML(slot.id)}">${escapeHTML(slot.start_time.slice(0, 5))} - ${escapeHTML(slot.end_time.slice(0, 5))}</option>`).join('');
+      slotSelect.disabled = false;
+      status.textContent = `${data.length} horario(s) disponible(s).`;
+    }
+    function openMobileRepairModal() {
+      if (!currentUser) {
+        openAuthModal();
+        document.getElementById('authStatus').textContent = 'Inicia sesión para solicitar una visita a domicilio.';
+        return;
+      }
+      const today = new Date();
+      const min = new Date(today); min.setDate(min.getDate() + 3);
+      const max = new Date(today); max.setDate(max.getDate() + 7);
+      const dateInput = document.getElementById('mobileRepairDate');
+      dateInput.min = localDateValue(min);
+      dateInput.max = localDateValue(max);
+      dateInput.value = '';
+      document.getElementById('mobileRepairSlot').innerHTML = '<option value="">Selecciona primero una fecha</option>';
+      document.getElementById('mobileRepairSlot').disabled = true;
+      document.getElementById('mobileRepairFormStatus').textContent = '';
+      document.getElementById('mobileRepairModal').classList.remove('hidden');
+      document.getElementById('mobileRepairModal').classList.add('flex');
+    }
+    function closeMobileRepairModal() {
+      const modal = document.getElementById('mobileRepairModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+    async function submitMobileRepair(event) {
+      event.preventDefault();
+      if (!currentUser || !supabaseClient) {
+        document.getElementById('mobileRepairFormStatus').textContent = 'Inicia sesión para enviar la solicitud.';
+        return;
+      }
+      const slotId = document.getElementById('mobileRepairSlot').value;
+      if (!slotId) {
+        document.getElementById('mobileRepairFormStatus').textContent = 'Selecciona un horario disponible.';
+        return;
+      }
+      const brand = document.getElementById('mobileRepairBrand').value;
+      const repairType = document.getElementById('mobileRepairType').value;
+      const issue = issuesData.find(item => item.id === repairType);
+      const formStatus = document.getElementById('mobileRepairFormStatus');
+      formStatus.textContent = 'Enviando solicitud…';
+      const { data, error } = await supabaseClient.rpc('book_mobile_repair', {
+        p_schedule_id: slotId,
+        p_city: document.getElementById('mobileRepairCity').value,
+        p_address: document.getElementById('mobileRepairAddress').value.trim(),
+        p_zip_code: document.getElementById('mobileRepairZip').value.trim(),
+        p_device_brand: brand,
+        p_device_model: document.getElementById('mobileRepairModel').value.trim(),
+        p_problem_description: issue?.name || '',
+        p_repair_type: repairType,
+        p_parts_quality: document.getElementById('mobileRepairQuality').value,
+        p_contact_phone: document.getElementById('mobileRepairPhone').value.trim()
+      });
+      if (error) {
+        formStatus.textContent = `No se pudo reservar: ${error.message}`;
+        if (/horario ya no está disponible/i.test(error.message)) await loadMobileRepairSlots();
+        return;
+      }
+      if (!data) {
+        formStatus.textContent = 'La base de datos no devolvió la solicitud. Comprueba la configuración de Supabase.';
+        return;
+      }
+      showToast('Solicitud de visita enviada. Está pendiente de confirmación y no se ha realizado ningún cobro.');
+      document.getElementById('mobileRepairForm').reset();
+      closeMobileRepairModal();
+      if (!document.getElementById('dashboardModal').classList.contains('hidden')) await loadDashboard();
+    }
+    function bookCalculatedRepair() {
+      const model = document.getElementById('modelSearch').value || 'Modelo no seleccionado';
+      const total = Number(document.getElementById('totalPrice').textContent) || 0;
+      const months = Number(document.getElementById('calculatorInstallmentMonths').value) || 2;
+      const monthlyEstimate = (total / months).toFixed(2);
+      const quality = document.querySelector('input[name="partQuality"]:checked').value === 'copy' ? 'Compatible AAA' : 'Original OEM';
+      document.getElementById('modalNotesText').value = `Modelo: ${model}. Presupuesto estimado: ${total.toFixed(2)} €. Calidad de pieza: ${quality}. Estimación informativa opcional: ${months} partes de ${monthlyEstimate} €; no es financiación ni programa cobros.`;
+      openBookingModal();
+    }
     function simulatePayment() {
       closePaymentModal();
       const toast = document.createElement('div');
@@ -749,7 +936,11 @@
     async function loadDashboard(view = currentDashboardView) {
       if (!currentUser || !supabaseClient) return;
       document.getElementById('dashboardEmail').textContent = currentUser.email;
-      const profile = await supabaseClient.from('profiles').select('full_name,role').eq('id', currentUser.id).maybeSingle();
+      const profile = await supabaseClient.from('profiles').select('full_name,phone,role').eq('id', currentUser.id).maybeSingle();
+      if (profile.error) {
+        document.getElementById('dashboardContent').innerHTML = `<p class="text-sm text-red-300">No se pudo cargar el perfil: ${escapeHTML(profile.error.message)}</p>`;
+        return;
+      }
       const isAdmin = profile.data?.role === 'admin';
       if (view === 'admin') {
         if (!isAdmin) {
@@ -762,14 +953,199 @@
         return;
       }
       document.getElementById('dashboardTitle').textContent = 'Mi cuenta';
-      const [requests, devices, reviews] = await Promise.all([
-        supabaseClient.from('repair_requests').select('device_model,issue,status,created_at').eq('user_id', currentUser.id).order('created_at', { ascending: false }),
+      document.getElementById('dashboardContent').innerHTML = `
+        <div class="dashboard-tabs" role="tablist" aria-label="Secciones de la cuenta">
+          <button id="dashboardTab-orders" class="dashboard-tab" type="button" role="tab" aria-controls="dashboardPanel-orders" data-dashboard-tab="orders">📋 Mis pedidos</button>
+          <button id="dashboardTab-new-repair" class="dashboard-tab" type="button" role="tab" aria-controls="dashboardPanel-new-repair" data-dashboard-tab="new-repair">🛠️ Nuevo arreglo</button>
+          <button id="dashboardTab-mobile-service" class="dashboard-tab" type="button" role="tab" aria-controls="dashboardPanel-mobile-service" data-dashboard-tab="mobile-service">📍 Servicio móvil</button>
+          <button id="dashboardTab-support" class="dashboard-tab" type="button" role="tab" aria-controls="dashboardPanel-support" data-dashboard-tab="support">💬 Ayuda</button>
+          <button id="dashboardTab-settings" class="dashboard-tab" type="button" role="tab" aria-controls="dashboardPanel-settings" data-dashboard-tab="settings">⚙️ Cuenta</button>
+        </div>
+        <section id="dashboardPanel-orders" class="dashboard-panel" role="tabpanel" aria-labelledby="dashboardTab-orders">
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-4"><div><h4 class="text-lg font-bold text-white">Mis pedidos</h4><p class="text-sm text-slate-400">Reservas de reparación en estudio y solicitudes de servicio móvil.</p></div><div class="flex flex-wrap gap-2" role="group" aria-label="Filtrar pedidos">
+            <button type="button" class="dashboard-filter px-3 py-2 rounded-lg border border-white/15 text-xs" data-order-filter="active">Activos</button>
+            <button type="button" class="dashboard-filter px-3 py-2 rounded-lg border border-white/15 text-xs" data-order-filter="archive">Archivo</button>
+            <button type="button" class="dashboard-filter px-3 py-2 rounded-lg border border-white/15 text-xs" data-order-filter="cancelled">Cancelados</button>
+          </div></div>
+          <div id="dashboardOrdersList" class="space-y-3"><p class="text-sm text-slate-400">Cargando pedidos…</p></div>
+        </section>
+        <section id="dashboardPanel-new-repair" class="dashboard-panel hidden" role="tabpanel" aria-labelledby="dashboardTab-new-repair">
+          <h4 class="text-lg font-bold text-white mb-2">Nuevo arreglo en el estudio</h4>
+          <p class="text-sm text-slate-400 mb-4">Empieza con el diagnóstico guiado o solicita una cita directamente. Confirmaremos el precio final antes de reparar.</p>
+          <div class="flex flex-wrap gap-3"><button type="button" class="px-4 py-3 rounded-xl bg-white text-black font-bold" data-dashboard-action="diagnostic">Iniciar diagnóstico</button><button type="button" class="px-4 py-3 rounded-xl border border-white/15 text-white font-bold" data-dashboard-action="booking">Solicitar cita</button></div>
+        </section>
+        <section id="dashboardPanel-mobile-service" class="dashboard-panel hidden" role="tabpanel" aria-labelledby="dashboardTab-mobile-service">
+          <h4 class="text-lg font-bold text-white mb-2">Reparación móvil a domicilio</h4>
+          <p class="text-slate-300">Solicita una visita, consulta tus horarios y revisa el estado de tu reparación en este apartado.</p>
+          <button type="button" onclick="openMobileRepairModal()" class="mt-3 px-4 py-3 rounded-xl bg-sky-300 text-slate-950 font-bold">Solicitar reparación a domicilio</button>
+          <p id="mobileServiceSetupNotice" class="mt-3 rounded-xl border border-amber-300/20 bg-amber-300/5 p-3 text-sm text-amber-200"></p>
+          <p id="mobileServiceOrdersNotice" class="mt-2 text-xs text-slate-400"></p>
+        </section>
+        <section id="dashboardPanel-support" class="dashboard-panel hidden" role="tabpanel" aria-labelledby="dashboardTab-support">
+          <h4 class="text-lg font-bold text-white mb-2">Ayuda y soporte</h4>
+          <p class="text-sm text-slate-400 mb-4">Cuéntanos qué necesitas y te contactaremos para ayudarte con tu dispositivo o pedido.</p>
+          <button type="button" class="px-4 py-3 rounded-xl bg-sky-300 text-slate-950 font-bold" data-dashboard-action="support">Enviar consulta</button>
+        </section>
+        <section id="dashboardPanel-settings" class="dashboard-panel hidden space-y-6" role="tabpanel" aria-labelledby="dashboardTab-settings">
+          <div><h4 class="text-lg font-bold text-white mb-3">Datos de la cuenta</h4><form onsubmit="saveProfile(event)" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <label class="text-xs text-slate-400">Nombre<input id="profileFullName" maxlength="120" value="${escapeHTML(profile.data?.full_name || '')}" class="mt-1 w-full bg-black/50 border border-white/15 text-white rounded-xl px-4 py-3"></label>
+            <label class="text-xs text-slate-400">Teléfono<input id="profilePhone" type="tel" maxlength="40" value="${escapeHTML(profile.data?.phone || '')}" class="mt-1 w-full bg-black/50 border border-white/15 text-white rounded-xl px-4 py-3"></label>
+            <button class="sm:col-span-2 justify-self-start px-4 py-2.5 rounded-xl bg-white text-black font-bold">Guardar datos</button>
+          </form></div>
+          <div><h4 class="text-lg font-bold text-white mb-3">Mis opiniones</h4>
+            <div id="accountReviewsList" class="space-y-2 mb-4"></div>
+            <div class="rounded-2xl border border-sky-300/20 bg-sky-400/5 p-5"><h5 class="font-bold text-white mb-3">Deja tu opinión</h5><form onsubmit="submitReview(event)" class="space-y-3"><div class="grid grid-cols-1 sm:grid-cols-2 gap-3"><input id="reviewAuthor" required maxlength="80" placeholder="Tu nombre" value="${escapeHTML(profile.data?.full_name || '')}" class="w-full bg-black/50 border border-white/15 text-white rounded-xl px-4 py-3"><select id="reviewRating" required class="w-full bg-black/50 border border-white/15 text-white rounded-xl px-4 py-3"><option value="">Valoración</option><option value="5">5 estrellas</option><option value="4">4 estrellas</option><option value="3">3 estrellas</option><option value="2">2 estrellas</option><option value="1">1 estrella</option></select></div><textarea id="reviewBody" required maxlength="1000" rows="3" placeholder="Cuéntanos cómo fue tu experiencia..." class="w-full bg-black/50 border border-white/15 text-white rounded-xl px-4 py-3"></textarea><button class="px-5 py-2.5 rounded-xl bg-white text-black font-bold">Enviar opinión</button><p class="text-xs text-slate-400">Tu opinión será visible después de la moderación.</p></form></div>
+          </div>
+        </section>`;
+
+      const content = document.getElementById('dashboardContent');
+      content.querySelectorAll('[data-dashboard-tab]').forEach(button => {
+        button.addEventListener('click', () => selectDashboardTab(button.dataset.dashboardTab));
+      });
+      content.onclick = handleDashboardClick;
+      selectDashboardTab(currentDashboardTab);
+
+      const [requests, mobileRepairs, devices, reviews] = await Promise.all([
+        supabaseClient.from('repair_requests').select('id,device_brand,device_model,issue,notes,status,estimated_price,created_at').eq('user_id', currentUser.id).order('created_at', { ascending: false }),
+        supabaseClient.from('mobile_repairs').select('id,service_type,status,address,city,visit_date,time_slot,device_brand,device_model,problem_description,repair_type,parts_quality,estimated_price,final_price,created_at,completed_at').eq('user_id', currentUser.id).order('created_at', { ascending: false }),
         supabaseClient.from('devices').select('brand,model,created_at').eq('user_id', currentUser.id).order('created_at', { ascending: false }),
         supabaseClient.from('reviews').select('rating,body,approved,created_at').eq('user_id', currentUser.id).order('created_at', { ascending: false })
       ]);
-      const list = (title, rows, fields) => `<div><h4 class="text-lg font-bold text-white mb-2">${title}</h4>${rows?.length ? `<div class="space-y-2">${rows.map(row => `<div class="rounded-xl border border-white/10 bg-black/30 p-3 text-sm text-slate-300">${fields.map(field => `<span class="mr-4">${escapeHTML(row[field] || '—')}</span>`).join('')}</div>`).join('')}</div>` : '<p class="text-sm text-slate-500">Sin datos todavía.</p>'}</div>`;
-      const reviewForm = `<div class="rounded-2xl border border-sky-300/20 bg-sky-400/5 p-5"><h4 class="text-lg font-bold text-white mb-3">Deja tu opinión</h4><form onsubmit="submitReview(event)" class="space-y-3"><div class="grid grid-cols-1 sm:grid-cols-2 gap-3"><input id="reviewAuthor" required maxlength="80" placeholder="Tu nombre" value="${escapeHTML(profile.data?.full_name || '')}" class="w-full bg-black/50 border border-white/15 text-white rounded-xl px-4 py-3"><select id="reviewRating" required class="w-full bg-black/50 border border-white/15 text-white rounded-xl px-4 py-3"><option value="">Valoración</option><option value="5">5 estrellas</option><option value="4">4 estrellas</option><option value="3">3 estrellas</option><option value="2">2 estrellas</option><option value="1">1 estrella</option></select></div><textarea id="reviewBody" required maxlength="1000" rows="3" placeholder="Cuéntanos cómo fue tu experiencia..." class="w-full bg-black/50 border border-white/15 text-white rounded-xl px-4 py-3"></textarea><button class="px-5 py-2.5 rounded-xl bg-white text-black font-bold">Enviar opinión</button><p class="text-xs text-slate-400">Tu opinión será visible después de la moderación.</p></form></div>`;
-      document.getElementById('dashboardContent').innerHTML = reviewForm + list('Mis solicitudes', requests.data, ['device_model', 'issue', 'status']) + list('Mis dispositivos', devices.data, ['brand', 'model']) + list('Mis opiniones', reviews.data, ['rating', 'body', 'approved']);
+      const requestError = requests.error
+        ? `<p class="text-sm text-red-300">No se pudieron cargar los pedidos del estudio: ${escapeHTML(requests.error.message)}</p>`
+        : '';
+      const mobileTableMissing = mobileRepairs.error?.code === 'PGRST205' || mobileRepairs.error?.code === '42P01';
+      const mobileError = mobileRepairs.error && !mobileTableMissing
+        ? `<p class="text-sm text-red-300">No se pudieron cargar los pedidos móviles: ${escapeHTML(mobileRepairs.error.message)}</p>`
+        : '';
+      const mobileMigrationNotice = mobileTableMissing
+        ? '<p class="text-sm text-amber-200">Pedidos móviles: ejecuta primero la migración de servicio móvil de Supabase.</p>'
+        : '';
+      if (mobileRepairs.error && mobileTableMissing) {
+        document.getElementById('mobileServiceSetupNotice').textContent = 'Para activar las reservas, ejecuta supabase-mobile-service-migration.sql en el SQL Editor de Supabase.';
+      } else {
+        document.getElementById('mobileServiceSetupNotice').textContent = 'Las visitas se reservan con 3-7 días de antelación. No se realiza ningún cobro online.';
+      }
+      document.getElementById('mobileServiceOrdersNotice').textContent = mobileTableMissing
+        ? 'El listado de pedidos móviles estará disponible después de ejecutar la migración.'
+        : mobileRepairs.error
+          ? `No se pudieron cargar las solicitudes móviles: ${mobileRepairs.error.message}`
+          : `${mobileRepairs.data?.length || 0} solicitudes móviles registradas.`;
+
+      dashboardOrders = new Map();
+      const studioOrders = requests.data || [];
+      const mobileOrders = mobileRepairs.data || [];
+      studioOrders.forEach(order => dashboardOrders.set(`studio:${order.id}`, { ...order, source: 'studio' }));
+      mobileOrders.forEach(order => dashboardOrders.set(`mobile:${order.id}`, { ...order, source: 'mobile' }));
+      dashboardOrderLoadNotice = `${requestError}${mobileError}${mobileMigrationNotice}`;
+      renderDashboardOrders(dashboardOrderLoadNotice);
+
+      const reviewList = document.getElementById('accountReviewsList');
+      if (reviews.error) reviewList.innerHTML = `<p class="text-sm text-red-300">No se pudieron cargar las opiniones: ${escapeHTML(reviews.error.message)}</p>`;
+      else reviewList.innerHTML = reviews.data?.length
+        ? reviews.data.map(review => `<article class="rounded-xl border border-white/10 p-3 text-sm text-slate-300"><div class="flex justify-between gap-3"><strong>${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</strong><span class="text-xs text-slate-400">${review.approved ? 'Publicada' : 'Pendiente de moderación'}</span></div><p class="mt-1 whitespace-pre-wrap">${escapeHTML(review.body)}</p></article>`).join('')
+        : '<p class="text-sm text-slate-500">Aún no has enviado opiniones.</p>';
+      const devicesList = devices.data?.length
+        ? devices.data.map(device => `${escapeHTML(device.brand)} ${escapeHTML(device.model)}`).join(' · ')
+        : 'No hay dispositivos guardados.';
+      document.getElementById('accountReviewsList').insertAdjacentHTML('afterend', `<p class="mt-4 text-xs text-slate-500">${devices.error ? `No se pudieron cargar los dispositivos: ${escapeHTML(devices.error.message)}` : `Dispositivos guardados: ${devicesList}`}</p>`);
+    }
+    function selectDashboardTab(tab) {
+      if (!tab) return;
+      currentDashboardTab = tab;
+      document.querySelectorAll('#dashboardContent [data-dashboard-tab]').forEach(button => {
+        const selected = button.dataset.dashboardTab === tab;
+        button.setAttribute('aria-selected', String(selected));
+        button.tabIndex = selected ? 0 : -1;
+      });
+      document.querySelectorAll('#dashboardContent [role="tabpanel"]').forEach(panel => {
+        panel.classList.toggle('hidden', panel.id !== `dashboardPanel-${tab}`);
+      });
+    }
+    function dashboardStatusLabel(status) {
+      return ({
+        received: 'Pendiente de confirmación', pending: 'Pendiente de confirmación',
+        confirmed: 'Confirmado', diagnosing: 'En diagnóstico',
+        repairing: 'En reparación', in_progress: 'En reparación',
+        ready: 'Listo para recoger', completed: 'Completado',
+        closed: 'Archivado', cancelled: 'Cancelado', rejected: 'Rechazado'
+      })[status] || status || 'Pendiente';
+    }
+    function renderDashboardOrders(errorMessage = '', filter = 'active') {
+      const container = document.getElementById('dashboardOrdersList');
+      if (!container) return;
+      const terminal = new Set(['closed', 'completed', 'cancelled', 'rejected']);
+      const orders = [...dashboardOrders.values()].filter(order => {
+        if (filter === 'archive') return ['closed', 'completed'].includes(order.status);
+        if (filter === 'cancelled') return ['cancelled', 'rejected'].includes(order.status);
+        return !terminal.has(order.status);
+      }).sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      const notices = errorMessage ? `<div class="space-y-1 mb-3">${errorMessage}</div>` : '';
+      if (!orders.length) {
+        container.innerHTML = `${notices}<p class="rounded-xl border border-white/10 p-4 text-sm text-slate-400">No hay pedidos en esta sección.</p>`;
+        return;
+      }
+      container.innerHTML = notices + orders.map(order => {
+        const key = `${order.source}:${order.id}`;
+        const brand = order.device_brand || (order.source === 'mobile' ? 'Dispositivo' : '');
+        const model = order.device_model || 'Modelo sin indicar';
+        const amount = order.final_price ?? order.estimated_price;
+        const date = order.visit_date || order.created_at;
+        const paymentEstimate = order.notes?.match(/(?:Pago dividido informativo|Estimación informativa)(?: opcional)?:\s*([^\n;|]+)/i)?.[1]?.trim();
+        return `<article class="dashboard-order"><div class="flex flex-wrap items-start justify-between gap-3"><div><p class="font-mono text-xs text-slate-400">Pedido BARSUK-${escapeHTML(order.id.slice(0, 8).toUpperCase())} · ${order.source === 'mobile' ? 'Servicio móvil' : 'Estudio'}</p><h5 class="mt-1 font-bold text-white">${escapeHTML(`${brand} ${model}`.trim())}</h5><p class="mt-1 text-sm text-slate-300">${escapeHTML(order.issue || order.problem_description || order.repair_type || 'Diagnóstico pendiente')}</p></div><span class="dashboard-status">${escapeHTML(dashboardStatusLabel(order.status))}</span></div><div class="mt-3 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-400"><span>${date ? new Date(date).toLocaleString() : 'Fecha pendiente'}${order.time_slot ? ` · ${escapeHTML(order.time_slot)}` : ''}</span><span>${amount != null ? `${Number(amount).toFixed(2)} €` : 'Precio por confirmar'}</span></div>${paymentEstimate ? `<p class="mt-2 text-xs text-sky-300">Estimación de partes iguales: ${escapeHTML(paymentEstimate)} (informativa)</p>` : ''}<div class="mt-3"><button type="button" class="text-sm font-semibold text-sky-300 hover:text-sky-200" data-order-details="${escapeHTML(key)}">Detalles</button></div></article>`;
+      }).join('');
+    }
+    function handleDashboardClick(event) {
+      const filterButton = event.target.closest('[data-order-filter]');
+      if (filterButton) { renderDashboardOrders(dashboardOrderLoadNotice, filterButton.dataset.orderFilter); return; }
+      const detailsButton = event.target.closest('[data-order-details]');
+      if (detailsButton) { openOrderDetails(detailsButton.dataset.orderDetails); return; }
+      const actionButton = event.target.closest('[data-dashboard-action]');
+      if (!actionButton) return;
+      const action = actionButton.dataset.dashboardAction;
+      closeDashboardModal();
+      if (action === 'diagnostic') document.getElementById('problemWizard').scrollIntoView({ behavior: 'smooth' });
+      if (action === 'booking' || action === 'support') {
+        if (action === 'support') document.getElementById('modalNotesText').value = 'Consulta de soporte: ';
+        openBookingModal();
+      }
+    }
+    function openOrderDetails(key) {
+      const order = dashboardOrders.get(key);
+      if (!order) return;
+      const rows = [
+        ['Número de pedido', `BARSUK-${order.id.slice(0, 8).toUpperCase()}`],
+        ['Servicio', order.source === 'mobile' ? 'Móvil' : 'En estudio'],
+        ['Dispositivo', `${order.device_brand || ''} ${order.device_model || 'Modelo sin indicar'}`.trim()],
+        ['Problema', order.issue || order.problem_description || order.repair_type || 'Pendiente de diagnóstico'],
+        ['Estado', dashboardStatusLabel(order.status)],
+        ['Fecha', order.visit_date || order.created_at ? new Date(order.visit_date || order.created_at).toLocaleString() : 'Pendiente'],
+        ['Dirección', order.address ? `${order.address}${order.city ? `, ${order.city}` : ''}` : 'No indicada'],
+        ['Calidad de piezas', order.parts_quality || 'Por confirmar'],
+        ['Precio estimado', order.estimated_price != null ? `${Number(order.estimated_price).toFixed(2)} €` : 'Por confirmar'],
+        ['Precio final', order.final_price != null ? `${Number(order.final_price).toFixed(2)} €` : 'Pendiente'],
+        ['Notas', order.notes || 'Sin notas adicionales']
+      ];
+      document.getElementById('orderDetailsBody').innerHTML = rows.map(([label, value]) => `<div class="border-b border-white/10 pb-2"><span class="block text-xs text-slate-500">${escapeHTML(label)}</span><span class="block mt-1 whitespace-pre-wrap">${escapeHTML(value)}</span></div>`).join('');
+      document.getElementById('orderDetailsModal').classList.remove('hidden');
+      document.getElementById('orderDetailsModal').classList.add('flex');
+    }
+    function closeOrderDetails() {
+      const modal = document.getElementById('orderDetailsModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+    async function saveProfile(event) {
+      event.preventDefault();
+      if (!currentUser || !supabaseClient) return;
+      const { error } = await supabaseClient.from('profiles').update({
+        full_name: document.getElementById('profileFullName').value.trim(),
+        phone: document.getElementById('profilePhone').value.trim()
+      }).eq('id', currentUser.id);
+      if (error) { showToast(`No se pudieron guardar los datos: ${error.message}`); return; }
+      showToast('Datos de la cuenta guardados.');
+      await loadDashboard('account');
+      selectDashboardTab('settings');
     }
     async function submitReview(event) {
       event.preventDefault();
@@ -783,18 +1159,44 @@
     async function loadAdminDashboard() {
       const adminEl = document.getElementById('adminContent');
       if (!adminEl) return;
-      const [requests, reviews, promotions] = await Promise.all([
+      const [requests, reviews, promotions, mobileRepairs, mobileSchedule] = await Promise.all([
         supabaseClient.from('repair_requests').select('id,user_id,device_brand,device_model,issue,status,notes,created_at').order('created_at', { ascending: false }),
         supabaseClient.from('reviews').select('id,author_name,rating,body,approved,created_at').order('created_at', { ascending: false }),
-        supabaseClient.from('promotions').select('id,title,description,discount,active,starts_at,ends_at').order('created_at', { ascending: false })
+        supabaseClient.from('promotions').select('id,title,description,discount,active,starts_at,ends_at').order('created_at', { ascending: false }),
+        supabaseClient.from('mobile_repairs').select('id,device_brand,device_model,problem_description,status,address,city,zip_code,contact_phone,visit_date,time_slot,estimated_price,created_at').order('created_at', { ascending: false }),
+        supabaseClient.from('mobile_schedule').select('id,visit_date,start_time,end_time,status,repair_id,technician_id').order('visit_date').order('start_time').limit(100)
       ]);
       const statusOptions = ['received', 'diagnosing', 'repairing', 'ready', 'closed', 'rejected'];
+      const mobileStatuses = ['pending', 'confirmed', 'in_progress', 'completed', 'cancelled'];
+      const availableSlots = (mobileSchedule.data || []).filter(slot => slot.status === 'available');
       adminEl.innerHTML = `<h4 class="text-xl font-bold text-white mb-4">Administración</h4>
         <div class="grid grid-cols-1 xl:grid-cols-2 gap-5">
           <section class="rounded-2xl border border-white/10 bg-black/20 p-4"><h5 class="font-bold text-white mb-3">Crear promoción</h5><form onsubmit="savePromotion(event)" class="space-y-3"><input id="promotionTitle" required maxlength="120" placeholder="Título" class="w-full bg-black/50 border border-white/15 text-white rounded-xl px-3 py-2.5"><input id="promotionDiscount" maxlength="40" placeholder="Descuento, ej. -15%" class="w-full bg-black/50 border border-white/15 text-white rounded-xl px-3 py-2.5"><textarea id="promotionDescription" rows="2" placeholder="Descripción" class="w-full bg-black/50 border border-white/15 text-white rounded-xl px-3 py-2.5"></textarea><button class="px-4 py-2 rounded-xl bg-sky-300 text-black font-bold">Crear promoción</button></form><div class="space-y-2 mt-4">${(promotions.data || []).map(item => `<div class="rounded-xl border border-white/10 p-3 text-sm"><div class="flex justify-between gap-3"><strong class="text-white">${escapeHTML(item.title)}</strong><button onclick="deletePromotion('${item.id}')" class="text-red-300">Eliminar</button></div><p class="text-slate-400">${escapeHTML(item.description || '')}</p><button onclick="togglePromotion('${item.id}', ${!item.active})" class="text-xs text-sky-300 mt-2">${item.active ? 'Desactivar' : 'Activar'}</button></div>`).join('') || '<p class="text-sm text-slate-500">No hay promociones.</p>'}</div></section>
           <section class="rounded-2xl border border-white/10 bg-black/20 p-4"><h5 class="font-bold text-white mb-3">Moderar opiniones</h5><div class="space-y-2">${(reviews.data || []).map(item => `<div class="rounded-xl border border-white/10 p-3 text-sm"><div class="flex flex-wrap justify-between gap-3"><strong class="text-white">${escapeHTML(item.author_name)} · ${item.rating}/5</strong><div class="flex gap-3"><button onclick="moderateReview('${item.id}', ${!item.approved})" class="text-sky-300">${item.approved ? 'Ocultar' : 'Publicar'}</button><button onclick="deleteReview('${item.id}')" class="text-red-300">Eliminar</button></div></div><p class="text-slate-300 mt-1">${escapeHTML(item.body)}</p><p class="text-xs text-slate-500 mt-2">${item.approved ? 'Publicado' : 'Pendiente'}</p></div>`).join('') || '<p class="text-sm text-slate-500">No hay opiniones.</p>'}</div></section>
         </div>
-        <section class="rounded-2xl border border-white/10 bg-black/20 p-4 mt-5"><h5 class="font-bold text-white mb-3">Solicitudes de reparación</h5><div class="space-y-3">${requests.error ? `<p class="text-sm text-red-300">No se pudieron cargar las solicitudes: ${escapeHTML(requests.error.message)}</p>` : (requests.data || []).map(item => `<article class="rounded-xl border border-white/10 bg-black/20 p-4 text-sm"><div class="flex flex-wrap items-center justify-between gap-3"><span class="text-white font-semibold">${escapeHTML(item.device_brand || '')} ${escapeHTML(item.device_model || '')}</span><select aria-label="Estado de solicitud" onchange="updateRequestStatus('${item.id}', this.value)" class="bg-black/60 border border-white/15 text-white rounded-lg px-2 py-2">${statusOptions.map(status => `<option value="${status}" ${item.status === status ? 'selected' : ''}>${status}</option>`).join('')}</select></div><p class="text-slate-300 mt-2">${escapeHTML(item.issue || '')}</p><p class="text-xs text-slate-400 mt-2 whitespace-pre-wrap">${escapeHTML(item.notes || 'Sin datos de contacto')}</p><p class="text-xs text-slate-500 mt-2">${new Date(item.created_at).toLocaleString()}</p><div class="flex flex-wrap gap-2 mt-3"><button onclick="updateRequestStatus('${item.id}', 'diagnosing')" class="px-3 py-2 rounded-lg bg-sky-300/10 text-sky-200 border border-sky-300/20">Aceptar / Diagnosticar</button><button onclick="updateRequestStatus('${item.id}', 'rejected')" class="px-3 py-2 rounded-lg bg-amber-300/10 text-amber-200 border border-amber-300/20">Rechazar</button><button onclick="deleteRepairRequest('${item.id}')" class="px-3 py-2 rounded-lg bg-red-300/10 text-red-200 border border-red-300/20">Eliminar</button></div></article>`).join('') || '<p class="text-sm text-slate-500">No hay solicitudes.</p>'}</div></section>`;
+        <section class="rounded-2xl border border-white/10 bg-black/20 p-4 mt-5">
+          <h5 class="font-bold text-white mb-3">Agenda del servicio móvil</h5>
+          ${mobileSchedule.error ? `<p class="text-sm text-red-300">No se pudo cargar la agenda: ${escapeHTML(mobileSchedule.error.message)}. Ejecuta la migración de servicio móvil si aún no está aplicada.</p>` : ''}
+          <form onsubmit="addMobileScheduleSlot(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 mb-4">
+            <input id="mobileSlotDate" type="date" required class="bg-black/50 border border-white/15 text-white rounded-lg px-3 py-2">
+            <input id="mobileSlotStart" type="time" required class="bg-black/50 border border-white/15 text-white rounded-lg px-3 py-2">
+            <input id="mobileSlotEnd" type="time" required class="bg-black/50 border border-white/15 text-white rounded-lg px-3 py-2">
+            <input id="mobileSlotTechnician" type="text" placeholder="ID técnico (opcional)" class="bg-black/50 border border-white/15 text-white rounded-lg px-3 py-2">
+            <button class="px-3 py-2 rounded-lg bg-sky-300 text-slate-950 font-bold">Añadir horario</button>
+          </form>
+          <div class="space-y-2">${(mobileSchedule.data || []).map(slot => `<div class="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-white/10 p-3 text-sm"><span class="text-slate-200">${escapeHTML(slot.visit_date)} · ${escapeHTML(slot.start_time.slice(0,5))}–${escapeHTML(slot.end_time.slice(0,5))} · ${escapeHTML(slot.status)}${slot.technician_id ? ` · ${escapeHTML(slot.technician_id)}` : ''}</span>${slot.status === 'available' ? `<button onclick="deleteMobileScheduleSlot('${slot.id}')" class="text-red-300">Eliminar</button>` : ''}</div>`).join('') || '<p class="text-sm text-slate-500">No hay horarios cargados todavía.</p>'}</div>
+        </section>
+        <section class="rounded-2xl border border-sky-300/20 bg-sky-300/5 p-4 mt-5">
+          <h5 class="font-bold text-white mb-3">Solicitudes de reparación a domicilio</h5>
+          ${mobileRepairs.error ? `<p class="text-sm text-red-300">No se pudieron cargar las solicitudes móviles: ${escapeHTML(mobileRepairs.error.message)}. Ejecuta supabase-mobile-service-migration.sql.</p>` : ''}
+          <div class="space-y-3">${(mobileRepairs.data || []).map(item => `<article class="rounded-xl border border-white/10 bg-black/20 p-4 text-sm">
+            <div class="flex flex-wrap items-center justify-between gap-3"><span class="text-white font-semibold">${escapeHTML(item.device_brand || '')} ${escapeHTML(item.device_model || '')}</span><select aria-label="Estado de visita" onchange="updateMobileRepairStatus('${item.id}', this.value)" class="bg-black/60 border border-white/15 text-white rounded-lg px-2 py-2">${mobileStatuses.map(status => `<option value="${status}" ${item.status === status ? 'selected' : ''}>${status}</option>`).join('')}</select></div>
+            <p class="text-slate-300 mt-2">${escapeHTML(item.problem_description || '')}</p><p class="text-xs text-slate-400 mt-2">${escapeHTML(item.address || '')}, ${escapeHTML(item.city || '')}${item.zip_code ? ` ${escapeHTML(item.zip_code)}` : ''} · ${escapeHTML(item.contact_phone || 'Sin teléfono')}</p>
+            <p class="text-xs text-slate-400 mt-2">${item.visit_date ? new Date(item.visit_date).toLocaleString() : 'Sin fecha'} · ${escapeHTML(item.time_slot || '')} · ${item.estimated_price != null ? `${Number(item.estimated_price).toFixed(2)} € estimados` : 'Sin estimación'}</p>
+            <label class="block text-xs text-slate-400 mt-3">Cambiar horario<select onchange="rescheduleMobileRepair('${item.id}', this.value)" class="mt-1 w-full bg-black/60 border border-white/15 text-white rounded-lg px-2 py-2" ${availableSlots.length && !['completed', 'cancelled'].includes(item.status) ? '' : 'disabled'}><option value="">Mantener horario</option>${availableSlots.map(slot => `<option value="${slot.id}">${escapeHTML(slot.visit_date)} · ${escapeHTML(slot.start_time.slice(0,5))}–${escapeHTML(slot.end_time.slice(0,5))}</option>`).join('')}</select></label>
+          </article>`).join('') || (!mobileRepairs.error ? '<p class="text-sm text-slate-500">No hay solicitudes móviles.</p>' : '')}</div>
+        </section>
+        <section class="rounded-2xl border border-white/10 bg-black/20 p-4 mt-5"><h5 class="font-bold text-white mb-3">Solicitudes de reparación en el estudio</h5><div class="space-y-3">${requests.error ? `<p class="text-sm text-red-300">No se pudieron cargar las solicitudes: ${escapeHTML(requests.error.message)}</p>` : (requests.data || []).map(item => `<article class="rounded-xl border border-white/10 bg-black/20 p-4 text-sm"><div class="flex flex-wrap items-center justify-between gap-3"><span class="text-white font-semibold">${escapeHTML(item.device_brand || '')} ${escapeHTML(item.device_model || '')}</span><select aria-label="Estado de solicitud" onchange="updateRequestStatus('${item.id}', this.value)" class="bg-black/60 border border-white/15 text-white rounded-lg px-2 py-2">${statusOptions.map(status => `<option value="${status}" ${item.status === status ? 'selected' : ''}>${status}</option>`).join('')}</select></div><p class="text-slate-300 mt-2">${escapeHTML(item.issue || '')}</p><p class="text-xs text-slate-400 mt-2 whitespace-pre-wrap">${escapeHTML(item.notes || 'Sin datos de contacto')}</p><p class="text-xs text-slate-500 mt-2">${new Date(item.created_at).toLocaleString()}</p><div class="flex flex-wrap gap-2 mt-3"><button onclick="updateRequestStatus('${item.id}', 'diagnosing')" class="px-3 py-2 rounded-lg bg-sky-300/10 text-sky-200 border border-sky-300/20">Aceptar / Diagnosticar</button><button onclick="updateRequestStatus('${item.id}', 'rejected')" class="px-3 py-2 rounded-lg bg-amber-300/10 text-amber-200 border border-amber-300/20">Rechazar</button><button onclick="deleteRepairRequest('${item.id}')" class="px-3 py-2 rounded-lg bg-red-300/10 text-red-200 border border-red-300/20">Eliminar</button></div></article>`).join('') || '<p class="text-sm text-slate-500">No hay solicitudes.</p>'}</div></section>`;
     }
     async function savePromotion(event) {
       event.preventDefault();
@@ -821,6 +1223,49 @@
       if (error) { showToast(`No se pudo eliminar la opinión: ${error.message}`); return; }
       showToast('Opinión eliminada definitivamente.');
       await loadPublicContent();
+      await loadAdminDashboard();
+    }
+    async function addMobileScheduleSlot(event) {
+      event.preventDefault();
+      if (!supabaseClient) return;
+      const date = document.getElementById('mobileSlotDate').value;
+      const start = document.getElementById('mobileSlotStart').value;
+      const end = document.getElementById('mobileSlotEnd').value;
+      const technician = document.getElementById('mobileSlotTechnician').value.trim();
+      const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+      if (end <= start) { showToast('La hora de fin debe ser posterior a la de inicio.'); return; }
+      if (technician && !uuidPattern.test(technician)) { showToast('El ID del técnico debe ser un UUID válido o quedar vacío.'); return; }
+      const min = new Date(); min.setDate(min.getDate() + 3);
+      const max = new Date(); max.setDate(max.getDate() + 7);
+      if (date < localDateValue(min) || date > localDateValue(max)) { showToast('La fecha debe estar entre 3 y 7 días desde hoy.'); return; }
+      const { error } = await supabaseClient.from('mobile_schedule').insert({
+        visit_date: date, start_time: start, end_time: end, technician_id: technician || null
+      });
+      if (error) { showToast(`No se pudo añadir el horario: ${error.message}`); return; }
+      showToast('Horario añadido a la agenda.');
+      await loadAdminDashboard();
+    }
+    async function deleteMobileScheduleSlot(id) {
+      if (!window.confirm('¿Eliminar este horario disponible?')) return;
+      const { error } = await supabaseClient.from('mobile_schedule').delete().eq('id', id).eq('status', 'available');
+      if (error) { showToast(`No se pudo eliminar el horario: ${error.message}`); return; }
+      showToast('Horario eliminado.');
+      await loadAdminDashboard();
+    }
+    async function updateMobileRepairStatus(id, status) {
+      const { error } = await supabaseClient.rpc('admin_set_mobile_repair_status', { p_repair_id: id, p_status: status });
+      if (error) { showToast(`No se pudo actualizar la visita: ${error.message}`); return; }
+      showToast('Estado de la visita actualizado.');
+      await loadAdminDashboard();
+    }
+    async function rescheduleMobileRepair(repairId, scheduleId) {
+      if (!scheduleId) return;
+      if (!window.confirm('¿Asignar esta solicitud al nuevo horario?')) { await loadAdminDashboard(); return; }
+      const { error } = await supabaseClient.rpc('admin_reschedule_mobile_repair', {
+        p_repair_id: repairId, p_schedule_id: scheduleId
+      });
+      if (error) { showToast(`No se pudo cambiar el horario: ${error.message}`); return; }
+      showToast('Visita reprogramada.');
       await loadAdminDashboard();
     }
     async function updateRequestStatus(id, status) {
@@ -887,6 +1332,7 @@
 
     const savedPreferences = loadPreferences();
     applyLanguage();
+    initializeMobileRepairForm();
     renderModels();
     if (savedPreferences.model) document.getElementById('modelSearch').value = savedPreferences.model;
     updateModelStatus();
@@ -1175,8 +1621,8 @@
           bookingModal.dataset.overrideIssue = `${state.issue}${state.detail ? ` — ${state.detail}` : ''}`;
           bookingModal.dataset.overridePrice = String(state.result.total);
           document.getElementById('modalNotesText').value = state.paymentPlan === 'installments'
-            ? `${recommendation()} Estimación informativa: ${state.months} ${copy.months} de ${(state.result.total / state.months).toFixed(2)} €; no se programan cobros reales.`
-            : `${recommendation()} Pago completo seleccionado por ${state.result.total.toFixed(2)} €; no se realizó ningún cobro.`;
+            ? `${recommendation()} Calidad de pieza: ${state.quality === 'oem' ? copy.qualityOEM : copy.qualityAAA}. Estimación informativa: ${state.months} ${copy.months} de ${(state.result.total / state.months).toFixed(2)} €; no se programan cobros reales.`
+            : `${recommendation()} Calidad de pieza: ${state.quality === 'oem' ? copy.qualityOEM : copy.qualityAAA}. Pago completo seleccionado por ${state.result.total.toFixed(2)} €; no se realizó ningún cobro.`;
           document.getElementById('modalTotal').textContent = `${state.result.total.toFixed(2)} €`;
           openBookingModal();
         }
