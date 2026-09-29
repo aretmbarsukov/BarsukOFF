@@ -402,7 +402,7 @@
     let currentDashboardTab = 'orders';
     let dashboardOrders = new Map();
     let dashboardOrderLoadNotice = '';
-    let mobileBookingState = { step: 1, date: '', time: '', slots: [], cities: [], pendingAuth: false, preferredCity: '', cityTouched: false };
+    let mobileBookingState = { step: 1, date: '', time: '', selectedTimeSlot: '', selectedDate: '', slots: [], cities: [], pendingAuth: false, preferredCity: '', cityTouched: false };
     const modelsData = {
       apple: ['iPhone 18 Pro Max','iPhone 18 Pro','iPhone 18','iPhone 17 Pro Max','iPhone 17 Pro','iPhone 17','iPhone 16 Pro Max','iPhone 16 Pro','iPhone 16','iPhone 15 Pro Max','iPhone 15 Pro','iPhone 15','iPhone 14 Pro Max','iPhone 14 Pro','iPhone 14','iPhone 13 Pro Max','iPhone 13 Pro','iPhone 13','iPhone 12 Pro Max','iPhone 12 Pro','iPhone 12','iPhone 11 Pro','iPhone 11','iPhone XS Max','iPhone XS','iPhone XR','iPhone X','iPhone SE (2022)','iPhone SE (2020)'],
       samsung: ['Galaxy S25 Ultra','Galaxy S25+','Galaxy S25','Galaxy S24 Ultra','Galaxy S24+','Galaxy S24','Galaxy S23 Ultra','Galaxy S23+','Galaxy S23','Galaxy S22 Ultra','Galaxy S22+','Galaxy S22','Galaxy S21 Ultra','Galaxy S21+','Galaxy S21','Galaxy S20 Ultra','Galaxy S20+','Galaxy S20','Galaxy Note 20 Ultra','Galaxy Note 20','Galaxy A95','Galaxy A74','Galaxy A54','Galaxy A34','Galaxy A24','Galaxy Z Fold 6','Galaxy Z Fold 5','Galaxy Z Flip 6','Galaxy Z Flip 5','Galaxy Z Flip 4'],
@@ -725,7 +725,7 @@
         <div class="mb-5"><div class="flex justify-between text-xs text-slate-400"><span id="mobileBookingStepLabel">Paso 1 de 6</span><span id="mobileBookingStepName">Ciudad</span></div><div class="h-1.5 rounded-full bg-white/10 mt-2 overflow-hidden"><div id="mobileBookingProgress" class="h-full rounded-full bg-sky-300 transition-all" style="width:16.67%"></div></div></div>
         <section data-mobile-booking-step="1" class="space-y-4"><h4 class="text-xl font-bold text-white">¿En qué ciudad estás?</h4><p class="text-sm text-slate-400">Servicio disponible en Castellón y localidades situadas a un máximo de 30 km.</p><label class="block text-sm text-slate-300">Ciudad<select id="mobileRepairCity" class="mt-2 w-full bg-black/50 border border-white/15 text-white rounded-xl px-3 py-3"><option value="">Cargando localidades...</option></select></label></section>
         <section data-mobile-booking-step="2" class="hidden space-y-4"><h4 class="text-xl font-bold text-white">¿Dónde vamos?</h4><p id="mobileRepairAddressCity" class="text-sm text-slate-400"></p><label class="block text-sm text-slate-300">Calle y número<input id="mobileRepairAddress" maxlength="255" autocomplete="street-address" class="mt-2 w-full bg-black/50 border border-white/15 text-white rounded-xl px-3 py-3" placeholder="Calle Mayor 25"></label><p class="text-xs text-amber-200">Por privacidad, no incluyas piso ni número de apartamento. El técnico llamará al llegar.</p><label class="block text-sm text-slate-300">Código postal <span class="text-slate-500">(opcional)</span><input id="mobileRepairZip" maxlength="20" autocomplete="postal-code" class="mt-2 w-full bg-black/50 border border-white/15 text-white rounded-xl px-3 py-3"></label></section>
-        <section data-mobile-booking-step="3" class="hidden space-y-4"><h4 class="text-xl font-bold text-white">Elige día y hora</h4><p class="text-sm text-slate-400">Próximos 14 días · L–V: 10:00, 14:00, 16:00 · S: 10:00, 12:00 · D: cerrado.</p><div id="mobileRepairCalendar" class="grid grid-cols-2 sm:grid-cols-4 gap-2"></div><p id="mobileRepairSlotStatus" class="text-sm text-slate-400" aria-live="polite">Consultando disponibilidad...</p><div id="mobileRepairSlots" class="flex flex-wrap gap-2"></div></section>
+        <section data-mobile-booking-step="3" class="hidden space-y-4"><h4 class="text-xl font-bold text-white">Elige primero una hora</h4><p class="text-sm text-slate-400">Selecciona una franja horaria y después elige una de las fechas disponibles.</p><div><p class="mb-2 text-sm font-semibold text-slate-200">Horario</p><div id="mobileRepairSlots" class="grid grid-cols-2 sm:grid-cols-4 gap-2"></div></div><div><p class="mb-2 text-sm font-semibold text-slate-200">Fechas disponibles</p><div id="mobileRepairCalendar" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div></div><p id="mobileRepairSlotStatus" class="text-sm text-slate-400" aria-live="polite">Consultando disponibilidad...</p></section>
         <section data-mobile-booking-step="4" class="hidden space-y-4"><h4 class="text-xl font-bold text-white">Datos del dispositivo</h4><div class="grid grid-cols-1 sm:grid-cols-2 gap-3"><label class="block text-sm text-slate-300">Marca<select id="mobileRepairBrand" class="mt-2 w-full bg-black/50 border border-white/15 text-white rounded-xl px-3 py-3"><option value="Apple">Apple</option><option value="Samsung">Samsung</option><option value="Xiaomi">Xiaomi</option><option value="Google">Google</option><option value="Other">Otra</option></select></label><label class="block text-sm text-slate-300">Modelo<input id="mobileRepairModel" maxlength="120" list="mobileRepairModels" class="mt-2 w-full bg-black/50 border border-white/15 text-white rounded-xl px-3 py-3" placeholder="iPhone 14 Pro"><datalist id="mobileRepairModels"></datalist></label></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-3"><label class="block text-sm text-slate-300">Problema<select id="mobileRepairType" class="mt-2 w-full bg-black/50 border border-white/15 text-white rounded-xl px-3 py-3"></select></label><label class="block text-sm text-slate-300">Calidad de piezas<select id="mobileRepairQuality" class="mt-2 w-full bg-black/50 border border-white/15 text-white rounded-xl px-3 py-3"><option value="original_oem">Original OEM (+15 €)</option><option value="compatible_aaa">Compatible AAA (-25%)</option></select></label></div><p class="text-xs text-slate-400">Precio orientativo, piezas Original OEM +15 €, desplazamiento +30 €. Confirmaremos el importe final antes de reparar.</p></section>
         <section data-mobile-booking-step="5" class="hidden space-y-4"><h4 class="text-xl font-bold text-white">¿Quién recibirá al técnico?</h4><div class="space-y-2"><label class="flex items-center gap-3 rounded-xl border border-white/10 p-3 text-slate-200"><input type="radio" name="mobileRepairForSelf" value="true" checked> Es para mí</label><label class="flex items-center gap-3 rounded-xl border border-white/10 p-3 text-slate-200"><input type="radio" name="mobileRepairForSelf" value="false"> Es para otra persona</label></div><label class="block text-sm text-slate-300">Teléfono de contacto<input id="mobileRepairPhone" type="tel" maxlength="40" autocomplete="tel" class="mt-2 w-full bg-black/50 border border-white/15 text-white rounded-xl px-3 py-3" placeholder="+34 600 000 000"></label><label id="mobileRepairRecipientWrap" class="hidden block text-sm text-slate-300">Nombre y apellidos de quien recibirá al técnico<input id="mobileRepairRecipient" maxlength="200" class="mt-2 w-full bg-black/50 border border-white/15 text-white rounded-xl px-3 py-3"></label><p class="text-xs text-amber-200">El técnico llamará al teléfono indicado antes de llegar.</p></section>
         <section data-mobile-booking-step="6" class="hidden space-y-4"><h4 class="text-xl font-bold text-white">Revisa tu solicitud</h4><div id="mobileRepairSummary" class="space-y-3 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-slate-300"></div><p class="text-xs text-slate-400">La solicitud quedará pendiente de confirmación. No se realiza ningún cobro online.</p></section>
@@ -774,8 +774,11 @@
       const citySelect = document.getElementById('mobileRepairCity');
       if (!supabaseClient) {
         citySelect.innerHTML = '<option value="">Servicio online no disponible</option>';
+        citySelect.disabled = true;
         return;
       }
+      citySelect.disabled = true;
+      citySelect.innerHTML = '<option value="">Cargando localidades…</option>';
       const { data, error } = await supabaseClient.from('service_cities').select('name,distance_km,is_beach').eq('is_active', true).order('distance_km').order('name');
       if (error) {
         citySelect.innerHTML = '<option value="">Localidades no disponibles</option>';
@@ -783,7 +786,13 @@
         return;
       }
       mobileBookingState.cities = data || [];
+      if (!mobileBookingState.cities.length) {
+        citySelect.innerHTML = '<option value="">No hay localidades configuradas</option>';
+        document.getElementById('mobileRepairFormStatus').textContent = 'No hay localidades activas. Ejecuta de nuevo supabase-castellon-mobile-service-migration.sql en el proyecto Supabase conectado a este sitio.';
+        return;
+      }
       citySelect.innerHTML = '<option value="">Selecciona tu localidad</option>' + mobileBookingState.cities.map(city => `<option value="${escapeHTML(city.name)}">${escapeHTML(city.name)} · ${Number(city.distance_km)} km${city.is_beach ? ' · 🏖️ Playa' : ''}</option>`).join('');
+      citySelect.disabled = false;
       if (mobileBookingState.preferredCity && !mobileBookingState.cityTouched && mobileBookingState.cities.some(city => city.name === mobileBookingState.preferredCity)) {
         citySelect.value = mobileBookingState.preferredCity;
       }
@@ -797,7 +806,7 @@
         document.getElementById('authStatus').textContent = 'Inicia sesión para solicitar una visita a domicilio.';
         return;
       }
-      mobileBookingState = { ...mobileBookingState, step: 1, date: '', time: '', slots: [], preferredCity: '', cityTouched: false };
+      mobileBookingState = { ...mobileBookingState, step: 1, date: '', time: '', selectedTimeSlot: '', selectedDate: '', slots: [], preferredCity: '', cityTouched: false };
       document.getElementById('mobileRepairFormStatus').textContent = '';
       document.getElementById('mobileRepairCalendar').innerHTML = '';
       document.getElementById('mobileRepairSlots').innerHTML = '';
@@ -814,12 +823,17 @@
       else loadMobileServiceCities();
       if (currentUser && supabaseClient) {
         supabaseClient.from('profiles').select('phone').eq('id', currentUser.id).maybeSingle().then(async ({ data, error }) => {
-          if (error) { document.getElementById('mobileRepairFormStatus').textContent = `No se pudieron cargar tus datos guardados: ${error.message}`; return; }
+          if (error) {
+            console.warn('No se pudieron cargar los datos de contacto guardados.', error);
+            if (!document.getElementById('mobileRepairFormStatus').textContent) document.getElementById('mobileRepairFormStatus').textContent = `No se pudieron cargar tus datos guardados: ${error.message}`;
+            return;
+          }
           if (!data) return;
           document.getElementById('mobileRepairPhone').value = data.phone || '';
           const savedAddress = await supabaseClient.from('profiles').select('primary_address,primary_city').eq('id', currentUser.id).maybeSingle();
           if (savedAddress.error) {
-            document.getElementById('mobileRepairFormStatus').textContent = `No se pudieron cargar la dirección y localidad guardadas: ${savedAddress.error.message}`;
+            console.warn('No se pudieron cargar la dirección y localidad guardadas.', savedAddress.error);
+            if (!document.getElementById('mobileRepairFormStatus').textContent) document.getElementById('mobileRepairFormStatus').textContent = `No se pudieron cargar la dirección y localidad guardadas: ${savedAddress.error.message}`;
           } else if (savedAddress.data) {
             document.getElementById('mobileRepairAddress').value = savedAddress.data.primary_address || '';
             if (savedAddress.data.primary_city) {
@@ -846,7 +860,7 @@
       const fail = message => { status.textContent = message; return false; };
       if (step === 1 && !document.getElementById('mobileRepairCity').value) return fail('Elige una localidad de la lista.');
       if (step === 2 && !document.getElementById('mobileRepairAddress').value.trim()) return fail('Escribe la calle y el número del edificio.');
-      if (step === 3 && (!mobileBookingState.date || !mobileBookingState.time)) return fail('Selecciona una fecha y un horario disponible.');
+      if (step === 3 && (!mobileBookingState.selectedTimeSlot || !mobileBookingState.selectedDate)) return fail('Selecciona un horario y una fecha disponible.');
       if (step === 4 && (!document.getElementById('mobileRepairModel').value.trim() || !document.getElementById('mobileRepairType').value)) return fail('Indica el modelo y el tipo de reparación.');
       if (step === 5) {
         if (!/^\+[1-9][\d\s().-]{7,18}$/.test(document.getElementById('mobileRepairPhone').value.trim())) return fail('Indica un teléfono con prefijo internacional, por ejemplo +34 600 123 456.');
@@ -859,7 +873,8 @@
       const status = document.getElementById('mobileRepairSlotStatus');
       const calendar = document.getElementById('mobileRepairCalendar');
       calendar.innerHTML = '';
-      document.getElementById('mobileRepairSlots').innerHTML = '';
+      const slotContainer = document.getElementById('mobileRepairSlots');
+      slotContainer.innerHTML = '';
       status.textContent = 'Consultando disponibilidad...';
       if (!supabaseClient) { status.textContent = 'La agenda no está disponible. Comprueba la configuración de Supabase.'; return; }
       const { data, error } = await supabaseClient.rpc('get_mobile_available_slots', {
@@ -869,44 +884,89 @@
         status.textContent = `No se pudo cargar la agenda: ${error.message}. Ejecuta supabase-castellon-mobile-service-migration.sql.`;
         return;
       }
-      mobileBookingState.slots = data || [];
-      const byDate = new Map();
-      mobileBookingState.slots.forEach(slot => {
-        if (!byDate.has(slot.visit_date)) byDate.set(slot.visit_date, []);
-        byDate.get(slot.visit_date).push(slot);
-      });
-      byDate.forEach((slots, date) => {
-        const dateObj = new Date(`${date}T12:00:00`);
+      mobileBookingState.slots = (data || []).map(slot => ({
+        ...slot,
+        available_date: slot.available_date || slot.visit_date
+      }));
+      mobileBookingState.selectedTimeSlot = '';
+      mobileBookingState.selectedDate = '';
+      mobileBookingState.time = '';
+      mobileBookingState.date = '';
+      ['10:00', '12:00', '14:00', '16:00'].forEach(time => {
         const button = document.createElement('button');
         button.type = 'button';
-        button.className = 'rounded-xl border border-white/15 bg-white/5 px-3 py-3 text-sm text-white hover:border-sky-300';
-        button.textContent = `${dateObj.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' })} · ${slots.length} hueco(s)`;
+        button.className = 'rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm font-semibold text-white hover:border-sky-300';
+        button.textContent = time;
+        button.setAttribute('aria-pressed', 'false');
+        button.onclick = () => selectMobileBookingTime(time, button);
+        slotContainer.appendChild(button);
+      });
+      status.textContent = 'Selecciona un horario para ver las fechas disponibles.';
+    }
+    function selectMobileBookingTime(time, button) {
+      mobileBookingState.selectedTimeSlot = time;
+      mobileBookingState.time = time;
+      mobileBookingState.selectedDate = '';
+      mobileBookingState.date = '';
+      document.querySelectorAll('#mobileRepairSlots button').forEach(item => {
+        item.classList.remove('bg-sky-300/20', 'border-sky-300');
+        item.setAttribute('aria-pressed', 'false');
+      });
+      button.classList.add('bg-sky-300/20', 'border-sky-300');
+      button.setAttribute('aria-pressed', 'true');
+      updateMobileBookingNextButton();
+      renderMobileBookingDates();
+    }
+    function renderMobileBookingDates() {
+      const calendar = document.getElementById('mobileRepairCalendar');
+      const status = document.getElementById('mobileRepairSlotStatus');
+      calendar.innerHTML = '';
+      const matchingSlots = mobileBookingState.slots.filter(slot => {
+        const capacity = Number(slot.remaining_capacity);
+        return slot.time_slot === mobileBookingState.selectedTimeSlot && Number.isFinite(capacity) && capacity > 0 && slot.available_date;
+      });
+      const slotsByDate = new Map();
+      matchingSlots.forEach(slot => {
+        if (!slotsByDate.has(slot.available_date)) slotsByDate.set(slot.available_date, slot);
+      });
+      const dateFormatter = new Intl.DateTimeFormat('es-ES', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'short'
+      });
+      Array.from(slotsByDate.entries()).sort(([first], [second]) => first.localeCompare(second)).forEach(([date, slot]) => {
+        const dateObj = new Date(slot.available_date);
+        if (Number.isNaN(dateObj.getTime())) return;
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-left text-sm text-white hover:border-sky-300';
+        const formattedDate = dateFormatter.format(dateObj);
+        button.textContent = `${formattedDate.charAt(0).toLocaleUpperCase('es-ES')}${formattedDate.slice(1)}`;
+        button.setAttribute('aria-pressed', 'false');
         button.onclick = () => selectMobileBookingDate(date, button);
         calendar.appendChild(button);
       });
-      status.textContent = byDate.size ? 'Selecciona un día para ver los horarios disponibles.' : 'No hay horarios disponibles en los próximos 14 días. Consulta más tarde.';
+      status.textContent = calendar.childElementCount
+        ? `Fechas disponibles para las ${mobileBookingState.selectedTimeSlot}.`
+        : 'No hay fechas disponibles para esta hora.';
     }
     function selectMobileBookingDate(date, button) {
+      mobileBookingState.selectedDate = date;
       mobileBookingState.date = date;
-      mobileBookingState.time = '';
-      document.querySelectorAll('#mobileRepairCalendar button').forEach(item => item.classList.remove('bg-sky-300/20', 'border-sky-300'));
-      button.classList.add('bg-sky-300/20', 'border-sky-300');
-      const slots = mobileBookingState.slots.filter(slot => slot.visit_date === date);
-      const slotContainer = document.getElementById('mobileRepairSlots');
-      slotContainer.innerHTML = '';
-      slots.forEach(slot => {
-        const slotButton = document.createElement('button');
-        slotButton.type = 'button';
-        slotButton.className = 'rounded-xl border border-white/15 px-4 py-3 text-white hover:border-sky-300';
-        slotButton.textContent = `${slot.time_slot} · ${slot.remaining_capacity} disponible(s)`;
-        slotButton.onclick = () => {
-          mobileBookingState.time = slot.time_slot;
-          slotContainer.querySelectorAll('button').forEach(item => item.classList.remove('bg-sky-300/20', 'border-sky-300'));
-          slotButton.classList.add('bg-sky-300/20', 'border-sky-300');
-        };
-        slotContainer.appendChild(slotButton);
+      document.querySelectorAll('#mobileRepairCalendar button').forEach(item => {
+        item.classList.remove('bg-sky-300/20', 'border-sky-300');
+        item.setAttribute('aria-pressed', 'false');
       });
-      document.getElementById('mobileRepairSlotStatus').textContent = `Horarios disponibles para ${new Date(`${date}T12:00:00`).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}.`;
+      button.classList.add('bg-sky-300/20', 'border-sky-300');
+      button.setAttribute('aria-pressed', 'true');
+      updateMobileBookingNextButton();
+    }
+    function updateMobileBookingNextButton() {
+      const next = document.getElementById('mobileRepairNext');
+      if (!next) return;
+      next.disabled = mobileBookingState.step === 3 && (!mobileBookingState.selectedTimeSlot || !mobileBookingState.selectedDate);
+      next.classList.toggle('opacity-40', next.disabled);
+      next.classList.toggle('cursor-not-allowed', next.disabled);
     }
     function renderMobileBookingStep() {
       const labels = ['Ciudad', 'Dirección', 'Fecha y hora', 'Dispositivo', 'Contacto', 'Resumen'];
@@ -919,6 +979,7 @@
       const next = document.getElementById('mobileRepairNext');
       next.textContent = mobileBookingState.step === 6 ? 'Reservar reparación' : 'Siguiente';
       next.onclick = mobileBookingState.step === 6 ? submitMobileRepair : () => moveMobileBookingStep(1);
+      updateMobileBookingNextButton();
       if (mobileBookingState.step === 2) document.getElementById('mobileRepairAddressCity').textContent = `Dirección en ${document.getElementById('mobileRepairCity').value}`;
       if (mobileBookingState.step === 3 && !mobileBookingState.slots.length) loadMobileRepairSlots();
       if (mobileBookingState.step === 6) renderMobileBookingSummary();
@@ -931,14 +992,13 @@
     }
     function renderMobileBookingSummary() {
       const city = document.getElementById('mobileRepairCity').value;
-      const date = mobileBookingState.date;
       const brand = document.getElementById('mobileRepairBrand').value;
       const repair = issuesData.find(item => item.id === document.getElementById('mobileRepairType').value);
       const quality = document.getElementById('mobileRepairQuality').value;
       const person = document.querySelector('input[name="mobileRepairForSelf"]:checked')?.value === 'true' ? 'Para mí' : document.getElementById('mobileRepairRecipient').value.trim();
       const details = [
         ['Localidad', city], ['Dirección', document.getElementById('mobileRepairAddress').value.trim()],
-        ['Fecha y hora', `${new Date(`${date}T12:00:00`).toLocaleDateString('es-ES')} · ${mobileBookingState.time}`],
+        ['Fecha y hora', `${new Date(mobileBookingState.selectedDate).toLocaleDateString('es-ES')} · ${mobileBookingState.selectedTimeSlot}`],
         ['Dispositivo', `${brand} ${document.getElementById('mobileRepairModel').value.trim()}`],
         ['Problema', repair?.name || ''], ['Piezas', quality === 'original_oem' ? 'Original OEM' : 'Compatible AAA'],
         ['Contacto', document.getElementById('mobileRepairPhone').value.trim()], ['Recibe al técnico', person]
