@@ -9,28 +9,51 @@ create table if not exists public.service_cities (
   latitude numeric(10,8),
   longitude numeric(10,8),
   distance_km numeric(5,2) not null check (distance_km between 0 and 30),
+  is_beach boolean not null default false,
   is_active boolean not null default true,
   created_at timestamptz not null default now()
 );
 
-insert into public.service_cities (name, province, latitude, longitude, distance_km) values
-  ('Castellón de la Plana', 'Castellón', 39.9864, -0.0513, 0),
-  ('Almassora', 'Castellon', 39.9462, -0.0631, 6),
-  ('Vila-real', 'Castellon', 39.9383, -0.1009, 9),
-  ('Benicàssim', 'Castellón', 40.0555, 0.0624, 13),
-  ('Burriana', 'Castellon', 39.8890, -0.0854, 13),
-  ('Borriol', 'Castellon', 40.0420, -0.0690, 7),
-  ('Onda', 'Castellon', 39.9640, -0.2610, 22),
-  ('Nules', 'Castellon', 39.8520, -0.1560, 20),
-  ('Betxi', 'Castellon', 39.9290, -0.1980, 17),
-  ('Alquerías del Niño Perdido', 'Castellón', 39.8940, -0.1250, 12),
-  ('La Vall d''Uixó', 'Castellón', 39.8230, -0.2330, 25),
-  ('Cabanes', 'Castellón', 40.1560, 0.0430, 23),
-  ('Vilafamés', 'Castellón', 40.1150, -0.0530, 15),
-  ('Sant Joan de Moró', 'Castellón', 40.0590, -0.1370, 15),
-  ('Vall d''Alba', 'Castellon', 40.1740, -0.0340, 22),
-  ('Oropesa del Mar', 'Castellon', 40.0910, 0.1390, 23)
-on conflict (name) do nothing;
+alter table public.service_cities
+  add column if not exists is_beach boolean not null default false;
+
+insert into public.service_cities (name, province, distance_km, is_beach) values
+  ('Castellón', 'Castellón', 0, false),
+  ('Villarreal', 'Castellón', 8, false),
+  ('Benicássim', 'Castellón', 8, true),
+  ('Almassora', 'Castellón', 11, false),
+  ('Burriana', 'Castellón', 12, true),
+  ('Betxí', 'Castellón', 15, false),
+  ('Oropesa', 'Castellón', 15, true),
+  ('Torreblanca', 'Castellón', 15, true),
+  ('Nules', 'Castellón', 18, false),
+  ('Benlloc', 'Castellón', 20, false),
+  ('Ribesalbes', 'Castellón', 20, false),
+  ('Vall d''Uixó', 'Castellón', 20, false),
+  ('Cabanes', 'Castellón', 20, false),
+  ('Onda', 'Castellón', 22, false),
+  ('Traiguera', 'Castellón', 25, false),
+  ('Jérica', 'Castellón', 25, false),
+  ('La Pobla Tornesa', 'Castellón', 25, false),
+  ('Alcalá de Xivert', 'Castellón', 28, false),
+  ('Eslida', 'Castellón', 28, false),
+  ('Altura', 'Castellón', 28, false),
+  ('Peñíscola', 'Castellón', 30, true),
+  ('Atzeneta del Maestrat', 'Castellón', 30, false)
+on conflict (name) do update
+  set province = excluded.province,
+      distance_km = excluded.distance_km,
+      is_beach = excluded.is_beach,
+      is_active = true;
+
+update public.service_cities
+set is_active = false
+where name not in (
+  'Castellón', 'Villarreal', 'Benicássim', 'Almassora', 'Burriana', 'Betxí',
+  'Oropesa', 'Torreblanca', 'Nules', 'Benlloc', 'Ribesalbes', 'Vall d''Uixó',
+  'Cabanes', 'Onda', 'Traiguera', 'Jérica', 'La Pobla Tornesa',
+  'Alcalá de Xivert', 'Eslida', 'Altura', 'Peñíscola', 'Atzeneta del Maestrat'
+);
 
 create table if not exists public.mobile_working_hours (
   id uuid primary key default gen_random_uuid(),

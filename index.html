@@ -776,14 +776,14 @@
         citySelect.innerHTML = '<option value="">Servicio online no disponible</option>';
         return;
       }
-      const { data, error } = await supabaseClient.from('service_cities').select('name,distance_km').eq('is_active', true).order('distance_km');
+      const { data, error } = await supabaseClient.from('service_cities').select('name,distance_km,is_beach').eq('is_active', true).order('distance_km').order('name');
       if (error) {
         citySelect.innerHTML = '<option value="">Localidades no disponibles</option>';
         document.getElementById('mobileRepairFormStatus').textContent = `No se pudieron cargar las localidades: ${error.message}. Ejecuta la migración móvil de Castellón.`;
         return;
       }
       mobileBookingState.cities = data || [];
-      citySelect.innerHTML = '<option value="">Selecciona tu localidad</option>' + mobileBookingState.cities.map(city => `<option value="${escapeHTML(city.name)}">${escapeHTML(city.name)} · ${Number(city.distance_km)} km</option>`).join('');
+      citySelect.innerHTML = '<option value="">Selecciona tu localidad</option>' + mobileBookingState.cities.map(city => `<option value="${escapeHTML(city.name)}">${escapeHTML(city.name)} · ${Number(city.distance_km)} km${city.is_beach ? ' · 🏖️ Playa' : ''}</option>`).join('');
       if (mobileBookingState.preferredCity && !mobileBookingState.cityTouched && mobileBookingState.cities.some(city => city.name === mobileBookingState.preferredCity)) {
         citySelect.value = mobileBookingState.preferredCity;
       }
@@ -1344,7 +1344,7 @@
         supabaseClient.from('mobile_working_hours').select('id,day_of_week,time_slot,max_repairs_per_slot,is_active').order('day_of_week').order('time_slot'),
         supabaseClient.from('mobile_closed_days').select('id,date,reason').order('date'),
         supabaseClient.from('mobile_unavailable_slots').select('id,date,time_slot,reason').order('date').order('time_slot'),
-        supabaseClient.from('service_cities').select('id,name,distance_km,is_active').order('distance_km')
+        supabaseClient.from('service_cities').select('id,name,distance_km,is_beach,is_active').order('distance_km').order('name')
       ]);
       const statusOptions = ['received', 'diagnosing', 'repairing', 'ready', 'closed', 'rejected'];
       const mobileStatuses = ['pending', 'confirmed', 'in_progress', 'completed', 'cancelled'];
@@ -1414,7 +1414,7 @@
           <div class="rounded-xl border border-white/10 p-3"><h6 class="font-semibold text-white mb-2">Días de cierre</h6><form onsubmit="addMobileClosedDay(event)" class="flex flex-wrap gap-2 mb-3"><input id="mobileClosedDate" type="date" min="${dateMin}" required class="min-w-0 flex-1 bg-black/50 border border-white/15 text-white rounded-lg px-3 py-2"><input id="mobileClosedReason" maxlength="200" placeholder="Motivo (opcional)" class="min-w-0 flex-1 bg-black/50 border border-white/15 text-white rounded-lg px-3 py-2"><button class="px-3 py-2 rounded-lg bg-sky-300 text-slate-950 font-bold">Cerrar día</button></form><div class="space-y-2">${(closedDays.data || []).map(item => `<div class="flex items-center justify-between gap-2 text-sm text-slate-300"><span>${escapeHTML(item.date)} · ${escapeHTML(item.reason || 'Cerrado')}</span><button type="button" onclick="deleteMobileClosedDay('${item.id}')" class="text-red-300">Eliminar</button></div>`).join('') || '<p class="text-xs text-slate-500">No hay días cerrados.</p>'}</div></div>
           <div class="rounded-xl border border-white/10 p-3"><h6 class="font-semibold text-white mb-2">Bloquear un horario concreto</h6><form onsubmit="addMobileUnavailableSlot(event)" class="grid grid-cols-2 gap-2 mb-3"><input id="mobileBlockedDate" type="date" min="${dateMin}" required class="min-w-0 bg-black/50 border border-white/15 text-white rounded-lg px-3 py-2"><select id="mobileBlockedTime" required class="min-w-0 bg-black/50 border border-white/15 text-white rounded-lg px-3 py-2">${[...new Set(byDay.map(slot => slot.time_slot))].sort().map(time => `<option value="${escapeHTML(time)}">${escapeHTML(time)}</option>`).join('')}</select><input id="mobileBlockedReason" maxlength="200" placeholder="Motivo (opcional)" class="min-w-0 bg-black/50 border border-white/15 text-white rounded-lg px-3 py-2"><button class="px-3 py-2 rounded-lg bg-sky-300 text-slate-950 font-bold">Bloquear horario</button></form><div class="space-y-2">${(unavailableSlots.data || []).map(item => `<div class="flex items-center justify-between gap-2 text-sm text-slate-300"><span>${escapeHTML(item.date)} · ${escapeHTML(item.time_slot)} · ${escapeHTML(item.reason || 'Bloqueado')}</span><button type="button" onclick="deleteMobileUnavailableSlot('${item.id}')" class="text-red-300">Eliminar</button></div>`).join('') || '<p class="text-xs text-slate-500">No hay horarios bloqueados.</p>'}</div></div>
         </section>
-        <section><h6 class="font-semibold text-white mb-2">Localidades con servicio</h6><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">${(serviceCities.data || []).map(city => `<label class="flex items-center gap-2 rounded-lg border border-white/10 p-2 text-sm text-slate-300"><input type="checkbox" ${city.is_active ? 'checked' : ''} onchange="toggleMobileServiceCity('${city.id}', this.checked)" class="accent-sky-300"><span>${escapeHTML(city.name)} · ${Number(city.distance_km)} km</span></label>`).join('')}</div></section>`;
+        <section><h6 class="font-semibold text-white mb-2">Localidades con servicio</h6><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">${(serviceCities.data || []).map(city => `<label class="flex items-center gap-2 rounded-lg border border-white/10 p-2 text-sm text-slate-300"><input type="checkbox" ${city.is_active ? 'checked' : ''} onchange="toggleMobileServiceCity('${city.id}', this.checked)" class="accent-sky-300"><span>${escapeHTML(city.name)} · ${Number(city.distance_km)} km${city.is_beach ? ' · 🏖️ Playa' : ''}</span></label>`).join('')}</div></section>`;
     }
     async function refreshMobileAvailability() {
       if (!document.getElementById('mobileRepairModal').classList.contains('hidden') && mobileBookingState.step === 3) {
