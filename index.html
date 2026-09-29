@@ -880,19 +880,21 @@
       const { data, error } = await supabaseClient.rpc('get_mobile_available_slots', {
         p_start_date: localDateValue(new Date()), p_end_date: mobileDateAfterDays(14)
       });
+      const slots = data || [];
+      console.log(slots);
       if (error) {
         status.textContent = `No se pudo cargar la agenda: ${error.message}. Ejecuta supabase-castellon-mobile-service-migration.sql.`;
         return;
       }
-      mobileBookingState.slots = (data || []).map(slot => ({
-        ...slot,
-        available_date: slot.available_date || slot.visit_date
-      }));
+      mobileBookingState.slots = slots;
       mobileBookingState.selectedTimeSlot = '';
       mobileBookingState.selectedDate = '';
       mobileBookingState.time = '';
       mobileBookingState.date = '';
-      ['10:00', '12:00', '14:00', '16:00'].forEach(time => {
+      const availableTimeSlots = [...new Set(slots.map(slot => slot.time_slot))]
+        .filter(time => typeof time === 'string' && time.length > 0)
+        .sort();
+      availableTimeSlots.forEach(time => {
         const button = document.createElement('button');
         button.type = 'button';
         button.className = 'rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm font-semibold text-white hover:border-sky-300';
@@ -901,7 +903,9 @@
         button.onclick = () => selectMobileBookingTime(time, button);
         slotContainer.appendChild(button);
       });
-      status.textContent = 'Selecciona un horario para ver las fechas disponibles.';
+      status.textContent = availableTimeSlots.length
+        ? 'Selecciona un horario para ver las fechas disponibles.'
+        : 'No hay horarios disponibles en los próximos 14 días. Consulta más tarde.';
     }
     function selectMobileBookingTime(time, button) {
       mobileBookingState.selectedTimeSlot = time;
@@ -921,33 +925,29 @@
       const calendar = document.getElementById('mobileRepairCalendar');
       const status = document.getElementById('mobileRepairSlotStatus');
       calendar.innerHTML = '';
-      const matchingSlots = mobileBookingState.slots.filter(slot => {
-        const capacity = Number(slot.remaining_capacity);
-        return slot.time_slot === mobileBookingState.selectedTimeSlot && Number.isFinite(capacity) && capacity > 0 && slot.available_date;
-      });
-      const slotsByDate = new Map();
-      matchingSlots.forEach(slot => {
-        if (!slotsByDate.has(slot.available_date)) slotsByDate.set(slot.available_date, slot);
-      });
+      const slots = mobileBookingState.slots;
+      const selectedTimeSlot = mobileBookingState.selectedTimeSlot;
+      const datesForSelectedTime = slots.filter(slot => slot.time_slot === selectedTimeSlot);
+      const uniqueDates = [...new Set(datesForSelectedTime.map(slot => slot.available_date))]
+        .filter(date => typeof date === 'string' && date.length > 0);
       const dateFormatter = new Intl.DateTimeFormat('es-ES', {
         weekday: 'long',
         day: 'numeric',
-        month: 'short'
+        month: 'long'
       });
-      Array.from(slotsByDate.entries()).sort(([first], [second]) => first.localeCompare(second)).forEach(([date, slot]) => {
-        const dateObj = new Date(slot.available_date);
+      uniqueDates.sort().forEach(date => {
+        const dateObj = new Date(date + 'T12:00:00');
         if (Number.isNaN(dateObj.getTime())) return;
         const button = document.createElement('button');
         button.type = 'button';
         button.className = 'rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-left text-sm text-white hover:border-sky-300';
-        const formattedDate = dateFormatter.format(dateObj);
-        button.textContent = `${formattedDate.charAt(0).toLocaleUpperCase('es-ES')}${formattedDate.slice(1)}`;
+        button.textContent = dateFormatter.format(dateObj);
         button.setAttribute('aria-pressed', 'false');
         button.onclick = () => selectMobileBookingDate(date, button);
         calendar.appendChild(button);
       });
       status.textContent = calendar.childElementCount
-        ? `Fechas disponibles para las ${mobileBookingState.selectedTimeSlot}.`
+        ? `Fechas disponibles para las ${selectedTimeSlot}.`
         : 'No hay fechas disponibles para esta hora.';
     }
     function selectMobileBookingDate(date, button) {
