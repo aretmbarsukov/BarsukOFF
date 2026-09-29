@@ -8,6 +8,9 @@ create table if not exists public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   full_name text,
   phone text,
+  phone_number varchar(40),
+  primary_address varchar(255),
+  primary_city varchar(100),
   role text not null default 'customer' check (role in ('customer', 'admin')),
   created_at timestamptz not null default now()
 );
@@ -52,8 +55,13 @@ language plpgsql
 security definer set search_path = public
 as $$
 begin
-  insert into public.profiles (id, full_name)
-  values (new.id, coalesce(new.raw_user_meta_data ->> 'full_name', new.email))
+  insert into public.profiles (id, full_name, phone, phone_number)
+  values (
+    new.id,
+    coalesce(new.raw_user_meta_data ->> 'full_name', new.email),
+    nullif(new.raw_user_meta_data ->> 'phone_number', ''),
+    nullif(new.raw_user_meta_data ->> 'phone_number', '')
+  )
   on conflict (id) do nothing;
   return new;
 end;
@@ -80,7 +88,7 @@ create policy "profiles own update" on public.profiles for update to authenticat
 drop policy if exists "profiles self insert" on public.profiles;
 create policy "profiles self insert" on public.profiles for insert to authenticated with check (id = auth.uid() and role = 'customer');
 revoke update on public.profiles from anon, authenticated, public;
-grant update (full_name, phone) on public.profiles to authenticated;
+grant update (full_name, phone, phone_number, primary_address, primary_city) on public.profiles to authenticated;
 create policy "devices own access" on public.devices for all to authenticated using (user_id = auth.uid() or public.is_admin()) with check (user_id = auth.uid() or public.is_admin());
 drop policy if exists "requests own access" on public.repair_requests;
 create policy "requests own read" on public.repair_requests for select to authenticated using (user_id = auth.uid() or public.is_admin());
