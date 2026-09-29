@@ -198,7 +198,7 @@ begin
   end if;
   v_estimated_price := round(
     (v_base_price * case when p_parts_quality = 'compatible_aaa' then 0.75 else 1 end
-      * case when lower(p_device_brand) = 'apple' then 1.10 else 1 end) + 15,
+      * case when lower(p_device_brand) = 'apple' then 1.10 else 1 end) + 30,
     2
   );
 

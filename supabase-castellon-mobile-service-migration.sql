@@ -291,7 +291,7 @@ begin
   if v_base_price is null then raise exception 'El tipo de reparación no es válido.'; end if;
   v_estimated_price := round(
     (v_base_price * case when p_parts_quality = 'compatible_aaa' then 0.75 else 1 end
-      + case when p_parts_quality = 'original_oem' then 15 else 0 end) + 15,
+      + case when p_parts_quality = 'original_oem' then 15 else 0 end) + 30,
     2
   );
 
