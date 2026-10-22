@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net data:; img-src 'self' data: blob: https:; connect-src 'self' https://zjfkrqkuezdvhgbudjnt.supabase.co wss://zjfkrqkuezdvhgbudjnt.supabase.co; media-src 'self' https:; upgrade-insecure-requests;" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://static.elfsight.com https://universe-static.elfsightcdn.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net data:; img-src 'self' data: blob: https:; connect-src 'self' https://zjfkrqkuezdvhgbudjnt.supabase.co wss://zjfkrqkuezdvhgbudjnt.supabase.co https://core.service.elfsight.com https://*.elfsight.com https://*.elfsightcdn.com; frame-src https://*.elf.site https://*.elfsight.com; media-src 'self' https:; upgrade-insecure-requests;" />
   <meta http-equiv="X-Frame-Options" content="DENY" />
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
@@ -15,6 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://static.elfsight.com/platform/platform.js" async></script>
   <script>
     tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] } } } };
   </script>
@@ -137,6 +138,7 @@
         <a id="navTech" href="#interactive" class="hover:text-white transition-colors">Anatomia</a>
         <a id="navServices" href="#services" class="hover:text-white transition-colors">Servicios</a>
         <a id="navMobileService" href="#mobile-service" class="hover:text-white transition-colors">Reparación a domicilio</a>
+        <a id="navInstagram" href="#instagram" class="hover:text-white transition-colors">Instagram</a>
         <a id="navStatus" href="#tracker" class="hover:text-white transition-colors">Estado</a>
         <a id="navFaq" href="#faq" class="hover:text-white transition-colors">Preguntas</a>
         <button onclick="toggleEmpresaModal()" class="px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-xs font-mono text-slate-300 hover:bg-white/10 transition-all flex items-center gap-1.5"><i class="fa-solid fa-graduation-cap text-slate-400"></i> <span id="navEmpresa">Proyecto Empresa</span></button>
@@ -157,6 +159,7 @@
       <a id="mobileNavTech" href="#interactive" class="py-2 hover:text-white">Anatomía</a>
       <a id="mobileNavServices" href="#services" class="py-2 hover:text-white">Servicios</a>
       <a id="mobileNavMobileService" href="#mobile-service" class="py-2 hover:text-white">Reparación a domicilio</a>
+      <a id="mobileNavInstagram" href="#instagram" class="py-2 hover:text-white">Instagram</a>
       <a id="mobileNavStatus" href="#tracker" class="py-2 hover:text-white">Estado</a>
       <a id="mobileNavDiagnostic" href="#problemWizard" class="py-2 hover:text-white">Diagnóstico guiado</a>
       <a id="mobileNavFaq" href="#faq" class="py-2 hover:text-white">Preguntas frecuentes</a>
@@ -205,6 +208,24 @@
   <section id="promotions" class="py-12 px-4 max-w-7xl mx-auto">
     <div class="text-center mb-8"><h2 class="text-xs font-mono tracking-widest text-slate-400 uppercase mb-2">// OFERTAS</h2><h3 class="text-3xl md:text-4xl font-extrabold text-white">Promociones activas</h3></div>
     <div id="promotionsList" class="grid grid-cols-1 md:grid-cols-3 gap-5"><p class="text-center text-slate-400 md:col-span-3">Cargando promociones...</p></div>
+  </section>
+
+  <section id="instagram" class="py-12 px-4 max-w-7xl mx-auto scroll-mt-24">
+    <div class="glass-panel rounded-3xl border border-white/10 p-6 md:p-10">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-7">
+        <div>
+          <p id="instagramEyebrow" class="text-xs font-mono tracking-widest text-sky-300 uppercase mb-2">// BARSUKON EN INSTAGRAM</p>
+          <h2 id="instagramHeading" class="text-3xl md:text-4xl font-extrabold text-white">Síguenos en Instagram</h2>
+          <p id="instagramLead" class="text-slate-400 mt-2">Novedades, reparaciones y consejos para cuidar tu dispositivo.</p>
+        </div>
+        <a href="https://www.instagram.com/barsukon/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-white/15 bg-white/5 text-white hover:bg-white/10 transition-all">
+          <i class="fa-brands fa-instagram"></i><span id="instagramFollow">Síguenos: @barsukon</span><i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+        </a>
+      </div>
+      <div class="min-h-[180px] rounded-2xl overflow-hidden">
+        <div class="elfsight-app-7a7cfb65-0e78-4d00-8f95-2c6f2ed0c959" data-elfsight-app-lazy></div>
+      </div>
+    </div>
   </section>
 
   <section id="reviews" class="py-12 px-4 max-w-7xl mx-auto">
@@ -433,7 +454,7 @@
     let currentLang = 'es';
     const translations = {
       es: {
-        navCalc:'Calculadora', navTech:'Anatomía', navServices:'Servicios', navMobileService:'Reparación a domicilio', navStatus:'Estado', navDiagnostic:'Diagnóstico guiado', navFaq:'Preguntas',
+        navCalc:'Calculadora', navTech:'Anatomía', navServices:'Servicios', navMobileService:'Reparación a domicilio', navInstagram:'Instagram', navStatus:'Estado', navDiagnostic:'Diagnóstico guiado', navFaq:'Preguntas',
         navEmpresa:'Proyecto Empresa', book:'Reservar cita',         mobileServiceTitle:'Reparación en furgoneta: vamos hasta ti', mobileServiceLead:'Solicita una visita en Castellón y localidades cercanas dentro de 30 km. Consulta horarios y reserva hasta con 14 días de antelación.', mobileServiceCta:'Solicitar visita', mobileServicePriceNote:'Desplazamiento: +30 € sobre la estimación de reparación. No hay cobro al enviar la solicitud.', heroBadge:'Reparación exprés desde 20 min • Garantía 6 meses',
         heroTitle:'Precisión quirúrgica para tu', heroDesc:'Servicio técnico minimalista de alta gama BarsukON. Sustitución de módulos, microsoldadura BGA y restauración tras mojado.',
         calcTitle:'Calculadora de presupuesto', calcSub:'Selecciona la marca, busca el modelo y obtén un presupuesto instantáneo.',
@@ -446,10 +467,11 @@
         total:'Total estimado:', installments:'Pago dividido (estimación)', installmentNote:'Estimación informativa en partes iguales; no es financiación ni genera una transacción.', months:'meses', perMonth:'/ mes',
         free:'*Diagnóstico gratuito al reparar en BarsukON', track:'Comprobar',
         hours:'Horario', footerDesc:'Precisión en cada reparación: pantallas, baterías, placas y restauración tras mojado.',
+        instagramEyebrow:'// BARSUKON EN INSTAGRAM', instagramHeading:'Síguenos en Instagram', instagramLead:'Novedades, reparaciones y consejos para cuidar tu dispositivo.', instagramFollow:'Síguenos: @barsukon',
         theme:'Tema', lightTheme:'Claro', darkTheme:'Oscuro'
       },
       en: {
-        navCalc:'Calculator', navTech:'Anatomy', navServices:'Services', navMobileService:'Mobile repair', navStatus:'Status', navDiagnostic:'Guided diagnostics', navFaq:'FAQ',
+        navCalc:'Calculator', navTech:'Anatomy', navServices:'Services', navMobileService:'Mobile repair', navInstagram:'Instagram', navStatus:'Status', navDiagnostic:'Guided diagnostics', navFaq:'FAQ',
         navEmpresa:'Business project', book:'Book appointment',         mobileServiceTitle:'Mobile workshop: we come to you', mobileServiceLead:'Request a visit in Castellón and nearby towns within a 30 km radius. Check opening times and book up to 14 days ahead.', mobileServiceCta:'Request a visit', mobileServicePriceNote:'Travel fee: +€30 on top of the repair estimate. No payment is taken when you submit a request.', heroBadge:'Express repair from 20 min • 6-month warranty',
         heroTitle:'Surgical precision for your', heroDesc:'High-end technical service by BarsukON. Module replacement, BGA microsoldering, and liquid damage recovery.',
         calcTitle:'Repair estimate calculator', calcSub:'Select a brand, search a model, and get an instant estimate.',
@@ -462,6 +484,7 @@
         total:'Estimated total:', installments:'Split payment (estimate)', installmentNote:'Informational equal-payment estimate only; this is not financing and no transaction is made.', months:'months', perMonth:'/ month',
         free:'*Free diagnosis when repairing at BarsukON', track:'Check',
         hours:'Opening hours', footerDesc:'Precision in every repair: screens, batteries, boards, and liquid damage recovery.',
+        instagramEyebrow:'// BARSUKON ON INSTAGRAM', instagramHeading:'Follow us on Instagram', instagramLead:'Updates, repairs, and tips to help care for your device.', instagramFollow:'Follow us: @barsukon',
         theme:'Theme', lightTheme:'Light', darkTheme:'Dark'
       }
     };
@@ -535,14 +558,15 @@
 
     function applyLanguage() {
       const map = {
-        '#navCalc': 'navCalc', '#navTech': 'navTech', '#navServices': 'navServices', '#navMobileService': 'navMobileService', '#navStatus': 'navStatus',
-        '#mobileNavCalc': 'navCalc', '#mobileNavTech': 'navTech', '#mobileNavServices': 'navServices', '#mobileNavMobileService': 'navMobileService', '#mobileNavStatus': 'navStatus', '#mobileNavDiagnostic': 'navDiagnostic',
+        '#navCalc': 'navCalc', '#navTech': 'navTech', '#navServices': 'navServices', '#navMobileService': 'navMobileService', '#navInstagram': 'navInstagram', '#navStatus': 'navStatus',
+        '#mobileNavCalc': 'navCalc', '#mobileNavTech': 'navTech', '#mobileNavServices': 'navServices', '#mobileNavMobileService': 'navMobileService', '#mobileNavInstagram': 'navInstagram', '#mobileNavStatus': 'navStatus', '#mobileNavDiagnostic': 'navDiagnostic',
         '#navEmpresa': 'navEmpresa', '#navFaq': 'navFaq', '#mobileNavFaq': 'navFaq', '#heroBadge': 'heroBadge', '#heroTitle': 'heroTitle', '#heroDesc': 'heroDesc',
         '#calcTitle': 'calcTitle', '#calcSub': 'calcSub', '#calcStep1': 'stepBrand', '#calcStep2': 'stepModel',
         '#calcStep3': 'stepIssue', '#calcStep4': 'stepQuality', '#modelSearch': 'modelPlaceholder',
         '#summaryTitle': 'summary', '#warrantyLabel': 'warranty', '#timeLabel': 'time', '#totalLabel': 'total',
         '#calcNote': 'free', '#trackButton': 'track', '#footerHoursTitle': 'hours', '#footerDescription': 'footerDesc',
         '#bookButton': 'book', '#payButton': 'pay', '#otherDeviceButton': 'other',
+        '#instagramEyebrow': 'instagramEyebrow', '#instagramHeading': 'instagramHeading', '#instagramLead': 'instagramLead', '#instagramFollow': 'instagramFollow',
         '#mobileServiceTitle': 'mobileServiceTitle', '#mobileServiceLead': 'mobileServiceLead', '#mobileServiceCta': 'mobileServiceCta', '#mobileServicePriceNote': 'mobileServicePriceNote'
       };
       Object.entries(map).forEach(([selector, key]) => {
