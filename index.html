@@ -3,6 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#090a0c" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="BarsukON" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="apple-touch-icon" sizes="180x180" href="./icons/icon-180.png" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://static.elfsight.com https://universe-static.elfsightcdn.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net data:; img-src 'self' data: blob: https:; connect-src 'self' https://zjfkrqkuezdvhgbudjnt.supabase.co wss://zjfkrqkuezdvhgbudjnt.supabase.co https://core.service.elfsight.com https://*.elfsight.com https://*.elfsightcdn.com; frame-src https://*.elf.site https://*.elfsight.com; media-src 'self' https:; upgrade-insecure-requests;" />
   <meta http-equiv="X-Frame-Options" content="DENY" />
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
@@ -140,6 +146,7 @@
         <i class="fa-solid fa-bars"></i><span id="mobileMenuLabel" class="hidden sm:inline">Secciones</span>
       </button>
       <div class="hidden items-center gap-2 md:flex md:w-full md:basis-full md:flex-wrap md:justify-center xl:w-auto xl:basis-auto xl:justify-self-end xl:gap-3">
+          <button id="desktopInstallAppButton" type="button" onclick="installBarsukOnApp()" class="hidden px-3 py-1.5 rounded-xl border border-sky-300/30 bg-sky-300/10 hover:bg-sky-300/20 font-mono text-xs text-sky-200 transition-all"><i class="fa-solid fa-download mr-1"></i><span>Instalar app</span></button>
           <button id="themeButton" onclick="toggleTheme()" class="px-3 py-1.5 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 font-mono text-xs text-white transition-all flex items-center gap-2" title="Cambiar tema"><i id="themeIcon" class="fa-solid fa-sun text-slate-400"></i><span id="themeLabel">Tema</span></button>
           <button onclick="toggleLanguage()" class="px-3 py-1.5 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 font-mono text-xs text-white transition-all flex items-center gap-2"><i class="fa-solid fa-globe text-slate-400"></i><span id="currentLangLabel" class="font-bold">ES</span></button>
           <button id="bookButton" onclick="openBookingModal()" class="px-5 py-2.5 bg-white text-black font-semibold text-sm rounded-xl hover:bg-slate-200 transition-all shadow-md shadow-white/5 active:scale-95 flex items-center gap-2"><i class="fa-solid fa-bolt-lightning text-xs"></i><span>Reservar Cita</span></button>
@@ -167,6 +174,7 @@
       <div class="mt-3 grid grid-cols-2 gap-2 border-t border-white/10 pt-3 md:hidden">
         <button id="mobileThemeButton" onclick="toggleTheme()" class="px-3 py-2 rounded-xl border border-white/15 bg-white/5 text-left text-xs flex items-center gap-2"><i id="mobileThemeIcon" class="fa-solid fa-sun text-slate-400"></i><span id="mobileThemeLabel">Tema</span></button>
         <button onclick="toggleLanguage()" class="px-3 py-2 rounded-xl border border-white/15 bg-white/5 text-left text-xs flex items-center gap-2"><i class="fa-solid fa-globe text-slate-400"></i><span id="mobileLangLabel" class="font-bold">ES</span></button>
+        <button id="mobileInstallAppButton" type="button" onclick="installBarsukOnApp()" class="hidden col-span-2 px-3 py-2 rounded-xl border border-sky-300/30 bg-sky-300/10 text-left text-xs text-sky-200"><i class="fa-solid fa-download mr-1"></i><span>Instalar app</span></button>
         <button onclick="openBookingModal(); mobileMenuToggle(false)" class="col-span-2 px-4 py-3 rounded-xl bg-white text-black font-semibold text-sm flex items-center justify-center gap-2"><i class="fa-solid fa-bolt-lightning text-xs"></i><span id="mobileBookLabel">Reservar cita</span></button>
         <button onclick="openAuthModal(); mobileMenuToggle(false)" class="px-3 py-2 rounded-xl border border-sky-400/30 bg-sky-400/10 text-sky-200 text-xs"><i class="fa-solid fa-user"></i> <span id="mobileAuthLabel">Acceder</span></button>
         <button id="mobileDashboardButton" onclick="openDashboardModal('admin'); mobileMenuToggle(false)" class="hidden px-3 py-2 rounded-xl border border-white/15 bg-white/5 text-white text-xs"><i class="fa-solid fa-shield-halved"></i> Moderación</button>
@@ -311,6 +319,7 @@
             </select>
             <strong id="calculatorInstallmentAmount">0.00 € / mes</strong>
             <small id="calculatorInstallmentNote" class="diagnostic-disclaimer">Estimación informativa en partes iguales; no es financiación ni genera una transacción.</small>
+            <button id="payInstallmentsButton" type="button" onclick="openInstallmentPaymentModal()" class="col-span-2 w-full py-2.5 rounded-xl border border-sky-300/30 bg-sky-300/10 text-sky-200 font-semibold text-sm hover:bg-sky-300/20 transition-all"><i class="fa-solid fa-credit-card mr-2"></i><span>Simular pago a plazos</span></button>
           </div>
           <div class="space-y-3">
             <button id="reserveButton" onclick="bookCalculatedRepair()" class="w-full py-4 bg-white text-black font-extrabold text-base rounded-xl hover:bg-slate-200 transition-all shadow-lg flex items-center justify-center gap-2"><span>Reservar este precio</span><i class="fa-solid fa-chevron-right text-xs"></i></button>
@@ -468,7 +477,9 @@
         free:'*Diagnóstico gratuito al reparar en BarsukON', track:'Comprobar',
         hours:'Horario', footerDesc:'Precisión en cada reparación: pantallas, baterías, placas y restauración tras mojado.',
         instagramEyebrow:'// BARSUKON EN INSTAGRAM', instagramHeading:'Síguenos en Instagram', instagramLead:'Novedades, reparaciones y consejos para cuidar tu dispositivo.', instagramFollow:'Síguenos: @barsukon',
-        theme:'Tema', lightTheme:'Claro', darkTheme:'Oscuro'
+        theme:'Tema', lightTheme:'Claro', darkTheme:'Oscuro', payInstallments:'Simular pago a plazos', installmentAmountTitle:'Importe de cada cuota',
+        installApp:'Instalar app', iosInstallHelp:'Para instalar BarsukON, toca Compartir en Safari y elige «Añadir a pantalla de inicio».',
+        installSuccess:'BarsukON se ha instalado.', installError:'No se pudo iniciar la instalación. Inténtalo desde el menú del navegador.'
       },
       en: {
         navHome:'Home', navPromotions:'Promotions', navReviews:'Reviews', navComparison:'Before and after', navCalc:'Calculator', navTech:'Anatomy', navServices:'Services', navMobileService:'Mobile repair', navInstagram:'Instagram', navStatus:'Tracking', navDiagnostic:'Guided diagnostics', navFaq:'FAQ',
@@ -485,7 +496,9 @@
         free:'*Free diagnosis when repairing at BarsukON', track:'Check',
         hours:'Opening hours', footerDesc:'Precision in every repair: screens, batteries, boards, and liquid damage recovery.',
         instagramEyebrow:'// BARSUKON ON INSTAGRAM', instagramHeading:'Follow us on Instagram', instagramLead:'Updates, repairs, and tips to help care for your device.', instagramFollow:'Follow us: @barsukon',
-        theme:'Theme', lightTheme:'Light', darkTheme:'Dark'
+        theme:'Theme', lightTheme:'Light', darkTheme:'Dark', payInstallments:'Simulate installment payment', installmentAmountTitle:'Amount per installment',
+        installApp:'Install app', iosInstallHelp:'To install BarsukON, tap Share in Safari and choose “Add to Home Screen”.',
+        installSuccess:'BarsukON was installed.', installError:'Could not start installation. Try the browser menu instead.'
       }
     };
     const issueTranslationKeys = { screen:'issueScreen', battery:'issueBattery', charging:'issueCharging', water:'issueWater', software:'issueSoftware', soldering:'issueSoldering' };
@@ -565,7 +578,8 @@
         '#calcStep3': 'stepIssue', '#calcStep4': 'stepQuality', '#modelSearch': 'modelPlaceholder',
         '#summaryTitle': 'summary', '#warrantyLabel': 'warranty', '#timeLabel': 'time', '#totalLabel': 'total',
         '#calcNote': 'free', '#trackButton': 'track', '#footerHoursTitle': 'hours', '#footerDescription': 'footerDesc',
-        '#bookButton': 'book', '#payButton': 'pay', '#otherDeviceButton': 'other',
+        '#bookButton': 'book', '#payButton': 'pay', '#payInstallmentsButton span': 'payInstallments',
+        '#desktopInstallAppButton span': 'installApp', '#mobileInstallAppButton span': 'installApp', '#otherDeviceButton': 'other',
         '#instagramEyebrow': 'instagramEyebrow', '#instagramHeading': 'instagramHeading', '#instagramLead': 'instagramLead', '#instagramFollow': 'instagramFollow',
         '#mobileServiceTitle': 'mobileServiceTitle', '#mobileServiceLead': 'mobileServiceLead', '#mobileServiceCta': 'mobileServiceCta', '#mobileServicePriceNote': 'mobileServicePriceNote'
       };
@@ -728,6 +742,16 @@
       const modal = document.getElementById('paymentModal');
       modal.classList.remove('hidden');
       modal.classList.add('flex');
+    }
+    function openInstallmentPaymentModal() {
+      const total = Number(document.getElementById('totalPrice').textContent) || 0;
+      const months = Number(document.getElementById('calculatorInstallmentMonths').value) || 2;
+      const monthlyAmount = (total / months).toFixed(2);
+      openPaymentModal({
+        amount: `${monthlyAmount} €`,
+        amountTitle: t('installmentAmountTitle'),
+        plan: `${months} ${t('months')} · ${total.toFixed(2)} € ${currentLang === 'es' ? 'en total' : 'total'} · ${t('installmentNote')}`
+      });
     }
     function closePaymentModal() { const modal = document.getElementById('paymentModal'); modal.classList.add('hidden'); modal.classList.remove('flex'); }
     function openOtherDeviceModal() { const modal = document.getElementById('otherDeviceModal'); modal.classList.remove('hidden'); modal.classList.add('flex'); }
@@ -1445,7 +1469,7 @@
           <h5 class="font-bold text-white mb-3">Solicitudes de reparación a domicilio</h5>
           ${mobileRepairs.error ? `<p class="text-sm text-red-300">No se pudieron cargar las solicitudes móviles: ${escapeHTML(mobileRepairs.error.message)}. Ejecuta primero supabase-mobile-service-migration.sql.</p>` : ''}
           <div class="space-y-3">${(mobileRepairs.data || []).map(item => `<article class="rounded-xl border border-white/10 bg-black/20 p-4 text-sm">
-            <div class="flex flex-wrap items-center justify-between gap-3"><span class="text-white font-semibold">${escapeHTML(item.device_brand || '')} ${escapeHTML(item.device_model || '')}</span><select aria-label="Estado de visita" data-reminder-sent="${item.call_reminder_sent ? 'true' : 'false'}" onchange="updateMobileRepairStatus('${item.id}', this.value, this.dataset.reminderSent === 'true')" class="bg-black/60 border border-white/15 text-white rounded-lg px-2 py-2">${mobileStatuses.map(status => `<option value="${status}" ${item.status === status ? 'selected' : ''}>${status}</option>`).join('')}</select></div>
+            <div class="flex flex-wrap items-center justify-between gap-3"><span class="text-white font-semibold">${escapeHTML(item.device_brand || '')} ${escapeHTML(item.device_model || '')}</span><select aria-label="Estado de visita" data-current-status="${escapeHTML(item.status || 'pending')}" data-reminder-sent="${item.call_reminder_sent ? 'true' : 'false'}" onchange="updateMobileRepairStatus('${item.id}', this.value, this.dataset.reminderSent === 'true', this)" class="bg-black/60 border border-white/15 text-white rounded-lg px-2 py-2">${mobileStatuses.map(status => `<option value="${status}" ${item.status === status ? 'selected' : ''}>${status}</option>`).join('')}</select></div>
             <p class="text-slate-300 mt-2">${escapeHTML(item.problem_description || '')}</p><p class="text-xs text-slate-400 mt-2">${escapeHTML(item.full_address || item.address || '')}, ${escapeHTML(item.city || '')}${item.zip_code ? ` ${escapeHTML(item.zip_code)}` : ''} · ${escapeHTML(item.phone_number || item.contact_phone || 'Sin teléfono')} · ${item.is_for_self === false ? `Recibe: ${escapeHTML(item.recipient_name || 'No indicado')}` : 'Para sí mismo'}</p>
             <p class="text-xs text-slate-400 mt-2">${item.visit_date ? new Date(item.visit_date).toLocaleString() : 'Sin fecha'} · ${escapeHTML(item.time_slot || '')} · ${item.estimated_price != null ? `${Number(item.estimated_price).toFixed(2)} € estimados` : 'Sin estimación'}</p>
             ${item.status === 'in_progress' ? `<button type="button" ${item.call_reminder_sent ? 'disabled' : ''} onclick="sendMobileRepairReminder('${item.id}')" class="mt-3 px-3 py-2 rounded-lg border border-sky-300/30 text-sky-200 disabled:opacity-50">${item.call_reminder_sent ? 'SMS de salida enviado' : 'Enviar SMS: técnico en camino'}</button>` : ''}
@@ -1557,9 +1581,20 @@
       await loadMobileServiceCities();
       await refreshMobileAvailability();
     }
-    async function updateMobileRepairStatus(id, status, reminderAlreadySent = false) {
+    async function updateMobileRepairStatus(id, status, reminderAlreadySent = false, select) {
+      const previousStatus = select?.dataset.currentStatus;
       const { error } = await supabaseClient.rpc('admin_set_mobile_repair_status', { p_repair_id: id, p_status: status });
-      if (error) { showToast(`No se pudo actualizar la visita: ${error.message}`); return; }
+      if (error) {
+        if (select && previousStatus) select.value = previousStatus;
+        const message = error.code === 'PGRST202' || error.code === '42883'
+          ? 'No existe la función de estado en Supabase. Ejecuta supabase-mobile-status-migration.sql desde el SQL Editor.'
+          : error.code === '42501' && error.message.toLowerCase().includes('permission denied')
+            ? 'Supabase denegó el permiso de la función. Ejecuta supabase-mobile-status-migration.sql y verifica que tu cuenta tenga rol de administrador.'
+            : `No se pudo actualizar la visita: ${error.message}`;
+        showToast(message);
+        return;
+      }
+      if (select) select.dataset.currentStatus = status;
       if (status === 'in_progress' && !reminderAlreadySent) {
         const reminder = await supabaseClient.functions.invoke('mobile-repair-reminder', { body: { repair_id: id } });
         if (reminder.error) showToast(`Estado actualizado, pero no se pudo enviar el SMS: ${reminder.error.message}`);
@@ -1974,6 +2009,54 @@
       };
       window.updateBarsukonModulesLanguage();
     })();
+  </script>
+  <script>
+    let deferredInstallPrompt = null;
+    const appleMobileDevice = /iPhone|iPad|iPod/.test(navigator.userAgent)
+      || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isStandaloneApp = () => window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    const setInstallButtonsVisible = visible => {
+      ['desktopInstallAppButton', 'mobileInstallAppButton'].forEach(id => {
+        document.getElementById(id).classList.toggle('hidden', !visible);
+      });
+    };
+
+    async function installBarsukOnApp() {
+      if (!deferredInstallPrompt) {
+        if (appleMobileDevice && !isStandaloneApp()) showToast(t('iosInstallHelp'));
+        return;
+      }
+
+      const installPrompt = deferredInstallPrompt;
+      deferredInstallPrompt = null;
+      setInstallButtonsVisible(false);
+      try {
+        await installPrompt.prompt();
+        const { outcome } = await installPrompt.userChoice;
+        if (outcome === 'accepted') showToast(t('installSuccess'));
+      } catch (error) {
+        console.error('No se pudo iniciar la instalación de BarsukON.', error);
+        showToast(t('installError'));
+      }
+    }
+
+    window.addEventListener('beforeinstallprompt', event => {
+      event.preventDefault();
+      deferredInstallPrompt = event;
+      setInstallButtonsVisible(true);
+    });
+
+    window.addEventListener('appinstalled', () => {
+      deferredInstallPrompt = null;
+      setInstallButtonsVisible(false);
+    });
+
+    if (appleMobileDevice && !isStandaloneApp()) setInstallButtonsVisible(true);
+    if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+      navigator.serviceWorker.register('./service-worker.js').catch(error => {
+        console.error('No se pudo registrar el service worker de BarsukON.', error);
+      });
+    }
   </script>
 </body>
 </html>
