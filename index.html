@@ -205,14 +205,38 @@
   <section id="games" class="px-4 py-14 max-w-7xl mx-auto scroll-mt-24">
     <div class="glass-panel rounded-3xl border border-sky-300/20 p-6 md:p-10">
       <p class="text-xs font-mono tracking-widest text-sky-300 uppercase mb-3">// <span id="gamesEyebrow">JUEGOS</span></p>
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-        <div>
-          <h2 id="gamesHeading" class="text-3xl md:text-4xl font-extrabold text-white mb-3">Juega en BarsukON</h2>
-          <p id="gamesLead" class="text-slate-300 max-w-2xl">Descubre Phone Rescue y disfruta de una partida.</p>
-        </div>
-        <a id="gamesPhoneRescueLink" href="./phone-rescue.html" class="w-full sm:w-auto px-6 py-4 rounded-xl bg-sky-300 text-slate-950 font-extrabold hover:bg-sky-200 transition-all flex items-center justify-center gap-2">
-          <i class="fa-solid fa-gamepad" aria-hidden="true"></i><span>Phone Rescue</span><i class="fa-solid fa-arrow-right text-sm" aria-hidden="true"></i>
-        </a>
+      <div>
+        <h2 id="gamesHeading" class="text-3xl md:text-4xl font-extrabold text-white mb-3">Juega en BarsukON</h2>
+        <p id="gamesLead" class="text-slate-300 max-w-2xl">Elige un reto de reparación y disfruta de una partida.</p>
+      </div>
+      <div class="mt-7 grid grid-cols-1 gap-4 md:grid-cols-2">
+        <article class="flex flex-col items-start gap-5 rounded-2xl border border-white/10 bg-white/5 p-5 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h3 id="gamesPhoneRescueTitle" class="text-xl font-extrabold text-white">Phone Rescue</h3>
+            <p id="gamesPhoneRescueDescription" class="mt-2 max-w-xl text-sm leading-relaxed text-slate-300">Diagnostica una avería, limpia la placa y devuelve el teléfono a la vida antes de que se agote el tiempo.</p>
+          </div>
+          <a id="gamesPhoneRescueLink" href="./phone-rescue.html" aria-label="Jugar a Phone Rescue" class="w-full shrink-0 rounded-xl bg-sky-300 px-5 py-3 font-extrabold text-slate-950 transition-all hover:bg-sky-200 sm:w-auto">
+            <span id="gamesPhoneRescuePlay">Jugar</span><span class="ml-2" aria-hidden="true">→</span>
+          </a>
+        </article>
+        <article class="flex flex-col items-start gap-5 rounded-2xl border border-cyan-300/20 bg-cyan-300/5 p-5 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h3 id="gamesMicroSolderingTitle" class="text-xl font-extrabold text-white">Micro-Soldering Master</h3>
+            <p id="gamesMicroSolderingDescription" class="mt-2 max-w-xl text-sm leading-relaxed text-slate-300">Reconecta pistas microscópicas con pulso firme. Controla el calor y evita cortocircuitos antes de que termine el tiempo.</p>
+          </div>
+          <a id="gamesMicroSolderingLink" href="./micro-soldering.html" aria-label="Jugar a Micro-Soldering Master" class="w-full shrink-0 rounded-xl bg-cyan-300 px-5 py-3 font-extrabold text-slate-950 transition-all hover:bg-cyan-200 sm:w-auto">
+            <span id="gamesMicroSolderingPlay">Jugar</span><span class="ml-2" aria-hidden="true">→</span>
+          </a>
+        </article>
+        <article class="flex flex-col items-start gap-5 rounded-2xl border border-emerald-300/20 bg-emerald-300/5 p-5 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h3 id="gamesOSDoctorTitle" class="text-xl font-extrabold text-white">OS Doctor: Clean Up!</h3>
+            <p id="gamesOSDoctorDescription" class="mt-2 max-w-xl text-sm leading-relaxed text-slate-300">Ordena fotos duplicadas, caché y aplicaciones pesadas para liberar memoria. Conserva los archivos del sistema y devuelve la velocidad al teléfono.</p>
+          </div>
+          <a id="gamesOSDoctorLink" href="./os-doctor.html" aria-label="Jugar a OS Doctor: Clean Up!" class="w-full shrink-0 rounded-xl bg-emerald-300 px-5 py-3 font-extrabold text-slate-950 transition-all hover:bg-emerald-200 sm:w-auto">
+            <span id="gamesOSDoctorPlay">Jugar</span><span class="ml-2" aria-hidden="true">→</span>
+          </a>
+        </article>
       </div>
     </div>
   </section>
@@ -480,7 +504,7 @@
     const translations = {
       es: {
         navHome:'Inicio', navGames:'Juegos', navPromotions:'Promociones', navReviews:'Opiniones', navComparison:'Antes y después', navCalc:'Calculadora', navTech:'Anatomía', navServices:'Servicios', navMobileService:'Reparación a domicilio', navInstagram:'Instagram', navStatus:'Seguimiento', navDiagnostic:'Diagnóstico guiado', navFaq:'Preguntas frecuentes',
-        navEmpresa:'Proyecto Empresa', menuSections:'Explora BarsukON', menuButton:'Secciones', book:'Reservar cita', gamesEyebrow:'JUEGOS', gamesHeading:'Juega en BarsukON', gamesLead:'Descubre Phone Rescue y disfruta de una partida.', gamesPhoneRescue:'Phone Rescue', mobileServiceTitle:'Reparación en furgoneta: vamos hasta ti', mobileServiceLead:'Solicita una visita en Castellón y localidades cercanas dentro de 30 km. Consulta horarios y reserva hasta con 14 días de antelación.', mobileServiceCta:'Solicitar visita', mobileServicePriceNote:'Desplazamiento: +30 € sobre la estimación de reparación. No hay cobro al enviar la solicitud.', heroBadge:'Reparación exprés desde 20 min • Garantía 6 meses',
+        navEmpresa:'Proyecto Empresa', menuSections:'Explora BarsukON', menuButton:'Secciones', book:'Reservar cita', gamesEyebrow:'JUEGOS', gamesHeading:'Juega en BarsukON', gamesLead:'Elige un reto de reparación y disfruta de una partida.', gamesPhoneRescue:'Phone Rescue', gamesPhoneRescueDescription:'Diagnostica una avería, limpia la placa y devuelve el teléfono a la vida antes de que se agote el tiempo.', gamesMicroSolderingDescription:'Reconecta pistas microscópicas con pulso firme. Controla el calor y evita cortocircuitos antes de que termine el tiempo.', gamesOSDoctorDescription:'Ordena fotos duplicadas, caché y aplicaciones pesadas para liberar memoria. Conserva los archivos del sistema y devuelve la velocidad al teléfono.', gamesPlay:'Jugar', mobileServiceTitle:'Reparación en furgoneta: vamos hasta ti', mobileServiceLead:'Solicita una visita en Castellón y localidades cercanas dentro de 30 km. Consulta horarios y reserva hasta con 14 días de antelación.', mobileServiceCta:'Solicitar visita', mobileServicePriceNote:'Desplazamiento: +30 € sobre la estimación de reparación. No hay cobro al enviar la solicitud.', heroBadge:'Reparación exprés desde 20 min • Garantía 6 meses',
         heroTitle:'Precisión quirúrgica para tu', heroDesc:'Servicio técnico minimalista de alta gama BarsukON. Sustitución de módulos, microsoldadura BGA y restauración tras mojado.',
         calcTitle:'Calculadora de presupuesto', calcSub:'Selecciona la marca, busca el modelo y obtén un presupuesto instantáneo.',
         stepBrand:'1. Selecciona la marca', stepModel:'2. Modelo del dispositivo', stepIssue:'3. Tipo de avería',
@@ -499,7 +523,7 @@
       },
       en: {
         navHome:'Home', navGames:'Games', navPromotions:'Promotions', navReviews:'Reviews', navComparison:'Before and after', navCalc:'Calculator', navTech:'Anatomy', navServices:'Services', navMobileService:'Mobile repair', navInstagram:'Instagram', navStatus:'Tracking', navDiagnostic:'Guided diagnostics', navFaq:'FAQ',
-        navEmpresa:'Business project', menuSections:'Explore BarsukON', menuButton:'Sections', book:'Book appointment', gamesEyebrow:'GAMES', gamesHeading:'Play at BarsukON', gamesLead:'Discover Phone Rescue and enjoy a repair mission.', gamesPhoneRescue:'Phone Rescue', mobileServiceTitle:'Mobile workshop: we come to you', mobileServiceLead:'Request a visit in Castellón and nearby towns within a 30 km radius. Check opening times and book up to 14 days ahead.', mobileServiceCta:'Request a visit', mobileServicePriceNote:'Travel fee: +€30 on top of the repair estimate. No payment is taken when you submit a request.', heroBadge:'Express repair from 20 min • 6-month warranty',
+        navEmpresa:'Business project', menuSections:'Explore BarsukON', menuButton:'Sections', book:'Book appointment', gamesEyebrow:'GAMES', gamesHeading:'Play at BarsukON', gamesLead:'Choose a repair challenge and enjoy a game.', gamesPhoneRescue:'Phone Rescue', gamesPhoneRescueDescription:'Diagnose a fault, clean the board, and bring the phone back to life before time runs out.', gamesMicroSolderingDescription:'Reconnect microscopic traces with a steady hand. Control the heat and avoid short circuits before time runs out.', gamesOSDoctorDescription:'Sort duplicate photos, cache, and heavy apps to free up memory. Keep system files safe and get the phone running smoothly again.', gamesPlay:'Play', mobileServiceTitle:'Mobile workshop: we come to you', mobileServiceLead:'Request a visit in Castellón and nearby towns within a 30 km radius. Check opening times and book up to 14 days ahead.', mobileServiceCta:'Request a visit', mobileServicePriceNote:'Travel fee: +€30 on top of the repair estimate. No payment is taken when you submit a request.', heroBadge:'Express repair from 20 min • 6-month warranty',
         heroTitle:'Surgical precision for your', heroDesc:'High-end technical service by BarsukON. Module replacement, BGA microsoldering, and liquid damage recovery.',
         calcTitle:'Repair estimate calculator', calcSub:'Select a brand, search a model, and get an instant estimate.',
         stepBrand:'1. Select the brand', stepModel:'2. Device model', stepIssue:'3. Type of damage',
@@ -590,7 +614,7 @@
         '#mobileNavHome > span:last-child': 'navHome', '#mobileNavGames > span:last-child': 'navGames', '#mobileNavPromotions > span:last-child': 'navPromotions', '#mobileNavReviews > span:last-child': 'navReviews', '#mobileNavComparison > span:last-child': 'navComparison',
         '#mobileNavCalc > span:last-child': 'navCalc', '#mobileNavTech > span:last-child': 'navTech', '#mobileNavServices > span:last-child': 'navServices', '#mobileNavMobileService > span:last-child': 'navMobileService', '#mobileNavInstagram > span:last-child': 'navInstagram', '#mobileNavStatus > span:last-child': 'navStatus', '#mobileNavDiagnostic > span:last-child': 'navDiagnostic',
         '#mobileNavFaq > span:last-child': 'navFaq', '#menuSectionsHeading': 'menuSections', '#mobileMenuLabel': 'menuButton', '#heroBadge': 'heroBadge', '#heroTitle': 'heroTitle', '#heroDesc': 'heroDesc',
-        '#gamesEyebrow': 'gamesEyebrow', '#gamesHeading': 'gamesHeading', '#gamesLead': 'gamesLead', '#gamesPhoneRescueLink span': 'gamesPhoneRescue',
+        '#gamesEyebrow': 'gamesEyebrow', '#gamesHeading': 'gamesHeading', '#gamesLead': 'gamesLead', '#gamesPhoneRescueTitle': 'gamesPhoneRescue', '#gamesPhoneRescueDescription': 'gamesPhoneRescueDescription', '#gamesMicroSolderingDescription': 'gamesMicroSolderingDescription', '#gamesOSDoctorDescription': 'gamesOSDoctorDescription', '#gamesPhoneRescuePlay': 'gamesPlay', '#gamesMicroSolderingPlay': 'gamesPlay', '#gamesOSDoctorPlay': 'gamesPlay',
         '#calcTitle': 'calcTitle', '#calcSub': 'calcSub', '#calcStep1': 'stepBrand', '#calcStep2': 'stepModel',
         '#calcStep3': 'stepIssue', '#calcStep4': 'stepQuality', '#modelSearch': 'modelPlaceholder',
         '#summaryTitle': 'summary', '#warrantyLabel': 'warranty', '#timeLabel': 'time', '#totalLabel': 'total',
