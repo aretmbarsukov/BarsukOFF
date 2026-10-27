@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#090a0c" />
+  <meta name="description" content="Practica microsoldadura de precisión en Micro-Soldering Master, el reto de reparación de BarsukON." />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; media-src 'self'; upgrade-insecure-requests;" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="apple-touch-icon" sizes="180x180" href="./icons/icon-180.png" />
+  <link rel="stylesheet" href="./micro-soldering.css" />
+  <title>Micro-Soldering Master — BarsukON</title>
+  <script type="module" src="./js/micro-soldering.js"></script>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <a class="brand" href="./index.html#games" aria-label="Volver a BarsukON">
+        <span class="brand-mark" aria-hidden="true">B</span>
+        <span class="brand-copy"><span class="brand-title">BARSUK<span>ON</span></span><span class="brand-subtitle">Laboratorio de reparación</span></span>
+      </a>
+      <div class="top-actions">
+        <button id="themeButton" class="utility-button" type="button" aria-label="Cambiar tema" aria-pressed="false"><span aria-hidden="true">◐</span><span id="themeLabel">Tema oscuro</span></button>
+        <button id="soundButton" class="utility-button" type="button" aria-label="Activar sonido" aria-pressed="false"><span aria-hidden="true">♫</span><span id="soundLabel">Sonido</span></button>
+        <a class="back-link" href="./index.html#games" aria-label="Volver a BarsukON"><span aria-hidden="true">←</span> Volver a BarsukON</a>
+      </div>
+    </header>
+
+    <section class="hud" aria-label="Estado de la partida">
+      <div class="hud-card"><span class="hud-label">Nivel</span><strong id="levelValue">—</strong></div>
+      <div class="hud-card"><span class="hud-label">Tiempo</span><strong id="timerValue">00:00</strong></div>
+      <div class="hud-card"><span class="hud-label">Puntuación</span><strong id="scoreValue">0</strong></div>
+      <div class="hud-card heat-card"><span class="hud-label">Sobrecalentamiento</span><strong id="heatValue">0 %</strong><div class="heat-track" role="progressbar" aria-label="Nivel de sobrecalentamiento" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="heatFill"></span></div></div>
+      <button id="pauseButton" class="pause-button" type="button" aria-label="Pausar partida" aria-pressed="false" disabled>Pausar</button>
+    </section>
+
+    <main class="game-layout">
+      <section class="board-panel" aria-labelledby="boardHeading">
+        <div class="panel-heading">
+          <div><p class="eyebrow">// ESTACIÓN DE MICROSOLDADURA</p><h1 id="boardHeading">Placa base · ampliación 40x</h1></div>
+          <span class="live-indicator"><span aria-hidden="true"></span> EN DIRECTO</span>
+        </div>
+        <div class="board-frame">
+          <canvas id="boardCanvas" tabindex="0" role="application" aria-label="Placa interactiva de microsoldadura. Mantén pulsada la plataforma inicial y sigue la pista hasta el siguiente contacto."></canvas>
+        </div>
+        <p id="boardHint" class="board-hint" role="status" aria-live="polite">Pulsa «Jugar» para preparar la estación de soldadura.</p>
+      </section>
+
+      <section id="screenPanel" class="screen-panel" aria-live="polite" aria-atomic="false" aria-label="Instrucciones y estado de la misión">
+        <p class="eyebrow">// RETO DE PRECISIÓN · BGA</p>
+        <h2>Micro-Soldering<br /><span>Master</span></h2>
+        <p class="screen-copy">Reconecta la pista dañada antes de que se agote el tiempo. Mantén el pulso firme: demasiado calor provoca un cortocircuito.</p>
+        <ol class="instruction-list">
+          <li><span>01</span><span>Empieza en la primera plataforma de contacto.</span></li>
+          <li><span>02</span><span>Arrastra hasta el siguiente contacto siguiendo la pista.</span></li>
+          <li><span>03</span><span>Suelta cuando quieras; retoma desde el último punto alcanzado.</span></li>
+        </ol>
+        <p id="recordLabel" class="record-label">Mejor puntuación: 0</p>
+        <button id="startButton" class="primary-button" type="button" aria-label="Jugar"><span>Jugar</span><span aria-hidden="true">↗</span></button>
+        <p class="keyboard-hint">Ratón, pantalla táctil o lápiz · Esc para pausar</p>
+      </section>
+    </main>
+    <footer class="footer"><span>BarsukON · Laboratorio de reparación</span><a href="./index.html#games" aria-label="Volver a BarsukON">Volver a BarsukON</a></footer>
+  </div>
+</body>
+</html>
