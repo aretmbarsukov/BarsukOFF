@@ -1,3 +1,5 @@
+import { initializeLeaderboardSync } from './leaderboard-store.js';
+
 const SCORE_STORAGE_KEY = 'barsukon-score-submissions';
 
 export function submitScore(gameId, score, meta = {}) {
@@ -25,3 +27,6 @@ export function submitScore(gameId, score, meta = {}) {
   window.dispatchEvent(new CustomEvent('barsukon:score', { detail: entry }));
   return { saved, entry };
 }
+
+window.submitBarsukScore = submitScore;
+initializeLeaderboardSync();

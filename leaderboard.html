@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#090a0c" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://zjfkrqkuezdvhgbudjnt.supabase.co wss://zjfkrqkuezdvhgbudjnt.supabase.co; upgrade-insecure-requests;" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="apple-touch-icon" sizes="180x180" href="./icons/icon-180.png" />
+  <link rel="stylesheet" href="./leaderboard.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./js/supabase-client.js"></script>
+  <script type="module" src="./js/leaderboard.js"></script>
+  <title>Clasificación — BarsukON</title>
+</head>
+<body>
+  <main class="terminal">
+    <header class="topbar">
+      <a class="brand" href="./index.html#games" aria-label="Volver a BarsukON">
+        <span class="brand-mark" aria-hidden="true">B</span>
+        <span><strong>BARSUK<span>ON</span></strong><small>Terminal de reparaciones</small></span>
+      </a>
+      <div class="top-actions">
+        <button id="themeButton" type="button" aria-label="Cambiar tema" aria-pressed="false">◐ <span id="themeLabel">Tema oscuro</span></button>
+        <a class="back-link" href="./index.html#auth" aria-label="Acceder con tu cuenta BarsukON">Acceder</a>
+        <a class="back-link" href="./index.html#games" aria-label="Volver a BarsukON">← Volver a BarsukON</a>
+      </div>
+    </header>
+
+    <section class="intro">
+      <p class="eyebrow">// ARCHIVO DE PUNTUACIONES</p>
+      <h1>Clasificación<br /><span>BarsukON</span></h1>
+      <p class="intro-copy">Los mejores diagnósticos, reparaciones y rescates de la comunidad.</p>
+    </section>
+
+    <section class="board">
+      <div class="controls">
+        <label>Juego
+          <select id="gameSelect" aria-label="Seleccionar juego">
+            <option value="global">Todos los juegos</option>
+            <option value="phone-rescue">Phone Rescue</option>
+            <option value="micro-soldering">Micro-Soldering Master</option>
+            <option value="os-doctor">OS Doctor: Clean Up!</option>
+          </select>
+        </label>
+        <label>Periodo
+          <select id="periodSelect" aria-label="Seleccionar periodo">
+            <option value="week">Esta semana</option>
+            <option value="all">Todos los tiempos</option>
+          </select>
+        </label>
+        <p id="weekCountdown" class="countdown" aria-live="polite">Cierre semanal: consultando…</p>
+      </div>
+      <div class="table-wrap">
+        <div class="table-head" aria-hidden="true"><span>POS.</span><span>APODO</span><span>PUNTUACIÓN</span><span>FECHA</span></div>
+        <div id="scoreRows" class="score-rows" role="list" aria-label="Clasificación"></div>
+        <p id="emptyState" class="empty-state" hidden>Aún no hay puntuaciones para este juego y periodo.</p>
+        <div id="myScoreArea" class="my-score-area" hidden></div>
+      </div>
+      <p id="statusLine" class="status-line" role="status" aria-live="polite">&gt; Conectando con la clasificación…</p>
+    </section>
+
+    <section id="nicknameSection" class="nickname-section" hidden>
+      <p class="eyebrow">// CUENTA AUTENTICADA</p>
+      <h2>&gt; elige tu apodo (3-12, letras/números/_/-):</h2>
+      <form id="nicknameForm">
+        <label for="nicknameInput">Apodo visible en la clasificación</label>
+        <div class="nickname-row"><input id="nicknameInput" type="text" minlength="3" maxlength="12" pattern="[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9_-]{3,12}" autocomplete="nickname" required aria-label="Apodo de 3 a 12 letras, números, guion o guion bajo" /><button type="submit" aria-label="Guardar apodo">Guardar apodo</button></div>
+        <p id="nicknameStatus" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <footer><span>BARSUKON · SERVICIO TÉCNICO</span><a href="./index.html#games">Volver a BarsukON</a></footer>
+  </main>
+</body>
+</html>
