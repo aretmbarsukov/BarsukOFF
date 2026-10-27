@@ -37,10 +37,10 @@
     .brand { display: flex; align-items: center; gap: 12px; }
     .brand-mark { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 13px; background: #eef5ff; color: #07111a; font-weight: 950; font-family: ui-monospace, monospace; font-size: 22px; box-shadow: 0 0 30px #66e4ff2e; }
     .brand-title { font-family: ui-monospace, monospace; font-size: 14px; font-weight: 900; letter-spacing: .13em; }
-    .brand-subtitle { margin-top: 3px; color: var(--muted); font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: .15em; text-transform: uppercase; }
+    .brand-subtitle { display: block; margin-top: 3px; color: var(--muted); font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: .15em; text-transform: uppercase; }
     .top-actions { display: flex; align-items: center; gap: 10px; }
     .back-link, .sound-button { min-height: 42px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 14px; border: 1px solid var(--line); border-radius: 13px; background: #111a27bd; color: #d3deef; font-size: 12px; font-weight: 700; }
-    .account-link { max-width: 230px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .account-link { min-width: 0; max-width: 230px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .sound-button { cursor: pointer; }
     .sound-button[aria-pressed="true"] { border-color: #67f0b055; color: var(--green); }
     .game-grid { flex: 1; min-height: 580px; display: grid; grid-template-columns: minmax(300px, .82fr) minmax(0, 1.18fr); gap: 18px; }
@@ -108,6 +108,12 @@
     }
     @media (max-width: 800px) {
       .app { min-height: 100svh; gap: 12px; padding-top: max(12px, env(safe-area-inset-top)); padding-bottom: max(14px, env(safe-area-inset-bottom)); }
+      .topbar { flex-wrap: wrap; }
+      .top-actions { display: grid; width: 100%; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+      .back-link, .sound-button { min-height: 44px; }
+      .account-link { grid-column: 1; grid-row: 1; max-width: none; justify-self: stretch; }
+      .sound-button { grid-column: 2; grid-row: 1; }
+      .top-actions > .back-link:last-child { grid-column: 1 / -1; width: 100%; }
       .game-grid { min-height: auto; grid-template-columns: 1fr; gap: 12px; }
       .bench { order: -1; min-height: 0; }
       .canvas-wrap { flex: none; height: clamp(275px, 43svh, 390px); }
@@ -123,8 +129,7 @@
     @media (max-width: 420px) {
       .brand-mark { width: 36px; height: 36px; }
       .brand-title { font-size: 12px; }
-      .back-link, .sound-button { min-height: 38px; padding: 0 10px; font-size: 11px; }
-      .account-link { max-width: 130px; }
+      .back-link, .sound-button { padding: 0 10px; font-size: 11px; }
       .sound-label { display: none; }
       .hud-item { padding: 7px 8px; font-size: 10px; }
       .briefing { padding: 17px; border-radius: 20px; }
