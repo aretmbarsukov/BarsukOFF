@@ -40,6 +40,8 @@
     .brand-subtitle { display: block; margin-top: 3px; color: var(--muted); font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: .15em; text-transform: uppercase; }
     .top-actions { display: flex; align-items: center; gap: 10px; }
     .back-link, .sound-button { min-height: 42px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 14px; border: 1px solid var(--line); border-radius: 13px; background: #111a27bd; color: #d3deef; font-size: 12px; font-weight: 700; }
+    .return-link { border-color: #66e4ff; background: linear-gradient(110deg, #d6f8ff, #70e8ff); color: #07111a; box-shadow: 0 8px 26px #66e4ff26; }
+    .return-link:hover { filter: brightness(1.08); }
     .account-link { min-width: 0; max-width: 230px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .sound-button { cursor: pointer; }
     .sound-button[aria-pressed="true"] { border-color: #67f0b055; color: var(--green); }
@@ -151,7 +153,7 @@
         <button id="soundButton" class="sound-button" type="button" aria-pressed="false" aria-label="Activar sonido">
           <span class="sound-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span class="sound-label">Sonido</span>
         </button>
-        <a class="back-link" href="./index.html#games"><span aria-hidden="true">←</span> <span>Volver a BarsukON</span></a>
+        <a class="back-link return-link" href="./index.html#games" aria-label="Volver a BarsukON"><span aria-hidden="true">←</span> <span>Volver a BarsukON</span></a>
       </div>
     </header>
 
