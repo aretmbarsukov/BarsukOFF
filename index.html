@@ -459,7 +459,7 @@
     </div>
   </div>
 
-  <div id="authModal" class="fixed inset-0 bg-black/80 hidden justify-center items-center z-[70] p-4"><div class="glass-panel rounded-3xl w-full max-w-md p-6 border border-white/10"><div class="flex items-center justify-between mb-5"><h3 class="text-2xl font-bold text-white">Tu cuenta BarsukON</h3><button type="button" onclick="closeAuthModal()" class="text-slate-400 hover:text-white" aria-label="Cerrar acceso"><i class="fa-solid fa-xmark"></i></button></div><form onsubmit="submitAuth(event)" class="space-y-4"><input id="authEmail" type="email" required placeholder="tu@email.com" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3"><input id="authPassword" type="password" required minlength="6" placeholder="Contraseña (mínimo 6)" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3"><div class="grid grid-cols-2 gap-3"><button type="submit" data-auth-mode="signin" class="py-3 rounded-xl bg-white text-black font-bold">Iniciar sesión</button><button type="button" onclick="signUp()" class="py-3 rounded-xl border border-white/20 text-white font-bold">Crear cuenta</button></div><p id="authStatus" class="text-sm text-slate-400" role="status" aria-live="polite"></p></form><div class="my-4 flex items-center gap-3 text-xs text-slate-500"><span class="h-px flex-1 bg-white/10"></span><span>O CONTINÚA CON</span><span class="h-px flex-1 bg-white/10"></span></div><div class="grid grid-cols-1 gap-3"><button type="button" onclick="signInWithOAuth('google')" class="py-3 rounded-xl border border-white/20 text-white font-bold hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-300" aria-label="Continuar con Google">Continuar con Google</button></div></div></div>
+  <div id="authModal" class="fixed inset-0 bg-black/80 hidden justify-center items-center z-[70] p-4"><div class="glass-panel rounded-3xl w-full max-w-md max-h-[90vh] overflow-y-auto p-6 border border-white/10"><div class="flex items-center justify-between mb-5"><h3 class="text-2xl font-bold text-white">Tu cuenta BarsukON</h3><button type="button" onclick="closeAuthModal()" class="text-slate-400 hover:text-white" aria-label="Cerrar acceso"><i class="fa-solid fa-xmark"></i></button></div><form onsubmit="submitAuth(event)" class="space-y-4"><input id="authEmail" type="email" required placeholder="tu@email.com" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3"><input id="authPassword" type="password" required minlength="6" placeholder="Contraseña (mínimo 6)" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3"><div class="grid grid-cols-2 gap-3"><button type="submit" data-auth-mode="signin" class="py-3 rounded-xl bg-white text-black font-bold">Iniciar sesión</button><button type="button" onclick="signUp()" class="py-3 rounded-xl border border-white/20 text-white font-bold">Crear cuenta</button></div><p id="authStatus" class="text-sm text-slate-400" role="status" aria-live="polite"></p></form><div class="my-4 flex items-center gap-3 text-xs text-slate-500"><span class="h-px flex-1 bg-white/10"></span><span>O CONTINÚA CON</span><span class="h-px flex-1 bg-white/10"></span></div><div class="grid grid-cols-1 gap-3"><button type="button" onclick="signInWithOAuth('google')" class="py-3 rounded-xl border border-white/20 text-white font-bold hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-300" aria-label="Continuar con Google">Continuar con Google</button><button type="button" onclick="signInWithOAuth('twitch')" class="py-3 rounded-xl border border-white/20 text-white font-bold hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-300" aria-label="Continuar con Twitch">Continuar con Twitch</button></div><div class="my-4 flex items-center gap-3 text-xs text-slate-500"><span class="h-px flex-1 bg-white/10"></span><span>O CON TU TELÉFONO</span><span class="h-px flex-1 bg-white/10"></span></div><form onsubmit="sendPhoneOtp(event)" class="space-y-3"><label for="authPhone" class="block text-xs text-slate-400">Teléfono con prefijo internacional</label><div class="flex gap-2"><input id="authPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+34 600 123 456" required class="min-w-0 flex-1 bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3"><button id="sendPhoneOtpButton" type="submit" class="shrink-0 rounded-xl border border-white/20 px-3 py-2 text-sm text-white font-bold hover:bg-white/10" aria-label="Enviar código SMS">Enviar código</button></div></form><form onsubmit="verifyPhoneOtp(event)" class="mt-3 flex gap-2"><label class="sr-only" for="authPhoneOtp">Código SMS</label><input id="authPhoneOtp" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="Código de 6 dígitos" required class="min-w-0 flex-1 bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3"><button id="verifyPhoneOtpButton" type="submit" class="shrink-0 rounded-xl bg-white px-3 py-2 text-sm text-black font-bold" aria-label="Verificar código SMS">Verificar</button></form></div></div>
   <div id="dashboardModal" class="fixed inset-0 bg-black/80 hidden justify-center items-center z-[70] p-4"><div class="glass-panel rounded-3xl w-full max-w-5xl max-h-[90vh] overflow-auto p-6 border border-white/10"><div class="flex items-center justify-between mb-5"><h3 id="dashboardTitle" class="text-2xl font-bold text-white">Mi cuenta</h3><div class="flex gap-2"><button onclick="signOut()" class="px-3 py-2 rounded-xl border border-red-300/30 text-red-200 text-sm">Salir</button><button onclick="closeDashboardModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div></div><p id="dashboardEmail" class="text-slate-400 text-sm mb-5"></p><div id="dashboardContent" class="space-y-5"></div></div></div>
   <div id="orderDetailsModal" class="fixed inset-0 bg-black/80 hidden justify-center items-center z-[80] p-4" role="dialog" aria-modal="true" aria-labelledby="orderDetailsTitle"><div class="glass-panel rounded-3xl w-full max-w-xl p-6 border border-white/10"><div class="flex items-center justify-between mb-5"><h3 id="orderDetailsTitle" class="text-xl font-bold text-white">Деталі замовлення</h3><button type="button" onclick="closeOrderDetails()" class="text-slate-400 hover:text-white" aria-label="Закрити"><i class="fa-solid fa-xmark"></i></button></div><div id="orderDetailsBody" class="space-y-3 text-sm text-slate-300"></div></div></div>
   <div id="wizardModal" class="fixed inset-0 bg-black/80 hidden justify-center items-center z-[70] p-4"><div class="glass-panel rounded-3xl w-full max-w-xl p-6 border border-white/10"><div class="flex items-center justify-between mb-5"><h3 class="text-2xl font-bold text-white">Diagnóstico guiado</h3><button onclick="closeWizardModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div><div id="wizardSteps"><label class="block text-sm text-slate-300 mb-2">Paso 1/4 · Marca y modelo</label><div class="grid grid-cols-2 gap-3"><input id="wizardBrand" placeholder="Marca" class="bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3"><input id="wizardModel" placeholder="Modelo" class="bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3"></div><label class="block text-sm text-slate-300 mt-4 mb-2">Síntoma principal</label><textarea id="wizardSymptom" rows="3" placeholder="Describe qué ocurre..." class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3"></textarea><div class="rounded-xl bg-amber-400/10 border border-amber-300/20 text-amber-100 text-sm p-3 mt-4">Recomendación: no cargues ni enciendas el dispositivo si está mojado o se calienta.</div><p class="text-sm text-slate-400 mt-3">Diagnóstico inicial: revisaremos el equipo y confirmaremos el presupuesto antes de reparar.</p><button onclick="submitWizard()" class="mt-5 w-full py-3 rounded-xl bg-white text-black font-bold">Solicitar cita</button></div></div></div>
@@ -1214,7 +1214,7 @@
     }
     async function signInWithOAuth(provider) {
       const status = document.getElementById('authStatus');
-      if (provider !== 'google' || !supabaseClient) {
+      if (!['google', 'twitch'].includes(provider) || !supabaseClient) {
         status.textContent = 'El acceso con este proveedor no está disponible.';
         return;
       }
@@ -1227,6 +1227,64 @@
         if (error) status.textContent = error.message;
       } catch (error) {
         status.textContent = error instanceof Error ? error.message : 'No se pudo iniciar el acceso con el proveedor.';
+      }
+    }
+    async function sendPhoneOtp(event) {
+      event.preventDefault();
+      const phoneInput = document.getElementById('authPhone');
+      const phone = phoneInput.value.replace(/[\s().-]/g, '');
+      const status = document.getElementById('authStatus');
+      const button = document.getElementById('sendPhoneOtpButton');
+      if (!/^\+[1-9]\d{7,14}$/.test(phone)) {
+        status.textContent = 'Indica un teléfono válido con prefijo internacional, por ejemplo +34 600 123 456.';
+        phoneInput.focus();
+        return;
+      }
+      if (!supabaseClient) {
+        status.textContent = 'El acceso no está disponible en este momento.';
+        return;
+      }
+      button.disabled = true;
+      status.textContent = 'Enviando código SMS…';
+      try {
+        const { error } = await supabaseClient.auth.signInWithOtp({ phone });
+        if (error) {
+          status.textContent = error.message;
+          return;
+        }
+        phoneInput.value = phone;
+        status.textContent = 'Código enviado. Revisa tus mensajes e introdúcelo aquí.';
+        document.getElementById('authPhoneOtp').focus();
+      } catch (error) {
+        status.textContent = error instanceof Error ? error.message : 'No se pudo enviar el código SMS.';
+      } finally {
+        button.disabled = false;
+      }
+    }
+    async function verifyPhoneOtp(event) {
+      event.preventDefault();
+      const phone = document.getElementById('authPhone').value.replace(/[\s().-]/g, '');
+      const token = document.getElementById('authPhoneOtp').value.trim();
+      const status = document.getElementById('authStatus');
+      const button = document.getElementById('verifyPhoneOtpButton');
+      if (!supabaseClient) {
+        status.textContent = 'El acceso no está disponible en este momento.';
+        return;
+      }
+      button.disabled = true;
+      status.textContent = 'Verificando código…';
+      try {
+        const { error } = await supabaseClient.auth.verifyOtp({ phone, token, type: 'sms' });
+        status.textContent = error ? error.message : 'Sesión iniciada.';
+        if (!error) {
+          document.getElementById('authPhoneOtp').value = '';
+          closeAuthModal();
+          await refreshAuth();
+        }
+      } catch (error) {
+        status.textContent = error instanceof Error ? error.message : 'No se pudo verificar el código SMS.';
+      } finally {
+        button.disabled = false;
       }
     }
     async function signUp() {
