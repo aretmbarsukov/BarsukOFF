@@ -195,6 +195,7 @@
   <div id="toast" class="toast" role="status" hidden></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./js/supabase-client.js"></script>
   <script>
     (() => {
       const canvas = document.getElementById('repairCanvas');
@@ -221,10 +222,7 @@
         account: document.getElementById('accountLink'),
         accountLabel: document.getElementById('accountLabel')
       };
-      const supabaseClient = window.supabase?.createClient(
-        'https://zjfkrqkuezdvhgbudjnt.supabase.co',
-        'sb_publishable_ngq1y4Zr9wCu86KTBgocSw_HmmmwEY6'
-      );
+      const supabaseClient = window.barsukonSupabaseClient;
       let gameUser = null;
       let accountBest = 0;
 
@@ -767,6 +765,7 @@
         const elapsed = Math.ceil(90 - state.seconds);
         const finalScore = won ? Math.max(0, 1000 - elapsed * 4 - state.mistakes * 65) : state.score;
         state.score = finalScore;
+        if (won) window.submitBarsukScore?.('phone-rescue', finalScore, { elapsedSeconds: elapsed, mistakes: state.mistakes });
         updateHud();
         updateProgress();
         const bestKey = 'barsukon-phone-rescue-best';
@@ -962,5 +961,6 @@
       requestAnimationFrame(tick);
     })();
   </script>
+  <script type="module" src="./js/score-api.js"></script>
 </body>
 </html>

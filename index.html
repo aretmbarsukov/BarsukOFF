@@ -21,6 +21,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./js/supabase-client.js"></script>
+  <script type="module" src="./js/leaderboard-init.js"></script>
   <script src="https://static.elfsight.com/platform/platform.js" async></script>
   <script>
     tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] } } } };
@@ -238,6 +240,7 @@
           </a>
         </article>
       </div>
+      <a id="gamesLeaderboardLink" href="./leaderboard.html" class="mt-6 inline-flex min-h-11 items-center gap-2 rounded-xl border border-sky-300/30 bg-sky-300/10 px-5 py-3 text-sm font-bold text-sky-200 transition-colors hover:bg-sky-300/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-300" aria-label="Ver la clasificación de los juegos">Ver clasificación <span aria-hidden="true">→</span></a>
     </div>
   </section>
 
@@ -456,16 +459,13 @@
     </div>
   </div>
 
-  <div id="authModal" class="fixed inset-0 bg-black/80 hidden justify-center items-center z-[70] p-4"><div class="glass-panel rounded-3xl w-full max-w-md p-6 border border-white/10"><div class="flex items-center justify-between mb-5"><h3 class="text-2xl font-bold text-white">Tu cuenta BarsukON</h3><button onclick="closeAuthModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div><form onsubmit="submitAuth(event)" class="space-y-4"><input id="authEmail" type="email" required placeholder="tu@email.com" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3"><input id="authPassword" type="password" required minlength="6" placeholder="Contraseña (mínimo 6)" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3"><div class="grid grid-cols-2 gap-3"><button type="submit" data-auth-mode="signin" class="py-3 rounded-xl bg-white text-black font-bold">Iniciar sesión</button><button type="button" onclick="signUp()" class="py-3 rounded-xl border border-white/20 text-white font-bold">Crear cuenta</button></div><p id="authStatus" class="text-sm text-slate-400"></p></form></div></div>
+  <div id="authModal" class="fixed inset-0 bg-black/80 hidden justify-center items-center z-[70] p-4"><div class="glass-panel rounded-3xl w-full max-w-md p-6 border border-white/10"><div class="flex items-center justify-between mb-5"><h3 class="text-2xl font-bold text-white">Tu cuenta BarsukON</h3><button type="button" onclick="closeAuthModal()" class="text-slate-400 hover:text-white" aria-label="Cerrar acceso"><i class="fa-solid fa-xmark"></i></button></div><form onsubmit="submitAuth(event)" class="space-y-4"><input id="authEmail" type="email" required placeholder="tu@email.com" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3"><input id="authPassword" type="password" required minlength="6" placeholder="Contraseña (mínimo 6)" class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3"><div class="grid grid-cols-2 gap-3"><button type="submit" data-auth-mode="signin" class="py-3 rounded-xl bg-white text-black font-bold">Iniciar sesión</button><button type="button" onclick="signUp()" class="py-3 rounded-xl border border-white/20 text-white font-bold">Crear cuenta</button></div><p id="authStatus" class="text-sm text-slate-400" role="status" aria-live="polite"></p></form><div class="my-4 flex items-center gap-3 text-xs text-slate-500"><span class="h-px flex-1 bg-white/10"></span><span>O CONTINÚA CON</span><span class="h-px flex-1 bg-white/10"></span></div><div class="grid grid-cols-1 gap-3"><button type="button" onclick="signInWithOAuth('google')" class="py-3 rounded-xl border border-white/20 text-white font-bold hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-300" aria-label="Continuar con Google">Continuar con Google</button></div></div></div>
   <div id="dashboardModal" class="fixed inset-0 bg-black/80 hidden justify-center items-center z-[70] p-4"><div class="glass-panel rounded-3xl w-full max-w-5xl max-h-[90vh] overflow-auto p-6 border border-white/10"><div class="flex items-center justify-between mb-5"><h3 id="dashboardTitle" class="text-2xl font-bold text-white">Mi cuenta</h3><div class="flex gap-2"><button onclick="signOut()" class="px-3 py-2 rounded-xl border border-red-300/30 text-red-200 text-sm">Salir</button><button onclick="closeDashboardModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div></div><p id="dashboardEmail" class="text-slate-400 text-sm mb-5"></p><div id="dashboardContent" class="space-y-5"></div></div></div>
   <div id="orderDetailsModal" class="fixed inset-0 bg-black/80 hidden justify-center items-center z-[80] p-4" role="dialog" aria-modal="true" aria-labelledby="orderDetailsTitle"><div class="glass-panel rounded-3xl w-full max-w-xl p-6 border border-white/10"><div class="flex items-center justify-between mb-5"><h3 id="orderDetailsTitle" class="text-xl font-bold text-white">Деталі замовлення</h3><button type="button" onclick="closeOrderDetails()" class="text-slate-400 hover:text-white" aria-label="Закрити"><i class="fa-solid fa-xmark"></i></button></div><div id="orderDetailsBody" class="space-y-3 text-sm text-slate-300"></div></div></div>
   <div id="wizardModal" class="fixed inset-0 bg-black/80 hidden justify-center items-center z-[70] p-4"><div class="glass-panel rounded-3xl w-full max-w-xl p-6 border border-white/10"><div class="flex items-center justify-between mb-5"><h3 class="text-2xl font-bold text-white">Diagnóstico guiado</h3><button onclick="closeWizardModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div><div id="wizardSteps"><label class="block text-sm text-slate-300 mb-2">Paso 1/4 · Marca y modelo</label><div class="grid grid-cols-2 gap-3"><input id="wizardBrand" placeholder="Marca" class="bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3"><input id="wizardModel" placeholder="Modelo" class="bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3"></div><label class="block text-sm text-slate-300 mt-4 mb-2">Síntoma principal</label><textarea id="wizardSymptom" rows="3" placeholder="Describe qué ocurre..." class="w-full bg-black/60 border border-white/15 text-white rounded-xl px-4 py-3"></textarea><div class="rounded-xl bg-amber-400/10 border border-amber-300/20 text-amber-100 text-sm p-3 mt-4">Recomendación: no cargues ni enciendas el dispositivo si está mojado o se calienta.</div><p class="text-sm text-slate-400 mt-3">Diagnóstico inicial: revisaremos el equipo y confirmaremos el presupuesto antes de reparar.</p><button onclick="submitWizard()" class="mt-5 w-full py-3 rounded-xl bg-white text-black font-bold">Solicitar cita</button></div></div></div>
 
   <script>
-    const SUPABASE_URL = 'https://zjfkrqkuezdvhgbudjnt.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_ngq1y4Zr9wCu86KTBgocSw_HmmmwEY6';
-    const SUPABASE_PUBLISHABLE_KEY = SUPABASE_ANON_KEY;
-    const supabaseClient = window.supabase?.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+    const supabaseClient = window.barsukonSupabaseClient;
     let currentUser = null;
     let currentUserIsAdmin = false;
     let currentDashboardView = 'account';
@@ -504,7 +504,7 @@
     const translations = {
       es: {
         navHome:'Inicio', navGames:'Juegos', navPromotions:'Promociones', navReviews:'Opiniones', navComparison:'Antes y después', navCalc:'Calculadora', navTech:'Anatomía', navServices:'Servicios', navMobileService:'Reparación a domicilio', navInstagram:'Instagram', navStatus:'Seguimiento', navDiagnostic:'Diagnóstico guiado', navFaq:'Preguntas frecuentes',
-        navEmpresa:'Proyecto Empresa', menuSections:'Explora BarsukON', menuButton:'Secciones', book:'Reservar cita', gamesEyebrow:'JUEGOS', gamesHeading:'Juega en BarsukON', gamesLead:'Elige un reto de reparación y disfruta de una partida.', gamesPhoneRescue:'Phone Rescue', gamesPhoneRescueDescription:'Diagnostica una avería, limpia la placa y devuelve el teléfono a la vida antes de que se agote el tiempo.', gamesMicroSolderingDescription:'Reconecta pistas microscópicas con pulso firme. Controla el calor y evita cortocircuitos antes de que termine el tiempo.', gamesOSDoctorDescription:'Ordena fotos duplicadas, caché y aplicaciones pesadas para liberar memoria. Conserva los archivos del sistema y devuelve la velocidad al teléfono.', gamesPlay:'Jugar', mobileServiceTitle:'Reparación en furgoneta: vamos hasta ti', mobileServiceLead:'Solicita una visita en Castellón y localidades cercanas dentro de 30 km. Consulta horarios y reserva hasta con 14 días de antelación.', mobileServiceCta:'Solicitar visita', mobileServicePriceNote:'Desplazamiento: +30 € sobre la estimación de reparación. No hay cobro al enviar la solicitud.', heroBadge:'Reparación exprés desde 20 min • Garantía 6 meses',
+        navEmpresa:'Proyecto Empresa', menuSections:'Explora BarsukON', menuButton:'Secciones', book:'Reservar cita', gamesEyebrow:'JUEGOS', gamesHeading:'Juega en BarsukON', gamesLead:'Elige un reto de reparación y disfruta de una partida.', gamesPhoneRescue:'Phone Rescue', gamesPhoneRescueDescription:'Diagnostica una avería, limpia la placa y devuelve el teléfono a la vida antes de que se agote el tiempo.', gamesMicroSolderingDescription:'Reconecta pistas microscópicas con pulso firme. Controla el calor y evita cortocircuitos antes de que termine el tiempo.', gamesOSDoctorDescription:'Ordena fotos duplicadas, caché y aplicaciones pesadas para liberar memoria. Conserva los archivos del sistema y devuelve la velocidad al teléfono.', gamesPlay:'Jugar', gamesLeaderboard:'Ver clasificación', mobileServiceTitle:'Reparación en furgoneta: vamos hasta ti', mobileServiceLead:'Solicita una visita en Castellón y localidades cercanas dentro de 30 km. Consulta horarios y reserva hasta con 14 días de antelación.', mobileServiceCta:'Solicitar visita', mobileServicePriceNote:'Desplazamiento: +30 € sobre la estimación de reparación. No hay cobro al enviar la solicitud.', heroBadge:'Reparación exprés desde 20 min • Garantía 6 meses',
         heroTitle:'Precisión quirúrgica para tu', heroDesc:'Servicio técnico minimalista de alta gama BarsukON. Sustitución de módulos, microsoldadura BGA y restauración tras mojado.',
         calcTitle:'Calculadora de presupuesto', calcSub:'Selecciona la marca, busca el modelo y obtén un presupuesto instantáneo.',
         stepBrand:'1. Selecciona la marca', stepModel:'2. Modelo del dispositivo', stepIssue:'3. Tipo de avería',
@@ -523,7 +523,7 @@
       },
       en: {
         navHome:'Home', navGames:'Games', navPromotions:'Promotions', navReviews:'Reviews', navComparison:'Before and after', navCalc:'Calculator', navTech:'Anatomy', navServices:'Services', navMobileService:'Mobile repair', navInstagram:'Instagram', navStatus:'Tracking', navDiagnostic:'Guided diagnostics', navFaq:'FAQ',
-        navEmpresa:'Business project', menuSections:'Explore BarsukON', menuButton:'Sections', book:'Book appointment', gamesEyebrow:'GAMES', gamesHeading:'Play at BarsukON', gamesLead:'Choose a repair challenge and enjoy a game.', gamesPhoneRescue:'Phone Rescue', gamesPhoneRescueDescription:'Diagnose a fault, clean the board, and bring the phone back to life before time runs out.', gamesMicroSolderingDescription:'Reconnect microscopic traces with a steady hand. Control the heat and avoid short circuits before time runs out.', gamesOSDoctorDescription:'Sort duplicate photos, cache, and heavy apps to free up memory. Keep system files safe and get the phone running smoothly again.', gamesPlay:'Play', mobileServiceTitle:'Mobile workshop: we come to you', mobileServiceLead:'Request a visit in Castellón and nearby towns within a 30 km radius. Check opening times and book up to 14 days ahead.', mobileServiceCta:'Request a visit', mobileServicePriceNote:'Travel fee: +€30 on top of the repair estimate. No payment is taken when you submit a request.', heroBadge:'Express repair from 20 min • 6-month warranty',
+        navEmpresa:'Business project', menuSections:'Explore BarsukON', menuButton:'Sections', book:'Book appointment', gamesEyebrow:'GAMES', gamesHeading:'Play at BarsukON', gamesLead:'Choose a repair challenge and enjoy a game.', gamesPhoneRescue:'Phone Rescue', gamesPhoneRescueDescription:'Diagnose a fault, clean the board, and bring the phone back to life before time runs out.', gamesMicroSolderingDescription:'Reconnect microscopic traces with a steady hand. Control the heat and avoid short circuits before time runs out.', gamesOSDoctorDescription:'Sort duplicate photos, cache, and heavy apps to free up memory. Keep system files safe and get the phone running smoothly again.', gamesPlay:'Play', gamesLeaderboard:'View leaderboard', mobileServiceTitle:'Mobile workshop: we come to you', mobileServiceLead:'Request a visit in Castellón and nearby towns within a 30 km radius. Check opening times and book up to 14 days ahead.', mobileServiceCta:'Request a visit', mobileServicePriceNote:'Travel fee: +€30 on top of the repair estimate. No payment is taken when you submit a request.', heroBadge:'Express repair from 20 min • 6-month warranty',
         heroTitle:'Surgical precision for your', heroDesc:'High-end technical service by BarsukON. Module replacement, BGA microsoldering, and liquid damage recovery.',
         calcTitle:'Repair estimate calculator', calcSub:'Select a brand, search a model, and get an instant estimate.',
         stepBrand:'1. Select the brand', stepModel:'2. Device model', stepIssue:'3. Type of damage',
@@ -614,7 +614,7 @@
         '#mobileNavHome > span:last-child': 'navHome', '#mobileNavGames > span:last-child': 'navGames', '#mobileNavPromotions > span:last-child': 'navPromotions', '#mobileNavReviews > span:last-child': 'navReviews', '#mobileNavComparison > span:last-child': 'navComparison',
         '#mobileNavCalc > span:last-child': 'navCalc', '#mobileNavTech > span:last-child': 'navTech', '#mobileNavServices > span:last-child': 'navServices', '#mobileNavMobileService > span:last-child': 'navMobileService', '#mobileNavInstagram > span:last-child': 'navInstagram', '#mobileNavStatus > span:last-child': 'navStatus', '#mobileNavDiagnostic > span:last-child': 'navDiagnostic',
         '#mobileNavFaq > span:last-child': 'navFaq', '#menuSectionsHeading': 'menuSections', '#mobileMenuLabel': 'menuButton', '#heroBadge': 'heroBadge', '#heroTitle': 'heroTitle', '#heroDesc': 'heroDesc',
-        '#gamesEyebrow': 'gamesEyebrow', '#gamesHeading': 'gamesHeading', '#gamesLead': 'gamesLead', '#gamesPhoneRescueTitle': 'gamesPhoneRescue', '#gamesPhoneRescueDescription': 'gamesPhoneRescueDescription', '#gamesMicroSolderingDescription': 'gamesMicroSolderingDescription', '#gamesOSDoctorDescription': 'gamesOSDoctorDescription', '#gamesPhoneRescuePlay': 'gamesPlay', '#gamesMicroSolderingPlay': 'gamesPlay', '#gamesOSDoctorPlay': 'gamesPlay',
+        '#gamesEyebrow': 'gamesEyebrow', '#gamesHeading': 'gamesHeading', '#gamesLead': 'gamesLead', '#gamesPhoneRescueTitle': 'gamesPhoneRescue', '#gamesPhoneRescueDescription': 'gamesPhoneRescueDescription', '#gamesMicroSolderingDescription': 'gamesMicroSolderingDescription', '#gamesOSDoctorDescription': 'gamesOSDoctorDescription', '#gamesPhoneRescuePlay': 'gamesPlay', '#gamesMicroSolderingPlay': 'gamesPlay', '#gamesOSDoctorPlay': 'gamesPlay', '#gamesLeaderboardLink': 'gamesLeaderboard',
         '#calcTitle': 'calcTitle', '#calcSub': 'calcSub', '#calcStep1': 'stepBrand', '#calcStep2': 'stepModel',
         '#calcStep3': 'stepIssue', '#calcStep4': 'stepQuality', '#modelSearch': 'modelPlaceholder',
         '#summaryTitle': 'summary', '#warrantyLabel': 'warranty', '#timeLabel': 'time', '#totalLabel': 'total',
@@ -1212,6 +1212,23 @@
       document.getElementById('authStatus').textContent = error ? error.message : 'Sesión iniciada.';
       if (!error) { closeAuthModal(); await refreshAuth(); }
     }
+    async function signInWithOAuth(provider) {
+      const status = document.getElementById('authStatus');
+      if (provider !== 'google' || !supabaseClient) {
+        status.textContent = 'El acceso con este proveedor no está disponible.';
+        return;
+      }
+      status.textContent = 'Conectando con el proveedor…';
+      try {
+        const { error } = await supabaseClient.auth.signInWithOAuth({
+          provider,
+          options: { redirectTo: window.location.origin + window.location.pathname }
+        });
+        if (error) status.textContent = error.message;
+      } catch (error) {
+        status.textContent = error instanceof Error ? error.message : 'No se pudo iniciar el acceso con el proveedor.';
+      }
+    }
     async function signUp() {
       const phone = document.getElementById('signupPhone').value.trim();
       if (!/^\+[1-9][\d\s().-]{7,18}$/.test(phone)) {
@@ -1728,6 +1745,7 @@
 
     const savedPreferences = loadPreferences();
     applyLanguage();
+    if (new URLSearchParams(location.search).get('booking') === '1') openBookingModal();
     initializeMobileRepairForm();
     renderModels();
     if (savedPreferences.model) document.getElementById('modelSearch').value = savedPreferences.model;
