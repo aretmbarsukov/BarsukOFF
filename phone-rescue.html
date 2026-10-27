@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#070a10" />
+  <meta name="description" content="BarsukON Phone Rescue — интерактивная игра-симулятор ремонта смартфона." />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob:; connect-src 'self' https://zjfkrqkuezdvhgbudjnt.supabase.co wss://zjfkrqkuezdvhgbudjnt.supabase.co; media-src 'self'; upgrade-insecure-requests;" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="apple-touch-icon" sizes="180x180" href="./icons/icon-180.png" />
+  <title>Phone Rescue — BarsukON</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #070a10;
+      color: #eef5ff;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      --panel: rgba(15, 23, 36, .86);
+      --line: rgba(170, 197, 230, .13);
+      --muted: #91a1b9;
+      --cyan: #66e4ff;
+      --green: #67f0b0;
+      --orange: #ff9a64;
+    }
+
+    * { box-sizing: border-box; }
+    body { min-width: 320px; min-height: 100vh; margin: 0; overflow-x: hidden; background: radial-gradient(ellipse at 75% 15%, #11263a 0, transparent 38%), radial-gradient(ellipse at 12% 90%, #10211e 0, transparent 32%), #070a10; }
+    button, a { color: inherit; font: inherit; }
+    button { touch-action: manipulation; }
+    a { text-decoration: none; }
+    button:focus-visible, a:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
+    .app { width: min(1440px, 100%); min-height: 100vh; margin: 0 auto; padding: 22px clamp(14px, 3vw, 42px) 28px; display: flex; flex-direction: column; gap: 20px; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; gap: 14px; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-mark { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 13px; background: #eef5ff; color: #07111a; font-weight: 950; font-family: ui-monospace, monospace; font-size: 22px; box-shadow: 0 0 30px #66e4ff2e; }
+    .brand-title { font-family: ui-monospace, monospace; font-size: 14px; font-weight: 900; letter-spacing: .13em; }
+    .brand-subtitle { margin-top: 3px; color: var(--muted); font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: .15em; text-transform: uppercase; }
+    .top-actions { display: flex; align-items: center; gap: 10px; }
+    .back-link, .sound-button { min-height: 42px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 14px; border: 1px solid var(--line); border-radius: 13px; background: #111a27bd; color: #d3deef; font-size: 12px; font-weight: 700; }
+    .account-link { max-width: 230px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .sound-button { cursor: pointer; }
+    .sound-button[aria-pressed="true"] { border-color: #67f0b055; color: var(--green); }
+    .game-grid { flex: 1; min-height: 580px; display: grid; grid-template-columns: minmax(300px, .82fr) minmax(0, 1.18fr); gap: 18px; }
+    .briefing, .bench { min-width: 0; border: 1px solid var(--line); border-radius: 24px; background: linear-gradient(145deg, #121c2beF, #0d1420ef); box-shadow: 0 24px 80px #0005, inset 0 1px #ffffff08; }
+    .briefing { position: relative; z-index: 1; display: flex; flex-direction: column; padding: clamp(20px, 3vw, 34px); overflow: hidden; }
+    .briefing::before { position: absolute; z-index: -1; top: -110px; right: -120px; width: 260px; height: 260px; border: 1px solid #66e4ff16; border-radius: 50%; box-shadow: 0 0 0 25px #66e4ff08, 0 0 0 55px #66e4ff05; content: ""; }
+    .eyebrow { color: var(--cyan); font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; }
+    h1 { margin: 13px 0 12px; font-size: clamp(30px, 4vw, 51px); line-height: .98; letter-spacing: -.055em; }
+    h1 span { color: var(--cyan); }
+    .intro { max-width: 42ch; margin: 0; color: #a7b5ca; font-size: 14px; line-height: 1.7; }
+    .mission-card { display: flex; gap: 13px; margin: 24px 0 19px; padding: 15px; border: 1px solid #66e4ff24; border-radius: 17px; background: #66e4ff08; }
+    .mission-icon { width: 38px; height: 38px; flex: 0 0 38px; display: grid; place-items: center; border: 1px solid #66e4ff2e; border-radius: 12px; color: var(--cyan); font-size: 19px; }
+    .mission-title { margin: 0 0 5px; font-size: 13px; font-weight: 800; }
+    .mission-copy { margin: 0; color: #9cacc1; font-size: 11px; line-height: 1.55; }
+    .progress-head { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 10px; color: var(--muted); font-family: ui-monospace, monospace; font-size: 10px; text-transform: uppercase; }
+    .progress-track { height: 5px; overflow: hidden; border-radius: 99px; background: #273344; }
+    .progress-fill { width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #66e4ff, #67f0b0); box-shadow: 0 0 16px #66e4ff8a; transition: width .45s ease; }
+    .step-list { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; margin: 15px 0 22px; }
+    .step-dot { height: 4px; border-radius: 10px; background: #273344; }
+    .step-dot.done { background: var(--green); box-shadow: 0 0 12px #67f0b075; }
+    .step-dot.current { background: var(--cyan); box-shadow: 0 0 12px #66e4ff99; }
+    .stage-title { margin: 0 0 8px; font-size: 20px; letter-spacing: -.03em; }
+    .stage-description { min-height: 46px; margin: 0; color: #a7b5ca; font-size: 13px; line-height: 1.6; }
+    .stage-content { margin-top: 15px; }
+    .stage-status { min-height: 24px; margin: 12px 0 0; color: var(--cyan); font-size: 12px; line-height: 1.5; }
+    .action-area { margin-top: auto; padding-top: 22px; }
+    .primary-button, .secondary-button, .part-choice { min-height: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 9px; padding: 0 18px; border: 0; border-radius: 14px; font-weight: 850; cursor: pointer; transition: transform .18s ease, filter .18s ease, border-color .18s ease, background .18s ease; }
+    .primary-button { width: 100%; background: linear-gradient(110deg, #d6f8ff, #70e8ff); color: #07111a; box-shadow: 0 9px 28px #66e4ff22; }
+    .primary-button:hover, .secondary-button:hover, .part-choice:hover { filter: brightness(1.09); transform: translateY(-2px); }
+    .primary-button:active, .secondary-button:active, .part-choice:active { transform: translateY(0) scale(.99); }
+    .secondary-button { border: 1px solid var(--line); background: #ffffff08; color: #d5e0ef; }
+    .button-row { display: flex; gap: 9px; }
+    .button-row > * { flex: 1; }
+    .keyboard-hint { margin: 11px 0 0; color: #65758c; font-size: 10px; text-align: center; }
+    .part-choices { display: grid; gap: 8px; }
+    .part-choice { min-height: 54px; justify-content: flex-start; padding: 8px 11px; border: 1px solid var(--line); background: #ffffff06; color: #e4ecf7; text-align: left; }
+    .part-choice[aria-pressed="true"] { border-color: var(--cyan); background: #66e4ff12; }
+    .part-icon { width: 34px; height: 34px; flex: 0 0 34px; display: grid; place-items: center; border-radius: 10px; background: #ffffff0b; color: var(--cyan); }
+    .part-choice strong { display: block; font-size: 11px; }
+    .part-choice small { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; font-weight: 500; }
+    .bench { position: relative; display: flex; flex-direction: column; min-height: 0; overflow: hidden; background: radial-gradient(ellipse at 50% 48%, #102b39, #091019 68%); }
+    .bench::before { position: absolute; inset: 0; background-image: linear-gradient(#84ccff08 1px, transparent 1px), linear-gradient(90deg, #84ccff08 1px, transparent 1px); background-size: 34px 34px; mask-image: linear-gradient(transparent, black 14%, black 88%, transparent); content: ""; pointer-events: none; }
+    .bench-top { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 19px 0; color: #879ab1; font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: .13em; text-transform: uppercase; }
+    .live-label { display: inline-flex; align-items: center; gap: 7px; }
+    .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 12px var(--green); }
+    .hud { display: flex; gap: 8px; }
+    .hud-item { padding: 8px 10px; border: 1px solid #ffffff0d; border-radius: 11px; background: #0a111bb3; color: #dce8f8; font-size: 11px; letter-spacing: 0; }
+    .hud-item span { color: var(--cyan); font-weight: 900; }
+    .canvas-wrap { position: relative; flex: 1; min-height: 0; display: grid; place-items: center; padding: 0 8px; }
+    canvas { width: 100%; height: 100%; min-height: 340px; max-height: 70vh; display: block; touch-action: none; }
+    .bench-hint { position: relative; z-index: 1; min-height: 34px; margin: 0 18px 15px; padding: 9px 12px; border: 1px solid #ffffff10; border-radius: 11px; background: #080e17be; color: #96a8bd; font-size: 11px; line-height: 1.45; text-align: center; }
+    .bench-hint strong { color: var(--cyan); }
+    .sound-wave { display: flex; align-items: center; gap: 2px; height: 13px; }
+    .sound-wave i { width: 2px; height: 5px; border-radius: 2px; background: currentColor; }
+    .sound-button[aria-pressed="true"] .sound-wave i { animation: wave .7s ease-in-out infinite alternate; }
+    .sound-wave i:nth-child(2n) { animation-delay: .2s; }
+    .sound-wave i:nth-child(3n) { animation-delay: .35s; }
+    .toast { position: fixed; z-index: 10; inset: auto 16px calc(16px + env(safe-area-inset-bottom)) 16px; max-width: 460px; margin: auto; padding: 13px 16px; border: 1px solid #66e4ff40; border-radius: 14px; background: #101c2a; color: #eaf5ff; font-size: 13px; box-shadow: 0 16px 40px #0008; }
+    .win-flash { animation: winFlash .7s ease-out; }
+    @keyframes wave { to { height: 12px; } }
+    @keyframes winFlash { 0% { filter: brightness(2.2); } 100% { filter: brightness(1); } }
+    @media (min-width: 1250px) and (min-height: 780px) {
+      .app { padding-top: 30px; padding-bottom: 35px; }
+      .game-grid { min-height: 680px; }
+    }
+    @media (max-width: 800px) {
+      .app { min-height: 100svh; gap: 12px; padding-top: max(12px, env(safe-area-inset-top)); padding-bottom: max(14px, env(safe-area-inset-bottom)); }
+      .game-grid { min-height: auto; grid-template-columns: 1fr; gap: 12px; }
+      .bench { order: -1; min-height: 0; }
+      .canvas-wrap { flex: none; height: clamp(275px, 43svh, 390px); }
+      canvas { min-height: 0; max-height: none; }
+      .bench-top { padding: 11px 13px 0; }
+      .bench-hint { margin: 0 12px 11px; }
+      .briefing { min-height: 410px; padding: 20px; }
+      .mission-card { margin: 15px 0 14px; }
+      .step-list { margin: 11px 0 16px; }
+      h1 { font-size: clamp(31px, 9vw, 43px); }
+      .stage-description { min-height: 0; }
+    }
+    @media (max-width: 420px) {
+      .brand-mark { width: 36px; height: 36px; }
+      .brand-title { font-size: 12px; }
+      .back-link, .sound-button { min-height: 38px; padding: 0 10px; font-size: 11px; }
+      .account-link { max-width: 130px; }
+      .sound-label { display: none; }
+      .hud-item { padding: 7px 8px; font-size: 10px; }
+      .briefing { padding: 17px; border-radius: 20px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <a class="brand" href="./index.html#games" aria-label="Volver a BarsukON">
+        <span class="brand-mark" aria-hidden="true">B</span>
+        <span><span class="brand-title">BARSUK<span style="color:#66e4ff">ON</span></span><span class="brand-subtitle">Interactive repair lab</span></span>
+      </a>
+      <div class="top-actions">
+        <a id="accountLink" class="back-link account-link" href="./index.html#auth"><span id="accountLabel">Iniciar sesión</span></a>
+        <button id="soundButton" class="sound-button" type="button" aria-pressed="false" aria-label="Activar sonido">
+          <span class="sound-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span class="sound-label">Sonido</span>
+        </button>
+        <a class="back-link" href="./index.html#games"><span aria-hidden="true">←</span> <span>Volver a BarsukON</span></a>
+      </div>
+    </header>
+
+    <div class="game-grid">
+      <section class="briefing" aria-labelledby="gameTitle">
+        <div class="eyebrow" id="missionEyebrow">Misión especial · Terminal 01</div>
+        <h1 id="gameTitle">PHONE<br /><span>RESCUE</span></h1>
+        <p id="gameIntro" class="intro">Una tormenta dejó este teléfono a oscuras. Tienes 90 segundos para encontrar el fallo, reparar la placa y devolverlo a la vida. El banco de trabajo es tuyo.</p>
+
+        <div class="mission-card">
+          <div class="mission-icon" aria-hidden="true">◈</div>
+          <div><p class="mission-title" id="missionTitle">Caso #014 · Daño por humedad</p><p class="mission-copy" id="missionCopy">Pantalla negra. Indicadores de líquido activados. Tu mejor puntuación se guarda en tu cuenta si inicias sesión.</p></div>
+        </div>
+
+        <div class="progress-head"><span id="phaseLabel">Prepara el taller</span><span id="progressLabel">0 / 5</span></div>
+        <div class="progress-track" role="progressbar" aria-label="Progreso de la reparación" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0"><div id="progressFill" class="progress-fill"></div></div>
+        <div id="stepList" class="step-list" aria-label="Fases de reparación"></div>
+        <h2 id="stageTitle" class="stage-title">¿Puedes revivirlo?</h2>
+        <p id="stageDescription" class="stage-description">Toca «Empezar misión» y descubre si tienes pulso de técnico. Funciona con ratón, pantalla táctil o teclado.</p>
+        <div id="stageContent" class="stage-content"></div>
+        <p id="stageStatus" class="stage-status" aria-live="polite"></p>
+        <div id="actionArea" class="action-area">
+          <button id="startButton" class="primary-button" type="button"><span>Empezar misión</span><span aria-hidden="true">↗</span></button>
+          <p class="keyboard-hint" id="controlHint">Teclado: pulsa Enter para comenzar · sin descargas</p>
+        </div>
+      </section>
+
+      <section class="bench" aria-label="Banco de trabajo interactivo">
+        <div class="bench-top">
+          <span class="live-label"><span class="live-dot" aria-hidden="true"></span><span id="benchLabel">Mesa de reparación</span></span>
+          <div class="hud">
+            <div class="hud-item">⏱ <span id="timerLabel">01:30</span></div>
+            <div class="hud-item">✦ <span id="scoreLabel">0000</span></div>
+          </div>
+        </div>
+        <div class="canvas-wrap"><canvas id="repairCanvas" aria-label="Teléfono interactivo. Pulsa los módulos marcados." role="img"></canvas></div>
+        <p id="benchHint" class="bench-hint">Observa el teléfono: los módulos con pulsos de luz se pueden tocar.</p>
+      </section>
+    </div>
+  </main>
+  <div id="toast" class="toast" role="status" hidden></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    (() => {
+      const canvas = document.getElementById('repairCanvas');
+      const ctx = canvas.getContext('2d', { alpha: false });
+      const ui = {
+        eyebrow: document.getElementById('missionEyebrow'),
+        intro: document.getElementById('gameIntro'),
+        phase: document.getElementById('phaseLabel'),
+        progress: document.getElementById('progressLabel'),
+        fill: document.getElementById('progressFill'),
+        progressBar: document.querySelector('[role="progressbar"]'),
+        steps: document.getElementById('stepList'),
+        title: document.getElementById('stageTitle'),
+        description: document.getElementById('stageDescription'),
+        content: document.getElementById('stageContent'),
+        status: document.getElementById('stageStatus'),
+        action: document.getElementById('actionArea'),
+        timer: document.getElementById('timerLabel'),
+        score: document.getElementById('scoreLabel'),
+        hint: document.getElementById('benchHint'),
+        toast: document.getElementById('toast'),
+        sound: document.getElementById('soundButton'),
+        bench: document.querySelector('.bench'),
+        account: document.getElementById('accountLink'),
+        accountLabel: document.getElementById('accountLabel')
+      };
+      const supabaseClient = window.supabase?.createClient(
+        'https://zjfkrqkuezdvhgbudjnt.supabase.co',
+        'sb_publishable_ngq1y4Zr9wCu86KTBgocSw_HmmmwEY6'
+      );
+      let gameUser = null;
+      let accountBest = 0;
+
+      const stages = [
+        { title: 'Encuentra la avería', phase: '01 · DIAGNÓSTICO' },
+        { title: 'Limpia la placa', phase: '02 · RESTAURACIÓN' },
+        { title: 'Elige una pantalla', phase: '03 · COMPONENTES' },
+        { title: 'Microsoldadura', phase: '04 · PRECISIÓN' },
+        { title: 'El momento de la verdad', phase: '05 · ARRANQUE' }
+      ];
+      const scanTargets = [{ x: 405, y: 256 }, { x: 577, y: 340 }, { x: 432, y: 447 }];
+      const corrosionTargets = [{ x: 425, y: 362 }, { x: 578, y: 414 }];
+      const state = {
+        stage: -1,
+        seconds: 90,
+        score: 0,
+        mistakes: 0,
+        scans: new Set(),
+        cleaned: new Set(),
+        brushTrail: [],
+        pulses: [],
+        particles: [],
+        pointerDown: false,
+        solderStartedAt: 0,
+        bootStartedAt: 0,
+        bootHeld: false,
+        lastFrame: 0,
+        lastSecond: 0,
+        toastTimer: 0,
+        audio: null,
+        soundOn: false,
+        finished: false
+      };
+
+      const phaseLabels = ['01 · DIAGNÓSTICO', '02 · RESTAURACIÓN', '03 · COMPONENTES', '04 · PRECISIÓN', '05 · ARRANQUE'];
+
+      function resizeCanvas() {
+        const bounds = canvas.getBoundingClientRect();
+        const ratio = Math.min(window.devicePixelRatio || 1, 1.75);
+        canvas.width = Math.round(bounds.width * ratio);
+        canvas.height = Math.round(bounds.height * ratio);
+        ctx.setTransform(canvas.width / 1000, 0, 0, canvas.height / 700, 0, 0);
+      }
+
+      function roundedRect(x, y, width, height, radius, fill, stroke) {
+        ctx.beginPath();
+        ctx.roundRect(x, y, width, height, radius);
+        if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+        if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 2; ctx.stroke(); }
+      }
+
+      function glow(x, y, radius, color, strength = .35) {
+        const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
+        gradient.addColorStop(0, `rgba(${color.replace('ALPHA', String(strength))})`);
+        gradient.addColorStop(1, `rgba(${color.replace('ALPHA', '0')})`);
+        ctx.fillStyle = gradient;
+        ctx.fillRect(x - radius, y - radius, radius * 2, radius * 2);
+      }
+
+      function drawBackground(time) {
+        ctx.fillStyle = '#09111a';
+        ctx.fillRect(0, 0, 1000, 700);
+        const backgroundGlow = ctx.createRadialGradient(500, 300, 20, 500, 320, 570);
+        backgroundGlow.addColorStop(0, '#11283a');
+        backgroundGlow.addColorStop(1, '#09111a');
+        ctx.fillStyle = backgroundGlow;
+        ctx.fillRect(0, 0, 1000, 700);
+        ctx.strokeStyle = '#83b9dc0d';
+        ctx.lineWidth = 1;
+        for (let x = 20; x < 1000; x += 38) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 700); ctx.stroke();
+        }
+        for (let y = 12; y < 700; y += 38) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(1000, y); ctx.stroke();
+        }
+        for (let i = 0; i < 13; i++) {
+          const x = (i * 193 + time * .018) % 1030 - 15;
+          const y = (i * 83 + Math.sin(time * .001 + i) * 24 + 700) % 700;
+          ctx.fillStyle = i % 3 ? '#80dcff29' : '#67f0b035';
+          ctx.fillRect(x, y, 2, 2);
+        }
+      }
+
+      function drawCircuitBoard(time) {
+        roundedRect(354, 150, 292, 435, 23, '#0b2b35', '#3fd2ce54');
+        roundedRect(369, 168, 262, 400, 16, '#0b202b', '#a0e3c01c');
+        ctx.save();
+        ctx.beginPath(); ctx.roundRect(369, 168, 262, 400, 16); ctx.clip();
+        ctx.strokeStyle = '#50d8be62'; ctx.lineWidth = 3; ctx.lineCap = 'round';
+        const traces = [
+          [[385, 205], [425, 205], [425, 236], [470, 236]],
+          [[600, 204], [565, 204], [565, 247], [527, 247]],
+          [[390, 320], [427, 320], [427, 350], [463, 350]],
+          [[609, 303], [573, 303], [573, 336], [536, 336]],
+          [[386, 455], [433, 455], [433, 423], [465, 423]],
+          [[612, 449], [566, 449], [566, 411], [537, 411]],
+          [[428, 520], [428, 485], [468, 485]],
+          [[579, 516], [579, 477], [538, 477]]
+        ];
+        traces.forEach((trace, index) => {
+          ctx.beginPath();
+          trace.forEach(([x, y], point) => point ? ctx.lineTo(x, y) : ctx.moveTo(x, y));
+          ctx.strokeStyle = index % 2 ? '#6fe9d044' : '#62d8ef38';
+          ctx.stroke();
+        });
+        for (let i = 0; i < 20; i++) {
+          const x = 391 + (i * 43) % 225;
+          const y = 190 + (i * 67) % 350;
+          ctx.fillStyle = '#73e6cc5c';
+          ctx.beginPath(); ctx.arc(x, y, 2.2, 0, Math.PI * 2); ctx.fill();
+        }
+        ctx.restore();
+
+        roundedRect(455, 268, 92, 82, 8, '#172735', '#90b4c448');
+        ctx.fillStyle = '#8badc520';
+        for (let i = 0; i < 5; i++) {
+          ctx.fillRect(464 + i * 15, 278, 6, 62);
+          ctx.fillRect(461, 279 + i * 14, 80, 5);
+        }
+        roundedRect(391, 372, 112, 78, 9, state.stage >= 2 ? '#142d32' : '#222933', state.stage >= 2 ? '#67f0b088' : '#ff9a6473');
+        ctx.fillStyle = '#a4e8d1';
+        ctx.font = '700 11px ui-monospace, monospace';
+        ctx.fillText('BATTERY', 416, 414);
+        roundedRect(530, 371, 69, 40, 8, '#142935', '#71d4ee55');
+        ctx.fillStyle = '#7cebd5';
+        ctx.font = '700 9px ui-monospace, monospace';
+        ctx.fillText('TAPTIC', 543, 395);
+        roundedRect(397, 474, 76, 43, 7, '#132832', '#71d4ee49');
+        ctx.fillText('USB-C', 413, 500);
+
+        if (state.stage < 3) {
+          ctx.fillStyle = '#a6d7f0';
+          for (let i = 0; i < 12; i++) {
+            const y = 174 + i * 31;
+            ctx.fillRect(338, y, 15, 3);
+            ctx.fillRect(647, y, 15, 3);
+          }
+        }
+        if (state.stage < 2) {
+          const corrosion = [{ x: 425, y: 362 }, { x: 578, y: 414 }];
+          corrosion.forEach((spot, index) => {
+            if (state.cleaned.has(index)) return;
+            for (let i = 0; i < 8; i++) {
+              const angle = i * Math.PI / 4;
+              ctx.fillStyle = i % 2 ? '#e5a450' : '#57be78';
+              ctx.beginPath(); ctx.arc(spot.x + Math.cos(angle) * (8 + i % 3 * 5), spot.y + Math.sin(angle) * (7 + i % 2 * 6), 4, 0, Math.PI * 2); ctx.fill();
+            }
+          });
+        }
+        if (state.stage === 0) {
+          scanTargets.forEach((target, index) => {
+            if (state.scans.has(index)) return;
+            const pulse = 14 + Math.sin(time * .006 + index * 2) * 4;
+            glow(target.x, target.y, 48, '102,228,255,ALPHA', .2);
+            ctx.strokeStyle = '#66e4ff';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath(); ctx.arc(target.x, target.y, pulse, 0, Math.PI * 2); ctx.stroke();
+            ctx.fillStyle = '#66e4ff'; ctx.beginPath(); ctx.arc(target.x, target.y, 4, 0, Math.PI * 2); ctx.fill();
+          });
+        }
+        if (state.stage === 1) {
+          corrosionTargets.forEach((target, index) => {
+            if (state.cleaned.has(index)) return;
+            ctx.strokeStyle = '#ff9a64';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath(); ctx.arc(target.x, target.y, 29 + Math.sin(time * .006) * 3, 0, Math.PI * 2); ctx.stroke();
+            ctx.setLineDash([]);
+          });
+          state.brushTrail.forEach((point, index) => {
+            ctx.fillStyle = `rgba(102,228,255,${.4 * (index / state.brushTrail.length)})`;
+            ctx.beginPath(); ctx.arc(point.x, point.y, 8, 0, Math.PI * 2); ctx.fill();
+          });
+        }
+      }
+
+      function drawPhone(time) {
+        const bob = state.stage === -1 || state.stage === 5 || state.stage === 6 ? Math.sin(time * .0018) * 4 : 0;
+        ctx.save();
+        ctx.translate(0, bob);
+        glow(500, 364, 310, state.stage >= 5 ? '74,241,172,ALPHA' : '71,205,225,ALPHA', state.stage >= 5 ? .19 : .11);
+        ctx.save();
+        ctx.shadowBlur = 32;
+        ctx.shadowColor = state.stage >= 5 ? '#67f0b054' : '#4fd9f04c';
+        roundedRect(313, 40, 374, 606, 48, '#17212d', '#a9c1d438');
+        ctx.restore();
+        roundedRect(322, 49, 356, 588, 42, '#070b11', '#dae7f020');
+        roundedRect(340, 67, 320, 552, 31, state.stage >= 5 ? '#071510' : '#0a1219', '#77b9d036');
+        roundedRect(433, 79, 134, 20, 11, '#030508', '#ffffff08');
+        ctx.fillStyle = '#bbd1df';
+        ctx.font = '600 11px ui-monospace, monospace';
+        ctx.fillText('BARSUKON · LAB', 359, 124);
+        ctx.textAlign = 'right';
+        ctx.fillStyle = '#8aa8b8';
+        ctx.fillText('01:30', 639, 124);
+        ctx.textAlign = 'left';
+        drawCircuitBoard(time);
+        if (state.stage >= 3) {
+          ctx.strokeStyle = '#67f0b0';
+          ctx.lineWidth = 3;
+          ctx.beginPath(); ctx.roundRect(388, 181, 224, 52, 8); ctx.stroke();
+          ctx.fillStyle = '#67f0b0';
+          ctx.font = '700 11px ui-monospace, monospace';
+          ctx.fillText(state.stage >= 4 ? 'OLED · ORIGINAL' : 'MÓDULO OLED', 441, 212);
+        }
+        if (state.stage >= 5) {
+          const powered = state.stage === 6;
+          const display = ctx.createLinearGradient(340, 120, 660, 620);
+          display.addColorStop(0, powered ? '#102f37' : '#111d25');
+          display.addColorStop(1, powered ? '#0b1c25' : '#0b1118');
+          roundedRect(340, 116, 320, 503, 26, display, powered ? '#67f0b05e' : '#ffffff08');
+          ctx.textAlign = 'center';
+          ctx.fillStyle = powered ? '#67f0b0' : '#7b91a8';
+          ctx.font = '800 18px ui-monospace, monospace';
+          ctx.fillText(powered ? 'SYSTEM ONLINE' : 'BOOTLOADER', 500, 350);
+          ctx.fillStyle = powered ? '#eafcff' : '#9eb0c4';
+          ctx.font = '500 12px ui-monospace, monospace';
+          ctx.fillText(powered ? 'REPAIR COMPLETE' : 'HOLD TO POWER ON', 500, 377);
+          ctx.textAlign = 'left';
+          if (powered) {
+            for (let i = 0; i < 16; i++) {
+              const x = 388 + (i * 67) % 225;
+              const y = 196 + (i * 53) % 274;
+              ctx.fillStyle = i % 2 ? '#67f0b0a1' : '#66e4ff9a';
+              ctx.beginPath(); ctx.arc(x, y, 2 + i % 3, 0, Math.PI * 2); ctx.fill();
+            }
+          }
+        } else {
+          ctx.textAlign = 'center';
+          ctx.fillStyle = '#426072';
+          ctx.font = '700 13px ui-monospace, monospace';
+          ctx.fillText(state.stage < 0 ? 'AWAITING TECHNICIAN' : 'DEVICE LOCKED', 500, 591);
+          ctx.textAlign = 'left';
+        }
+        roundedRect(482, 651, 36, 4, 4, '#93afc553');
+        ctx.restore();
+      }
+
+      function drawSolderGauge(time) {
+        if (state.stage !== 3) return;
+        roundedRect(106, 621, 788, 44, 13, '#0b141f', '#ffffff16');
+        const x = 128, width = 744;
+        ctx.fillStyle = '#ff9a6440'; ctx.fillRect(x, 638, width * .62, 10);
+        ctx.fillStyle = '#67f0b0'; ctx.fillRect(x + width * .62, 636, width * .2, 14);
+        ctx.fillStyle = '#ff9a6440'; ctx.fillRect(x + width * .82, 638, width * .16, 10);
+        const marker = (time * .00058) % 1;
+        const markerX = x + marker * width;
+        ctx.fillStyle = '#effaff';
+        ctx.shadowBlur = 12; ctx.shadowColor = '#fff';
+        ctx.beginPath(); ctx.arc(markerX, 643, 9, 0, Math.PI * 2); ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+
+      function drawParticles() {
+        state.particles = state.particles.filter(particle => particle.life > 0);
+        state.particles.forEach(particle => {
+          particle.x += particle.vx;
+          particle.y += particle.vy;
+          particle.vy += .035;
+          particle.life -= .018;
+          ctx.globalAlpha = Math.max(0, particle.life);
+          ctx.fillStyle = particle.color;
+          ctx.fillRect(particle.x, particle.y, particle.size, particle.size);
+        });
+        ctx.globalAlpha = 1;
+      }
+
+      function renderCanvas(time) {
+        ctx.setTransform(canvas.width / 1000, 0, 0, canvas.height / 700, 0, 0);
+        drawBackground(time);
+        drawPhone(time);
+        drawSolderGauge(time);
+        drawParticles();
+      }
+
+      function tick(time) {
+        const delta = Math.min(100, time - (state.lastFrame || time));
+        state.lastFrame = time;
+        if (state.stage >= 0 && state.stage < 5 && !state.finished) {
+          state.seconds -= delta / 1000;
+          if (time - state.lastSecond > 120) {
+            state.lastSecond = time;
+            updateHud();
+          }
+          if (state.seconds <= 0) {
+            state.seconds = 0;
+            finishGame(false);
+          }
+        }
+        if (state.bootHeld && state.stage === 4) {
+          const progress = Math.min(100, (time - state.bootStartedAt) / 1350 * 100);
+          const bootFill = document.getElementById('bootFill');
+          const bootPercent = document.getElementById('bootPercent');
+          if (bootFill) bootFill.style.width = `${progress}%`;
+          if (bootPercent) bootPercent.textContent = `${Math.floor(progress)} %`;
+        }
+        if (state.bootHeld && state.stage === 4 && time - state.bootStartedAt >= 1350) {
+          state.bootHeld = false;
+          state.stage = stages.length;
+          finishGame(true);
+        }
+        renderCanvas(time);
+        requestAnimationFrame(tick);
+      }
+
+      function updateHud() {
+        const seconds = Math.ceil(state.seconds);
+        ui.timer.textContent = `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
+        ui.timer.style.color = seconds < 20 ? '#ff9a64' : '';
+        ui.score.textContent = String(state.score).padStart(4, '0');
+      }
+
+      function updateProgress() {
+        const completed = Math.max(0, state.stage);
+        const percentage = Math.min(100, completed / stages.length * 100);
+        ui.fill.style.width = `${percentage}%`;
+        ui.progress.textContent = `${completed} / ${stages.length}`;
+        ui.progressBar.setAttribute('aria-valuenow', String(completed));
+        ui.steps.innerHTML = stages.map((_, index) =>
+          `<span class="step-dot ${index < completed ? 'done' : index === state.stage ? 'current' : ''}" aria-hidden="true"></span>`
+        ).join('');
+        ui.phase.textContent = state.stage < 0 ? 'Prepara el taller' : state.stage >= stages.length ? 'Misión finalizada' : stages[state.stage].phase;
+      }
+
+      function setStageContent(html) {
+        ui.content.innerHTML = html;
+      }
+
+      function setPrimaryButton(label, callback, hint) {
+        ui.action.innerHTML = `<button id="stageButton" class="primary-button" type="button"><span>${label}</span><span aria-hidden="true">↗</span></button>${hint ? `<p class="keyboard-hint">${hint}</p>` : ''}`;
+        document.getElementById('stageButton').addEventListener('click', callback);
+      }
+
+      function renderStage() {
+        updateProgress();
+        if (state.stage === -1) {
+          ui.title.textContent = '¿Puedes revivirlo?';
+          ui.description.textContent = 'Toca «Empezar misión» y descubre si tienes pulso de técnico. Funciona con ratón, pantalla táctil o teclado.';
+          ui.hint.innerHTML = 'Observa el teléfono: los módulos con pulsos de luz se pueden tocar.';
+          setStageContent('');
+          ui.action.innerHTML = '<button id="stageButton" class="primary-button" type="button"><span>Empezar misión</span><span aria-hidden="true">↗</span></button><p class="keyboard-hint">Teclado: pulsa Enter para comenzar · sin descargas</p>';
+          document.getElementById('stageButton').addEventListener('click', startGame);
+          return;
+        }
+        if (state.stage >= stages.length) return;
+        ui.title.textContent = stages[state.stage].title;
+
+        if (state.stage === 0) {
+          ui.description.textContent = 'Toca los tres módulos que parpadean en el teléfono: el conector, el circuito y el sensor de humedad.';
+          ui.hint.innerHTML = 'Toca los <strong>3 puntos luminosos</strong> del teléfono. Cada hallazgo suma puntos.';
+          setStageContent(`<p class="mission-copy">Hallazgos confirmados: <strong id="scanCount">${state.scans.size} / 3</strong></p>`);
+          ui.action.innerHTML = '<p class="keyboard-hint">Toca o haz clic directamente en los círculos de luz del teléfono.</p>';
+          return;
+        }
+        if (state.stage === 1) {
+          ui.description.textContent = 'La humedad dejó corrosión en dos zonas. Pasa el dedo o el ratón por ambos puntos naranjas hasta limpiarlos.';
+          ui.hint.innerHTML = 'Desliza sobre las <strong>dos zonas naranjas</strong> de la placa para limpiarlas.';
+          setStageContent(`<p class="mission-copy">Zonas limpias: <strong id="cleanCount">${state.cleaned.size} / 2</strong></p>`);
+          ui.action.innerHTML = '<p class="keyboard-hint">Arrastra el dedo o mantén pulsado el ratón y frota cada punto naranja.</p>';
+          return;
+        }
+        if (state.stage === 2) {
+          ui.description.textContent = 'La pantalla original quedó inutilizada. Elige la pieza correcta para este modelo; una incompatible reinicia la selección.';
+          ui.hint.innerHTML = 'Elige el <strong>módulo compatible</strong>. Una pieza equivocada resta puntos.';
+          setStageContent(`
+            <div class="part-choices" role="group" aria-label="Piezas de repuesto">
+              <button class="part-choice" type="button" data-part="lcd"><span class="part-icon">▤</span><span><strong>LCD universal</strong><small>Más barato · no es compatible</small></span></button>
+              <button class="part-choice" type="button" data-part="oled"><span class="part-icon">▧</span><span><strong>OLED original</strong><small>Color y ajuste originales</small></span></button>
+              <button class="part-choice" type="button" data-part="broken"><span class="part-icon">◩</span><span><strong>Panel usado</strong><small>Cristal roto · no probado</small></span></button>
+            </div>`);
+          ui.action.innerHTML = '<p class="keyboard-hint">Selecciona la pieza con ratón, toque, Tab y Enter.</p>';
+          ui.content.querySelectorAll('[data-part]').forEach(button => {
+            button.addEventListener('click', () => {
+              if (button.dataset.part === 'oled') {
+                state.score += 180;
+                playTone(680, .12);
+                advanceStage('OLED original instalado. La placa está lista para soldar.');
+              } else {
+                state.mistakes++;
+                state.score = Math.max(0, state.score - 75);
+                playTone(180, .18, 'triangle');
+                ui.status.textContent = 'Esta pieza no es compatible. Revisa las especificaciones del modelo.';
+                updateHud();
+              }
+            });
+          });
+          return;
+        }
+        if (state.stage === 3) {
+          ui.description.textContent = 'El contacto de la pantalla necesita microsoldadura. Pulsa cuando el indicador móvil entre en la zona verde.';
+          ui.hint.innerHTML = 'Pulsa justo cuando el indicador esté en la <strong>zona verde</strong>.';
+          setStageContent('<p class="mission-copy">Una soldadura precisa devuelve la señal a la pantalla.</p>');
+          ui.action.innerHTML = '<button id="stageButton" class="primary-button" type="button"><span>⚡ &nbsp; Soldar</span></button><p class="keyboard-hint">Pulsa el botón o la barra espaciadora al entrar en la zona verde.</p>';
+          document.getElementById('stageButton').addEventListener('click', solder);
+          return;
+        }
+        ui.description.textContent = 'Todo está conectado. Mantén pulsado el botón de encendido hasta que aparezca el logo BarsukON.';
+        ui.hint.innerHTML = 'Mantén pulsado <strong>ENCENDER</strong> durante un segundo y medio.';
+        setStageContent(`<div class="progress-track"><div id="bootFill" class="progress-fill"></div></div><p class="mission-copy" style="margin-top:9px">Arranque: <strong id="bootPercent">0 %</strong></p>`);
+        ui.action.innerHTML = '<button id="powerButton" class="primary-button" type="button"><span>⏻ &nbsp; Mantener para encender</span></button><p class="keyboard-hint">Mantén pulsado el botón, toca la pantalla o mantén Espacio.</p>';
+        const button = document.getElementById('powerButton');
+        button.addEventListener('pointerdown', beginBoot);
+        button.addEventListener('pointerup', endBoot);
+        button.addEventListener('pointerleave', endBoot);
+        button.addEventListener('pointercancel', endBoot);
+        button.addEventListener('contextmenu', event => event.preventDefault());
+      }
+
+      function startGame() {
+        state.stage = 0;
+        state.seconds = 90;
+        state.score = 0;
+        state.mistakes = 0;
+        state.scans.clear();
+        state.cleaned.clear();
+        state.brushTrail = [];
+        state.finished = false;
+        updateHud();
+        renderStage();
+        playTone(520, .11);
+      }
+
+      function advanceStage(message) {
+        state.stage++;
+        if (state.stage >= stages.length) {
+          state.stage = stages.length;
+          renderStage();
+          finishGame(true);
+          return;
+        }
+        renderStage();
+        ui.status.textContent = message;
+        playTone(620 + state.stage * 90, .12);
+      }
+
+      function pointFromEvent(event) {
+        const bounds = canvas.getBoundingClientRect();
+        return {
+          x: (event.clientX - bounds.left) * 1000 / bounds.width,
+          y: (event.clientY - bounds.top) * 700 / bounds.height
+        };
+      }
+
+      function canvasPointerDown(event) {
+        if (state.stage !== 1) return;
+        state.pointerDown = true;
+        if (event.isTrusted) canvas.setPointerCapture(event.pointerId);
+        brushAt(pointFromEvent(event));
+      }
+
+      function canvasPointerMove(event) {
+        const point = pointFromEvent(event);
+        if (state.stage === 0) return;
+        if (state.stage === 1 && state.pointerDown) brushAt(point);
+      }
+
+      function canvasPointerUp() {
+        state.pointerDown = false;
+      }
+
+      function canvasClick(event) {
+        if (state.stage !== 0) return;
+        const point = pointFromEvent(event);
+        const index = scanTargets.findIndex((target, targetIndex) =>
+          !state.scans.has(targetIndex) && Math.hypot(target.x - point.x, target.y - point.y) < 52
+        );
+        if (index < 0) {
+          state.mistakes++;
+          state.score = Math.max(0, state.score - 18);
+          ui.status.textContent = 'Сканер ничего не нашёл здесь. Ищи пульсирующий маркер.';
+          updateHud();
+          return;
+        }
+        state.scans.add(index);
+        state.score += 110;
+        spawnParticles(point.x, point.y, '#66e4ff', 16);
+        playTone(690 + index * 130, .1);
+        const counter = document.getElementById('scanCount');
+        if (counter) counter.textContent = `${state.scans.size} / 3`;
+        if (state.scans.size === 3) advanceStage('Диагностика завершена: следы влаги и короткое замыкание найдены.');
+        else ui.status.textContent = `Обнаружен дефект ${state.scans.size} / 3. Осталось проверить модули.`;
+      }
+
+      function brushAt(point) {
+        state.brushTrail.push(point);
+        if (state.brushTrail.length > 32) state.brushTrail.shift();
+        corrosionTargets.forEach((target, index) => {
+          if (!state.cleaned.has(index) && Math.hypot(target.x - point.x, target.y - point.y) < 39) {
+            state.cleaned.add(index);
+            state.score += 120;
+            spawnParticles(target.x, target.y, '#67f0b0', 18);
+            playTone(560 + index * 180, .1);
+            const counter = document.getElementById('cleanCount');
+            if (counter) counter.textContent = `${state.cleaned.size} / 2`;
+            if (state.cleaned.size === 2) advanceStage('Коррозия удалена. Все контакты чистые.');
+            else ui.status.textContent = 'Первый контакт восстановлен. Найди и очисти вторую зону.';
+          }
+        });
+      }
+
+      function solder() {
+        const position = (performance.now() * .00058) % 1;
+        if (position >= .62 && position <= .82) {
+          state.score += 220;
+          spawnParticles(500, 410, '#67f0b0', 32);
+          ui.bench.classList.add('win-flash');
+          window.setTimeout(() => ui.bench.classList.remove('win-flash'), 700);
+          advanceStage('Идеальный импульс! Контакт восстановлен.');
+        } else {
+          state.mistakes++;
+          state.score = Math.max(0, state.score - 45);
+          ui.status.textContent = 'Мимо зоны. Подожди, пока индикатор снова войдёт в зелёный участок.';
+          playTone(180, .14, 'triangle');
+          updateHud();
+        }
+      }
+
+      function beginBoot(event) {
+        if (event?.pointerType === 'mouse' && event.button !== 0) return;
+        event?.preventDefault();
+        state.bootHeld = true;
+        state.bootStartedAt = performance.now();
+        state.bench.classList.add('win-flash');
+      }
+
+      function endBoot() {
+        if (state.bootHeld && performance.now() - state.bootStartedAt < 1350) {
+          ui.status.textContent = 'Удерживай дольше — экран почти включился.';
+          playTone(240, .08, 'triangle');
+        }
+        state.bootHeld = false;
+        state.bench.classList.remove('win-flash');
+      }
+
+      function finishGame(won) {
+        if (state.finished) return;
+        state.finished = true;
+        state.bootHeld = false;
+        if (won) state.stage = stages.length;
+        const elapsed = Math.ceil(90 - state.seconds);
+        const finalScore = won ? Math.max(0, 1000 - elapsed * 4 - state.mistakes * 65) : state.score;
+        state.score = finalScore;
+        updateHud();
+        updateProgress();
+        const bestKey = 'barsukon-phone-rescue-best';
+        let best = 0;
+        try {
+          best = Number(localStorage.getItem(bestKey)) || 0;
+          if (won && finalScore > best) localStorage.setItem(bestKey, String(finalScore));
+          if (won) best = Math.max(best, accountBest, finalScore);
+        } catch (error) {
+          console.warn('No se pudo guardar la mejor puntuación.', error);
+        }
+        ui.phase.textContent = won ? 'Dispositivo restaurado' : 'Tiempo agotado';
+        ui.fill.style.width = won ? '100%' : `${Math.max(0, state.stage / stages.length * 100)}%`;
+        ui.progress.textContent = won ? '5 / 5' : `${state.stage} / 5`;
+        ui.progressBar.setAttribute('aria-valuenow', won ? '5' : String(state.stage));
+        ui.steps.querySelectorAll('.step-dot').forEach(dot => dot.classList.add('done'));
+        ui.title.textContent = won ? '¡Rescate completado!' : 'Misión a contrarreloj';
+        ui.description.textContent = won
+          ? `Reparaste el teléfono en ${elapsed} s y recuperaste todos sus datos.`
+          : 'El tiempo se acabó, pero el teléfono espera otra oportunidad. ¡Una reparación más rápida sube tu puntuación!';
+        ui.status.textContent = won ? `Puntuación: ${finalScore} · Mejor: ${best} · Errores: ${state.mistakes}` : `Puntuación parcial: ${finalScore} · Puedes volver a intentarlo.`;
+        ui.hint.innerHTML = won ? 'Pantalla encendida. <strong>Restauración BarsukON verificada.</strong>' : 'El banco de trabajo queda listo para el siguiente intento.';
+        ui.content.innerHTML = won
+          ? `<div class="mission-card" style="margin:10px 0;padding:12px"><div class="mission-icon" aria-hidden="true">✦</div><div><p class="mission-title">SENIOR TECH · ${finalScore} PUNTOS</p><p class="mission-copy">Tu mejor resultado: ${best} · Reto completado en ${elapsed} segundos.</p></div></div>`
+          : '<p class="mission-copy">Cada toque cuenta. Aprende la secuencia y prueba a mejorar tu tiempo.</p>';
+        ui.action.innerHTML = `<div class="button-row"><button id="replayButton" class="primary-button" type="button">↻ &nbsp; Jugar otra vez</button><button id="shareButton" class="secondary-button" type="button">↗ &nbsp; Compartir</button></div><p class="keyboard-hint">${gameUser ? 'Tu mejor puntuación se guarda en tu cuenta BarsukON.' : 'Inicia sesión en BarsukON para guardar tu mejor puntuación en tu cuenta.'}</p>`;
+        document.getElementById('replayButton').addEventListener('click', startGame);
+        document.getElementById('shareButton').addEventListener('click', shareScore);
+        if (won) {
+          saveAccountScore(finalScore, elapsed).catch(error => {
+            console.error('No se pudo guardar la puntuación de Phone Rescue.', error);
+            showToast('No se pudo guardar tu récord. Inténtalo de nuevo más tarde.');
+          });
+        }
+        if (won) {
+          spawnParticles(500, 330, '#67f0b0', 110);
+          playTone(740, .18);
+          window.setTimeout(() => playTone(980, .24), 120);
+        }
+      }
+
+      async function setGameUser(user) {
+        gameUser = user;
+        accountBest = 0;
+        ui.account.href = user ? './index.html#account' : './index.html#auth';
+        ui.accountLabel.textContent = user ? 'Mi cuenta' : 'Iniciar sesión';
+        ui.account.title = user ? `Cuenta BarsukON: ${user.email}` : 'Inicia sesión para guardar tu mejor puntuación en tu cuenta BarsukON.';
+        if (!user || !supabaseClient) return;
+        const { data, error } = await supabaseClient
+          .from('phone_rescue_scores')
+          .select('best_score')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        if (error) {
+          console.error('No se pudo cargar la puntuación de Phone Rescue.', error);
+          ui.account.title = `No se pudo cargar tu puntuación: ${error.message}`;
+          return;
+        }
+        accountBest = Number(data?.best_score) || 0;
+      }
+
+      async function saveAccountScore(score, elapsed) {
+        if (!gameUser || !supabaseClient || score <= accountBest) return;
+        const { data, error } = await supabaseClient.rpc('save_phone_rescue_score', {
+          p_score: score,
+          p_elapsed_seconds: elapsed
+        });
+        if (error) {
+          console.error('No se pudo guardar la puntuación de Phone Rescue.', error);
+          showToast('No se pudo guardar tu récord. Comprueba que se ejecutó la migración de Phone Rescue en Supabase.');
+          return;
+        }
+        accountBest = Number(data) || score;
+      }
+
+      async function restoreAccount() {
+        if (!supabaseClient) return;
+        const { data, error } = await supabaseClient.auth.getSession();
+        if (error) {
+          console.error('No se pudo restaurar la sesión BarsukON.', error);
+          ui.account.title = `No se pudo comprobar la sesión: ${error.message}`;
+          return;
+        }
+        await setGameUser(data.session?.user || null);
+        supabaseClient.auth.onAuthStateChange((_event, session) => {
+          window.setTimeout(() => {
+            setGameUser(session?.user || null).catch(error => {
+              console.error('No se pudo actualizar la cuenta BarsukON.', error);
+            });
+          }, 0);
+        });
+      }
+
+      async function shareScore() {
+        const shareData = { title: 'BarsukON Phone Rescue', text: `¡He rescatado el teléfono en BarsukON Phone Rescue con ${state.score} puntos!`, url: location.href };
+        try {
+          if (navigator.share) await navigator.share(shareData);
+          else if (navigator.clipboard?.writeText) {
+            await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
+            showToast('¡Resultado copiado! Compártelo con quien quieras.');
+          } else {
+            showToast('Abre Phone Rescue en una página HTTPS para compartir el resultado.');
+          }
+        } catch (error) {
+          if (error.name !== 'AbortError') {
+            console.error('No se pudo compartir el resultado.', error);
+            showToast('No se pudo compartir. Puedes volver a intentarlo.');
+          }
+        }
+      }
+
+      function spawnParticles(x, y, color, count) {
+        for (let i = 0; i < count; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = 1.5 + Math.random() * 5;
+          state.particles.push({ x, y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed - 2, life: .7 + Math.random() * .55, size: 2 + Math.random() * 4, color });
+        }
+      }
+
+      function showToast(message) {
+        ui.toast.textContent = message;
+        ui.toast.hidden = false;
+        window.clearTimeout(state.toastTimer);
+        state.toastTimer = window.setTimeout(() => { ui.toast.hidden = true; }, 3200);
+      }
+
+      function playTone(frequency, duration, type = 'sine') {
+        if (!state.soundOn) return;
+        try {
+          state.audio ||= new AudioContext();
+          if (state.audio.state === 'suspended') state.audio.resume();
+          const oscillator = state.audio.createOscillator();
+          const gain = state.audio.createGain();
+          oscillator.type = type;
+          oscillator.frequency.value = frequency;
+          gain.gain.setValueAtTime(.035, state.audio.currentTime);
+          gain.gain.exponentialRampToValueAtTime(.001, state.audio.currentTime + duration);
+          oscillator.connect(gain); gain.connect(state.audio.destination);
+          oscillator.start(); oscillator.stop(state.audio.currentTime + duration);
+        } catch (error) {
+          console.warn('No se pudo reproducir el sonido.', error);
+        }
+      }
+
+      function setSound() {
+        state.soundOn = !state.soundOn;
+        ui.sound.setAttribute('aria-pressed', String(state.soundOn));
+        ui.sound.setAttribute('aria-label', state.soundOn ? 'Desactivar sonido' : 'Activar sonido');
+        ui.sound.lastElementChild.textContent = state.soundOn ? 'Sonido ON' : 'Sonido';
+        if (state.soundOn) playTone(520, .1);
+      }
+
+      function handleKeyDown(event) {
+        if (event.code === 'Space' && state.stage === 4 && !state.finished) {
+          event.preventDefault();
+          if (!state.bootHeld) {
+            state.bootHeld = true;
+            state.bootStartedAt = performance.now();
+          }
+          return;
+        }
+        if (event.code === 'Space' && state.stage === 3 && !state.finished) {
+          event.preventDefault();
+          solder();
+          return;
+        }
+        if (event.key === 'Enter' && state.stage === -1) startGame();
+      }
+
+      function handleKeyUp(event) {
+        if (event.code === 'Space' && state.stage === 4 && state.bootHeld) endBoot();
+      }
+
+      canvas.addEventListener('pointerdown', canvasPointerDown);
+      canvas.addEventListener('pointermove', canvasPointerMove);
+      canvas.addEventListener('pointerup', canvasPointerUp);
+      canvas.addEventListener('pointercancel', canvasPointerUp);
+      canvas.addEventListener('click', canvasClick);
+      ui.sound.addEventListener('click', setSound);
+      window.addEventListener('keydown', handleKeyDown);
+      window.addEventListener('keyup', handleKeyUp);
+      window.addEventListener('blur', () => { state.pointerDown = false; if (state.bootHeld) endBoot(); });
+      document.addEventListener('visibilitychange', () => { if (!document.hidden) state.lastFrame = performance.now(); });
+      window.addEventListener('resize', resizeCanvas, { passive: true });
+
+      resizeCanvas();
+      renderStage();
+      updateHud();
+      restoreAccount().catch(error => {
+        console.error('No se pudo iniciar la integración de cuenta BarsukON.', error);
+        ui.account.title = 'No se pudo comprobar la sesión BarsukON.';
+      });
+      requestAnimationFrame(tick);
+    })();
+  </script>
+</body>
+</html>
