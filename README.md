@@ -44,6 +44,10 @@ After `supabase-schema.sql`, run these migrations in Supabase SQL Editor, in ord
 1. `supabase-mobile-service-migration.sql`
 2. `supabase-castellon-mobile-service-migration.sql`
 
+### Phone Rescue game
+
+The **Juegos** section links to `phone-rescue.html` on the same site. The game reuses the site's Supabase Auth session: visitors can play without signing in, while signed-in users can save their personal best to their account and view it in **Mi cuenta → Cuenta**. To enable account score storage, run `supabase-phone-rescue-migration.sql` once in Supabase SQL Editor. Scores are private to the owning account; guest scores remain only in the current browser.
+
 The public booking form covers the 22 configured towns near Castellón, with coastal towns marked in the city list. Customers can select a date up to 14 days ahead, a live available slot, a device/repair type and part quality, and whether the visit is for themselves. Phone and saved address details are prefilled when available. Weekday hours are 10:00, 14:00, and 16:00; Saturday hours are 10:00 and 12:00; Sunday is closed. A database function enforces the active city, opening hours, closures, capacity, and one booking per slot atomically. The estimate applies the brand-specific repair price, the €15 OEM surcharge (when selected), and the €30 travel fee. Requests remain pending until an administrator confirms them; the site does not collect payment.
 
 The admin panel can toggle weekly hours and covered towns, close a whole day, block a specific date/time, and update mobile request statuses. When a request is moved to `in_progress`, the admin panel attempts to send the customer an SMS via the Supabase Edge Function `mobile-repair-reminder`. To enable actual SMS, deploy it with `supabase functions deploy mobile-repair-reminder` and configure `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, and `TWILIO_FROM_NUMBER` as Edge Function secrets in Supabase; Supabase supplies the project URL and API keys to the function. Keep all secrets in Supabase only, never in `index.html` or Git. Without Twilio credentials and deployment, bookings still work but SMS delivery will report an error.
