@@ -42,6 +42,8 @@
             <option value="phone-rescue">Phone Rescue</option>
             <option value="micro-soldering">Micro-Soldering Master</option>
             <option value="os-doctor">OS Doctor: Clean Up!</option>
+            <option value="repair-rush">Repair Rush</option>
+            <option value="circuit-detective">Circuit Detective</option>
           </select>
         </label>
         <label>Periodo
@@ -61,6 +63,25 @@
       <p id="statusLine" class="status-line" role="status" aria-live="polite">&gt; Conectando con la clasificación…</p>
     </section>
 
+    <section class="weekly-prizes-section" aria-labelledby="weeklyPrizesTitle">
+      <div>
+        <p class="eyebrow">// COMPETICIÓN SEMANAL</p>
+        <h2 id="weeklyPrizesTitle">Premios del top 3</h2>
+      </div>
+      <ol id="weeklyPrizeList" class="weekly-prize-list">
+        <li class="weekly-prize"><span class="weekly-prize-place">1.º</span><strong>Premio por configurar</strong></li>
+        <li class="weekly-prize"><span class="weekly-prize-place">2.º</span><strong>Premio por configurar</strong></li>
+        <li class="weekly-prize"><span class="weekly-prize-place">3.º</span><strong>Premio por configurar</strong></li>
+      </ol>
+      <form id="weeklyPrizeForm" class="weekly-prize-form" hidden>
+        <label>Premio para 1.º lugar<input name="prize1" maxlength="160" required /></label>
+        <label>Premio para 2.º lugar<input name="prize2" maxlength="160" required /></label>
+        <label>Premio para 3.º lugar<input name="prize3" maxlength="160" required /></label>
+        <button type="submit">Guardar premios</button>
+      </form>
+      <p id="weeklyPrizeStatus" class="prize-status" role="status" aria-live="polite"></p>
+    </section>
+
     <section id="nicknameSection" class="nickname-section" hidden>
       <p class="eyebrow">// CUENTA AUTENTICADA</p>
       <h2>&gt; elige tu apodo (3-12, letras/números/_/-):</h2>
@@ -71,7 +92,7 @@
       </form>
     </section>
 
-    <footer><span>BARSUKON · SERVICIO TÉCNICO</span><a href="./index.html#games">Volver a BarsukON</a></footer>
+    <footer><span>BARSUKON · SERVICIO TÉCNICO</span><a href="./games.html">Ver todos los juegos</a></footer>
   </main>
 </body>
 </html>

@@ -1,5 +1,9 @@
 # BarsukON
 
+## Frontend build
+
+Run `npm install` and `npm run build:css` before deploying. This generates `tailwind.css`, which must be deployed with `index.html`. Rebuild it after changing Tailwind classes in `index.html` or `js/`.
+
 ## MVP Supabase setup
 
 1. Create/open a Supabase project and run `supabase-schema.sql` in **SQL Editor**.
@@ -9,6 +13,16 @@
 5. Add promotions and approved reviews from the Supabase dashboard. Public visitors can read active promotions and approved reviews; signed-in users can create requests and see their own data.
 
 The SQL is intentionally not run by the static site. Never commit a secret key.
+
+### New games
+
+`games.html` is the game directory. Repair Rush and Circuit Detective are local-first games that submit results through `js/score-api.js` and use the shared 0-1000 score scale. The project does not include the deployed `lb_submit_score` RPC definition; if Supabase rejects either new game ID, add `repair-rush` and `circuit-detective` to that function's game allowlist before enabling account leaderboard submissions.
+
+### Weekly game leaderboard
+
+Run `supabase-weekly-prizes-migration.sql` once to enable public prize display and admin-only prize editing on `leaderboard.html`. The cross-game leaderboard normalizes results for display to 0-1000 using the current game maxima in `js/score-normalization.js`; update those maxima if a game's scoring rules change. Raw scores remain stored in each game's original scale, preserving compatibility with existing leaderboard RPCs.
+
+After running the schema and feature migrations below, run `supabase-security-hardening-migration.sql` once in the Supabase SQL Editor. It restricts public request fields, keeps review approval admin-only, and hardens privileged function search paths. Supabase service-role and Twilio secrets must remain in Supabase Function secrets, never in frontend files.
 
 ### Administrator
 

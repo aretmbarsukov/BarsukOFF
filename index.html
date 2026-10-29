@@ -9,24 +9,21 @@
   <meta name="apple-mobile-web-app-title" content="BarsukON" />
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="apple-touch-icon" sizes="180x180" href="./icons/icon-180.png" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://static.elfsight.com https://universe-static.elfsightcdn.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net data:; img-src 'self' data: blob: https:; connect-src 'self' https://zjfkrqkuezdvhgbudjnt.supabase.co wss://zjfkrqkuezdvhgbudjnt.supabase.co https://core.service.elfsight.com https://*.elfsight.com https://*.elfsightcdn.com; frame-src https://*.elf.site https://*.elfsight.com; media-src 'self' https:; upgrade-insecure-requests;" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://static.elfsight.com https://universe-static.elfsightcdn.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net data:; img-src 'self' data: blob: https:; connect-src 'self' https://zjfkrqkuezdvhgbudjnt.supabase.co wss://zjfkrqkuezdvhgbudjnt.supabase.co https://core.service.elfsight.com https://*.elfsight.com https://*.elfsightcdn.com; frame-src https://*.elf.site https://*.elfsight.com; media-src 'self' https:; upgrade-insecure-requests;" />
   <meta http-equiv="X-Frame-Options" content="DENY" />
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()" />
   <title>BarsukON - Reparacion de moviles</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="./tailwind.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="./js/supabase-client.js"></script>
   <script type="module" src="./js/leaderboard-init.js"></script>
   <script src="https://static.elfsight.com/platform/platform.js" async></script>
-  <script>
-    tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] } } } };
-  </script>
   <style>
     :root { --bg:#090a0c; --panel:rgba(17,20,28,.8); --text:#f4f5f7; --muted:#a6adba; --brand:#7dd3fc; }
     html { scroll-behavior:smooth; }
@@ -239,6 +236,20 @@
           <a id="gamesOSDoctorLink" href="./os-doctor.html" aria-label="Jugar a OS Doctor: Clean Up!" class="w-full shrink-0 rounded-xl bg-emerald-300 px-5 py-3 font-extrabold text-slate-950 transition-all hover:bg-emerald-200 sm:w-auto">
             <span id="gamesOSDoctorPlay">Jugar</span><span class="ml-2" aria-hidden="true">→</span>
           </a>
+        </article>
+        <article class="flex flex-col items-start gap-5 rounded-2xl border border-amber-300/20 bg-amber-300/5 p-5 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h3 class="text-xl font-extrabold text-white">Repair Rush</h3>
+            <p class="mt-2 max-w-xl text-sm leading-relaxed text-slate-300">Diagnostica teléfonos y encadena reparaciones en un turno diario de 60 segundos.</p>
+          </div>
+          <a href="./repair-rush.html" aria-label="Jugar a Repair Rush" class="w-full shrink-0 rounded-xl bg-amber-300 px-5 py-3 font-extrabold text-slate-950 transition-all hover:bg-amber-200 sm:w-auto">Jugar <span class="ml-2" aria-hidden="true">→</span></a>
+        </article>
+        <article class="flex flex-col items-start gap-5 rounded-2xl border border-blue-300/20 bg-blue-300/5 p-5 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h3 class="text-xl font-extrabold text-white">Circuit Detective</h3>
+            <p class="mt-2 max-w-xl text-sm leading-relaxed text-slate-300">Investiga el caso diario, reúne hasta tres pruebas y encuentra la avería.</p>
+          </div>
+          <a href="./circuit-detective.html" aria-label="Jugar a Circuit Detective" class="w-full shrink-0 rounded-xl bg-blue-300 px-5 py-3 font-extrabold text-slate-950 transition-all hover:bg-blue-200 sm:w-auto">Abrir <span class="ml-2" aria-hidden="true">→</span></a>
         </article>
       </div>
       <a id="gamesLeaderboardLink" href="./leaderboard.html" class="mt-6 inline-flex min-h-11 items-center gap-2 rounded-xl border border-sky-300/30 bg-sky-300/10 px-5 py-3 text-sm font-bold text-sky-200 transition-colors hover:bg-sky-300/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-300" aria-label="Ver la clasificación de los juegos">Ver clasificación <span aria-hidden="true">→</span></a>

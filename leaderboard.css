@@ -37,6 +37,18 @@ button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible
 .intro h1 { margin: 0; font-family: ui-monospace, monospace; font-size: clamp(36px, 7vw, 65px); line-height: .96; letter-spacing: -.075em; }
 .intro-copy { max-width: 520px; margin: 15px 0 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
 .board, .nickname-section { border: 1px solid var(--line); border-radius: 22px; background: var(--panel); box-shadow: 0 24px 80px #0003, inset 0 1px #ffffff08; }
+.weekly-prizes-section { display: grid; grid-template-columns: minmax(180px, .7fr) 1.3fr; gap: 16px 24px; align-items: start; padding: 18px; border: 1px solid var(--line); border-radius: 18px; background: var(--panel); }
+.weekly-prizes-section h2 { margin: 0; font-family: ui-monospace, monospace; font-size: 19px; }
+.weekly-prize-list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.weekly-prize { min-height: 42px; display: flex; align-items: center; gap: 12px; padding: 8px 11px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); font-size: 12px; }
+.weekly-prize-place { width: 36px; flex: 0 0 auto; color: var(--brand); font-family: ui-monospace, monospace; font-weight: 900; }
+.weekly-prize strong { overflow-wrap: anywhere; }
+.weekly-prize-form { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; padding-top: 12px; border-top: 1px solid var(--line); }
+.weekly-prize-form[hidden] { display: none; }
+.weekly-prize-form label { display: grid; gap: 6px; color: var(--muted); font-size: 10px; }
+.weekly-prize-form input { width: 100%; min-width: 0; min-height: 40px; padding: 0 10px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); color: var(--text); font-size: 12px; }
+.weekly-prize-form button { min-height: 40px; align-self: end; padding: 0 14px; border: 1px solid var(--brand); border-radius: 10px; background: var(--brand); color: var(--bg); font-size: 11px; font-weight: 900; cursor: pointer; }
+.prize-status { grid-column: 1 / -1; min-height: 16px; margin: 0; color: var(--muted); font-size: 10px; }
 .board { padding: clamp(13px, 2.4vw, 24px); }
 .controls { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; padding-bottom: 17px; }
 .controls label { min-width: 165px; display: grid; gap: 6px; color: var(--muted); font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: .11em; text-transform: uppercase; }
@@ -49,6 +61,7 @@ button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible
 .score-row.is-me { color: var(--brand); }
 .score-position { color: var(--muted); font-family: ui-monospace, monospace; }
 .score-nickname { overflow: hidden; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+.score-game { display: block; overflow: hidden; color: var(--muted); font-size: 9px; font-weight: 500; text-overflow: ellipsis; }
 .score-points { font-family: ui-monospace, monospace; font-weight: 900; }
 .score-date { color: var(--muted); font-size: 10px; }
 .empty-state { margin: 0; padding: 28px 14px; color: var(--muted); font-size: 12px; text-align: center; }
@@ -88,6 +101,8 @@ footer a { color: var(--brand); }
   .score-row { min-height: 48px; font-size: 10px; }
   .nickname-row { flex-direction: column; }
   .nickname-row button { width: 100%; }
+  .weekly-prizes-section { grid-template-columns: 1fr; gap: 12px; padding: 14px; }
+  .weekly-prize-form { grid-template-columns: 1fr; }
   footer { font-size: 7px; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; } }

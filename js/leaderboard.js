@@ -1,4 +1,15 @@
 import { initializeLeaderboardSync, leaderboardStore } from './leaderboard-store.js';
+import { normalizeGameScore } from './score-normalization.js';
+
+const GAME_NAMES = {
+  'phone-rescue': 'Phone Rescue',
+  'micro-soldering': 'Micro-Soldering Master',
+  'os-doctor': 'OS Doctor',
+  'repair-rush': 'Repair Rush',
+  'circuit-detective': 'Circuit Detective'
+};
+const GAME_IDS = Object.keys(GAME_NAMES);
+const PRIZE_PLACEHOLDERS = ['Premio por configurar', 'Premio por configurar', 'Premio por configurar'];
 
 const ui = {
   games: document.getElementById('gameSelect'),
@@ -13,7 +24,10 @@ const ui = {
   nicknameSection: document.getElementById('nicknameSection'),
   nicknameForm: document.getElementById('nicknameForm'),
   nicknameInput: document.getElementById('nicknameInput'),
-  nicknameStatus: document.getElementById('nicknameStatus')
+  nicknameStatus: document.getElementById('nicknameStatus'),
+  prizeList: document.getElementById('weeklyPrizeList'),
+  prizeForm: document.getElementById('weeklyPrizeForm'),
+  prizeStatus: document.getElementById('weeklyPrizeStatus')
 };
 
 function applyTheme(theme) {
@@ -60,6 +74,12 @@ function appendScoreRow(parent, row, positionText = null) {
   const nickname = document.createElement('span');
   nickname.className = 'score-nickname';
   nickname.textContent = row.nickname;
+  if (row.game) {
+    const game = document.createElement('small');
+    game.className = 'score-game';
+    game.textContent = GAME_NAMES[row.game] || row.game;
+    nickname.append(document.createElement('br'), game);
+  }
   const score = document.createElement('span');
   score.className = 'score-points';
   score.textContent = Number(row.score).toLocaleString('es-ES');
@@ -76,15 +96,36 @@ async function loadBoard() {
   ui.mine.replaceChildren();
   ui.mine.hidden = true;
   try {
-    const { rows, myRow } = await leaderboardStore.getTop(ui.games.value, ui.periods.value, 10);
-    rows.forEach(row => appendScoreRow(ui.rows, row));
+    const selectedGame = ui.games.value;
+    const games = selectedGame === 'global' ? GAME_IDS : [selectedGame];
+    const results = await Promise.all(games.map(game => leaderboardStore.getTop(game, ui.periods.value, 10)));
+    const rows = results.flatMap((result, index) => result.rows.map(row => ({
+      ...row,
+      game: games[index],
+      score: normalizeGameScore(games[index], row.score)
+    })));
+    rows.sort((a, b) => b.score - a.score || Date.parse(a.achieved_at) - Date.parse(b.achieved_at));
+    rows.slice(0, 10).forEach((row, index) => appendScoreRow(ui.rows, { ...row, pos: index + 1 }));
     ui.empty.hidden = rows.length > 0;
-    if (myRow) {
+    const myRows = selectedGame === 'global'
+      ? results.map((result, index) => result.myRow && ({
+        ...result.myRow,
+        game: games[index],
+        score: normalizeGameScore(games[index], result.myRow.score)
+      })).filter(Boolean).sort((a, b) => b.score - a.score)
+      : [results[0].myRow].filter(Boolean);
+    const myRow = myRows[0];
+    const alreadyInTop = selectedGame === 'global' && rows.slice(0, 10).some(row => row.is_me);
+    if (myRow && !alreadyInTop) {
       const heading = document.createElement('p');
       heading.className = 'my-score-heading';
-      heading.textContent = '> TU POSICIÓN';
+      heading.textContent = selectedGame === 'global' ? '> TU MEJOR RESULTADO' : '> TU POSICIÓN';
       ui.mine.append(heading);
-      appendScoreRow(ui.mine, myRow, String(myRow.pos));
+      appendScoreRow(ui.mine, {
+        ...myRow,
+        game: selectedGame,
+        score: normalizeGameScore(selectedGame, myRow.score)
+      }, selectedGame === 'global' ? 'Personal' : String(myRow.pos));
       ui.mine.hidden = false;
     }
     ui.status.textContent = leaderboardStore.adapterName === 'supabase'
@@ -94,6 +135,55 @@ async function loadBoard() {
     ui.empty.hidden = true;
     ui.status.textContent = `> ${error instanceof Error ? error.message : 'No se pudo cargar la clasificación.'}`;
   }
+}
+
+function renderWeeklyPrizes(prizes = PRIZE_PLACEHOLDERS) {
+  ui.prizeList.replaceChildren();
+  prizes.forEach((prize, index) => {
+    const item = document.createElement('li');
+    const place = document.createElement('span');
+    const description = document.createElement('strong');
+    item.className = 'weekly-prize';
+    place.className = 'weekly-prize-place';
+    place.textContent = `${index + 1}.º`;
+    description.textContent = prize || PRIZE_PLACEHOLDERS[index];
+    item.append(place, description);
+    ui.prizeList.append(item);
+  });
+}
+
+async function loadWeeklyPrizes() {
+  const client = window.barsukonSupabaseClient;
+  if (!client) {
+    renderWeeklyPrizes();
+    return;
+  }
+
+  const { data, error } = await client
+    .from('leaderboard_weekly_prizes')
+    .select('place,prize')
+    .order('place');
+  const prizeByPlace = new Map((data || []).map(item => [Number(item.place), item.prize]));
+  renderWeeklyPrizes([1, 2, 3].map(place => prizeByPlace.get(place) || PRIZE_PLACEHOLDERS[place - 1]));
+
+  if (error) {
+    ui.prizeStatus.textContent = 'Ejecuta la migración de premios semanales en Supabase para activar esta sección.';
+    return;
+  }
+
+  const { data: userResult } = await client.auth.getUser();
+  if (!userResult.user) return;
+  const { data: profile } = await client
+    .from('profiles')
+    .select('role')
+    .eq('id', userResult.user.id)
+    .maybeSingle();
+  if (profile?.role !== 'admin') return;
+
+  ui.prizeForm.hidden = false;
+  [1, 2, 3].forEach(place => {
+    ui.prizeForm.elements.namedItem(`prize${place}`).value = prizeByPlace.get(place) || '';
+  });
 }
 
 async function loadWeekEnd() {
@@ -167,10 +257,33 @@ window.addEventListener('barsukon:leaderboard-nickname-required', () => {
 window.addEventListener('barsukon:score', () => {
   window.setTimeout(loadBoard, 100);
 });
+ui.prizeForm.addEventListener('submit', async event => {
+  event.preventDefault();
+  const client = window.barsukonSupabaseClient;
+  if (!client) return;
+  ui.prizeStatus.textContent = 'Guardando premios…';
+  const button = ui.prizeForm.querySelector('button[type="submit"]');
+  button.disabled = true;
+  try {
+    const prizes = [1, 2, 3].map(place => ({
+      place,
+      prize: ui.prizeForm.elements.namedItem(`prize${place}`).value.trim()
+    }));
+    const { error } = await client.from('leaderboard_weekly_prizes').upsert(prizes, { onConflict: 'place' });
+    if (error) throw error;
+    renderWeeklyPrizes(prizes.map(item => item.prize));
+    ui.prizeStatus.textContent = 'Premios semanales actualizados.';
+  } catch (error) {
+    ui.prizeStatus.textContent = 'No se pudieron guardar los premios. Comprueba la migración y los permisos de administrador.';
+  } finally {
+    button.disabled = false;
+  }
+});
 
 initializeLeaderboardSync();
 applyTheme(loadTheme());
 loadBoard();
 loadWeekEnd();
 refreshNickname();
+loadWeeklyPrizes();
 window.setInterval(loadWeekEnd, 60000);

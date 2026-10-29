@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#090a0c" />
+  <meta name="description" content="Resuelve el caso diario de Circuit Detective: reúne pruebas y localiza la avería del teléfono." />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://zjfkrqkuezdvhgbudjnt.supabase.co wss://zjfkrqkuezdvhgbudjnt.supabase.co; upgrade-insecure-requests;" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="apple-touch-icon" sizes="180x180" href="./icons/icon-180.png" />
+  <link rel="stylesheet" href="./circuit-detective.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./js/supabase-client.js"></script>
+  <script type="module" src="./js/circuit-detective.js"></script>
+  <title>Circuit Detective — BarsukON</title>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <a class="brand" href="./index.html#games" aria-label="Volver a BarsukON">
+        <span class="brand-mark" aria-hidden="true">B</span>
+        <span class="brand-copy"><span class="brand-title">BARSUK<span>ON</span></span><span class="brand-subtitle">Laboratorio de reparación</span></span>
+      </a>
+      <div class="top-actions">
+        <button id="themeButton" class="utility-button" type="button" aria-label="Cambiar tema" aria-pressed="false"><span aria-hidden="true">◐</span><span id="themeLabel">Tema oscuro</span></button>
+        <a class="back-link" href="./games.html"><span aria-hidden="true">←</span> Volver a juegos</a>
+      </div>
+    </header>
+
+    <main class="detective-layout">
+      <section class="case-file" aria-labelledby="gameTitle">
+        <div class="case-heading"><div><p class="eyebrow">// ARCHIVO DE DIAGNÓSTICO</p><h1 id="gameTitle">Circuit <span>Detective</span></h1></div><div class="case-stamp"><span>CASO</span><strong id="caseCode">—</strong></div></div>
+        <div class="case-summary"><div class="phone-sketch" aria-hidden="true"><div class="screen-crack"></div><span id="phoneStatus">?</span></div><div><span id="caseCategory" class="case-category">CASO DIARIO</span><h2 id="caseTitle">Expediente listo</h2><p id="caseDescription">El teléfono espera una revisión. Reúne pruebas antes de emitir un diagnóstico.</p></div></div>
+        <section class="evidence-section" aria-labelledby="evidenceTitle">
+          <div class="section-heading"><div><p class="eyebrow">// PRUEBAS RECOGIDAS</p><h3 id="evidenceTitle">Registro del caso</h3></div><span id="testCount" class="test-count">0 / 3</span></div>
+          <ol id="evidenceList" class="evidence-list"><li class="evidence-empty">Aún no se han realizado comprobaciones.</li></ol>
+        </section>
+        <form id="diagnosisForm" class="diagnosis-form">
+          <fieldset id="diagnosisChoices" disabled>
+            <legend>¿Cuál es la causa más probable?</legend>
+            <div id="diagnosisList" class="diagnosis-list"></div>
+          </fieldset>
+          <button id="diagnoseButton" class="primary-button" type="submit" disabled>Emitir diagnóstico <span aria-hidden="true">↗</span></button>
+          <p id="diagnosisFeedback" class="feedback" role="status" aria-live="polite">Usa al menos una prueba antes de decidir.</p>
+        </form>
+      </section>
+
+      <aside class="lab-panel">
+        <div class="lab-heading"><div><p class="eyebrow">// BANCO DE PRUEBAS</p><h2>Elige una medición</h2></div><span class="capacity"><strong id="checksLeft">3</strong><small>PRUEBAS</small></span></div>
+        <p class="lab-copy">Cada caso es el mismo para todos durante el día. Revisa hasta tres señales antes de decidir.</p>
+        <div id="testGrid" class="test-grid">
+          <button class="test-button" type="button" data-test="usb"><span class="test-icon">⌁</span><span><strong>Medidor USB</strong><small>Consumo y negociación</small></span><span class="test-arrow">↗</span></button>
+          <button class="test-button" type="button" data-test="thermal"><span class="test-icon">◉</span><span><strong>Cámara térmica</strong><small>Temperatura de placa</small></span><span class="test-arrow">↗</span></button>
+          <button class="test-button" type="button" data-test="battery"><span class="test-icon">▱</span><span><strong>Banco de batería</strong><small>Capacidad e impedancia</small></span><span class="test-arrow">↗</span></button>
+          <button class="test-button" type="button" data-test="microscope"><span class="test-icon">⌕</span><span><strong>Microscopio</strong><small>Conectores y corrosión</small></span><span class="test-arrow">↗</span></button>
+          <button class="test-button" type="button" data-test="display"><span class="test-icon">▣</span><span><strong>Patrón de pantalla</strong><small>Imagen y táctil</small></span><span class="test-arrow">↗</span></button>
+        </div>
+        <div class="score-card"><span>MEJOR CASO</span><strong id="bestValue">0 / 1000</strong><div class="score-track"><span id="scoreFill"></span></div></div>
+        <div class="lab-actions"><button id="shareButton" class="secondary-button" type="button" disabled>Compartir resultado</button><a class="secondary-button" href="./leaderboard.html">Ver clasificación</a></div>
+      </aside>
+    </main>
+    <footer><span>BarsukON · Circuit Detective</span><a href="./games.html">Ver todos los juegos</a></footer>
+  </div>
+</body>
+</html>

@@ -2,7 +2,7 @@ const CONFIG = { adapter: 'supabase', limit: 10 };
 const PENDING_KEY = 'barsukon-leaderboard-pending';
 const LOCAL_SCORE_KEY = 'barsukon-score-submissions';
 const LOCAL_NICKNAME_KEY = 'barsukon-leaderboard-nickname';
-const GAME_IDS = new Set(['phone-rescue', 'micro-soldering', 'os-doctor']);
+const GAME_IDS = new Set(['phone-rescue', 'micro-soldering', 'os-doctor', 'repair-rush', 'circuit-detective']);
 const ERROR_MESSAGES = {
   nickname_taken: 'Ese apodo ya está en uso. Elige otro.',
   invalid_nickname: 'El apodo debe tener entre 3 y 12 letras, números, guiones o guiones bajos.',
